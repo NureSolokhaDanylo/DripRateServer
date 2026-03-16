@@ -1,10 +1,10 @@
 {
   "Identity": {
-    "PasswordMinLength": 8,
-    "PasswordRequireDigit": true,
-    "PasswordRequireLowercase": true,
-    "PasswordRequireUppercase": true,
-    "PasswordRequireNonAlphanumeric": true,
+    "PasswordMinLength": 6,
+    "PasswordRequireDigit": false,
+    "PasswordRequireLowercase": false,
+    "PasswordRequireUppercase": false,
+    "PasswordRequireNonAlphanumeric": false,
     "LockoutMaxFailedAccessAttempts": 5,
     "LockoutDefaultLockoutTimeSpanMinutes": 5
   },

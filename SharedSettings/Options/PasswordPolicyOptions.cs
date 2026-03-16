@@ -1,6 +1,6 @@
-namespace SharedSettings;
+namespace SharedSettings.Options;
 
-public sealed class IdentityOptions
+public sealed class PasswordPolicyOptions
 {
     public const string SectionName = "Identity";
 

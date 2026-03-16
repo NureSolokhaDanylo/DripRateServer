@@ -1,4 +1,4 @@
-namespace SharedSettings;
+namespace SharedSettings.Options;
 
 public sealed class JwtOptions
 {

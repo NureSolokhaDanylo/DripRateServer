@@ -10,8 +10,9 @@ public sealed class MyDbContextFactory : IDesignTimeDbContextFactory<MyDbContext
     public MyDbContext CreateDbContext(string[] args)
     {
         var configuration = SharedConfigurationBuilder.Build();
-        var connectionString = configuration.GetConnectionString("DefaultConnection")
-            ?? throw new InvalidOperationException("Connection string 'DefaultConnection' was not found.");
+        var connectionString =
+            configuration.GetConnectionString("DefaultConnection")
+            ?? "Server=localhost;Database=DesignTimeDb;Trusted_Connection=True;TrustServerCertificate=True";
 
         var optionsBuilder = new DbContextOptionsBuilder<MyDbContext>();
         optionsBuilder.UseSqlServer(
