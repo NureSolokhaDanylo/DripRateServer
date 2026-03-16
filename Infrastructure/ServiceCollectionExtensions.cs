@@ -9,7 +9,7 @@ namespace Infrastructure;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, string? basePath = null)
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
         var configuration = SharedConfigurationBuilder.Build();
         var connectionString = configuration.GetConnectionString("DefaultConnection")

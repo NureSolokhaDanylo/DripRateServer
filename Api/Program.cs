@@ -2,8 +2,6 @@ using Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddInfrastructure(builder.Environment.ContentRootPath);
-var app = builder.Build();
+var host = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
-
-app.Run();
+host.Run();
