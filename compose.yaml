@@ -1,0 +1,32 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP.NET Core service.
+
+services:
+  api:
+    image: api
+    build:
+      context: .
+      dockerfile: Api/Dockerfile
+      args:
+        - configuration=Debug
+    ports:
+      - ${SERVER_PORT:-5268}:5268
+    depends_on:
+      - sqlserver
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=${DB_NAME:-DripRateDb};User Id=${DB_USER:-sa};Password=${DB_PASSWORD:-Your_strong_password_123};TrustServerCertificate=True;Encrypt=False
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2025-latest
+    container_name: driprate-sqlserver
+    ports:
+      - ${DB_PORT:-1433}:1433
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_PID=Developer
+      - MSSQL_SA_PASSWORD=${DB_PASSWORD:-Your_strong_password_123}
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+
+volumes:
+  sqlserver_data:
