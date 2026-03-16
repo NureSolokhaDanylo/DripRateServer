@@ -1,8 +1,8 @@
 namespace SharedSettings.Options;
 
-public sealed class PasswordPolicyOptions
+public sealed class PasswordPolicyOptions : IOptions2
 {
-    public const string SectionName = "Identity";
+    public string GetSectionName() => "Identity";
 
     public int PasswordMinLength { get; set; } = 8;
     public bool PasswordRequireDigit { get; set; } = true;

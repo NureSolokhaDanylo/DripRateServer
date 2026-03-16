@@ -9,7 +9,7 @@ public sealed class MyDbContextFactory : IDesignTimeDbContextFactory<MyDbContext
 {
     public MyDbContext CreateDbContext(string[] args)
     {
-        var configuration = SharedConfigurationBuilder.Build();
+        var configuration = SharedConfiguration.GetConfiguration();
         var connectionString =
             configuration.GetConnectionString("DefaultConnection")
             ?? "Server=localhost;Database=DesignTimeDb;Trusted_Connection=True;TrustServerCertificate=True";

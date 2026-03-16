@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Api.Extensions;
 
-public static class WebApplicationExtensions
+public static class HostExtensions
 {
-    public static async Task InitializeDatabaseAsync(this WebApplication app)
+    public static async Task InitializeDatabaseAsync(this IHost app)
     {
         var startupLogger = app.Services.GetRequiredService<ILoggerFactory>().CreateLogger("Startup");
 

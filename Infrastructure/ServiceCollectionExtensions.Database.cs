@@ -12,7 +12,7 @@ public static partial class ServiceCollectionExtensions
 {
     private static IServiceCollection AddDatabaseConfiguration(this IServiceCollection services)
     {
-        var configuration = SharedConfigurationBuilder.Build();
+        var configuration = SharedConfiguration.GetConfiguration();
         var connectionString = configuration.GetConnectionString("DefaultConnection")
             ?? throw new InvalidOperationException("Connection string 'DefaultConnection' was not found.");
 
@@ -26,11 +26,18 @@ public static partial class ServiceCollectionExtensions
                         maxRetryDelay: TimeSpan.FromSeconds(30),
                         errorNumbersToAdd: null)));
 
-        services.Configure<PasswordPolicyOptions>(configuration.GetSection(PasswordPolicyOptions.SectionName));
-
-        var passwordPolicySection = configuration.GetSection(PasswordPolicyOptions.SectionName);
-        var passwordPolicy = passwordPolicySection.Get<PasswordPolicyOptions>() 
-            ?? new PasswordPolicyOptions();
+        // Get password policy options
+        var passwordPolicy = SharedConfiguration.GetIOptions2<PasswordPolicyOptions>();
+        services.Configure<PasswordPolicyOptions>(_ =>
+        {
+            _.PasswordMinLength = passwordPolicy.PasswordMinLength;
+            _.PasswordRequireDigit = passwordPolicy.PasswordRequireDigit;
+            _.PasswordRequireLowercase = passwordPolicy.PasswordRequireLowercase;
+            _.PasswordRequireUppercase = passwordPolicy.PasswordRequireUppercase;
+            _.PasswordRequireNonAlphanumeric = passwordPolicy.PasswordRequireNonAlphanumeric;
+            _.LockoutMaxFailedAccessAttempts = passwordPolicy.LockoutMaxFailedAccessAttempts;
+            _.LockoutDefaultLockoutTimeSpanMinutes = passwordPolicy.LockoutDefaultLockoutTimeSpanMinutes;
+        });
 
         services
             .AddIdentityCore<IdentityUser>(options =>

@@ -1,26 +1,21 @@
 using Application.Dtos;
+using Application.Interfaces;
 using Application.Queries;
 using Microsoft.AspNetCore.Identity;
-using SharedSettings.Options;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.Extensions.Options;
 
 namespace Application.Handlers;
 
 public sealed class LoginQueryHandler
 {
     private readonly UserManager<IdentityUser> _userManager;
-    private readonly IOptions<JwtOptions> _jwtOptions;
+    private readonly IJwtTokenService _jwtTokenService;
 
     public LoginQueryHandler(
         UserManager<IdentityUser> userManager,
-        IOptions<JwtOptions> jwtOptions)
+        IJwtTokenService jwtTokenService)
     {
         _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-        _jwtOptions = jwtOptions ?? throw new ArgumentNullException(nameof(jwtOptions));
+        _jwtTokenService = jwtTokenService ?? throw new ArgumentNullException(nameof(jwtTokenService));
     }
 
     public async Task<AuthResponse> Handle(LoginQuery query)
@@ -45,7 +40,7 @@ public sealed class LoginQueryHandler
             };
         }
 
-        var token = GenerateJwtToken(user);
+        var token = _jwtTokenService.GenerateToken(user);
 
         return new AuthResponse
         {
@@ -53,33 +48,5 @@ public sealed class LoginQueryHandler
             Message = "Login successful",
             AccessToken = token
         };
-    }
-
-    private string GenerateJwtToken(IdentityUser user)
-    {
-        var key = Encoding.ASCII.GetBytes(_jwtOptions.Value.Key 
-            ?? throw new InvalidOperationException("JWT Key not configured"));
-
-        var claims = new List<Claim>
-        {
-            new(ClaimTypes.NameIdentifier, user.Id),
-            new(ClaimTypes.Name, user.UserName ?? ""),
-            new(ClaimTypes.Email, user.Email ?? "")
-        };
-
-        var tokenDescriptor = new SecurityTokenDescriptor
-        {
-            Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.UtcNow.AddMinutes(_jwtOptions.Value.ExpirationMinutes),
-            Issuer = _jwtOptions.Value.Issuer,
-            Audience = _jwtOptions.Value.Audience,
-            SigningCredentials = new SigningCredentials(
-                new SymmetricSecurityKey(key),
-                SecurityAlgorithms.HmacSha256Signature)
-        };
-
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var token = tokenHandler.CreateToken(tokenDescriptor);
-        return tokenHandler.WriteToken(token);
     }
 }

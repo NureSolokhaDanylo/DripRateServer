@@ -1,6 +1,6 @@
 namespace SharedSettings.Options;
 
-public sealed class Config
+public sealed class Config : IOptions2
 {
-    public const string SectionName = "Config";
+    public string GetSectionName() => "Config";
 }

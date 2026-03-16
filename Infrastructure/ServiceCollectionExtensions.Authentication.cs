@@ -1,7 +1,6 @@
 using Application.Interfaces;
 using Infrastructure.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,17 +15,21 @@ public static partial class ServiceCollectionExtensions
 {
     private static IServiceCollection AddAuthenticationConfiguration(this IServiceCollection services)
     {
-        var configuration = SharedConfigurationBuilder.Build();
-
-        // Register Jwt options
-        services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.SectionName));
-
-        // Configure JWT authentication
-        var jwtSection = configuration.GetSection(JwtOptions.SectionName);
-        var jwtOptions = jwtSection.Get<JwtOptions>() ?? new JwtOptions();
+        // Get JWT options
+        var jwtOptions = SharedConfiguration.GetIOptions2<JwtOptions>();
+        services.Configure<JwtOptions>(_  => 
+        {
+            _.Key = jwtOptions.Key;
+            _.Issuer = jwtOptions.Issuer;
+            _.Audience = jwtOptions.Audience;
+            _.ExpirationMinutes = jwtOptions.ExpirationMinutes;
+            _.RefreshTokenExpirationDays = jwtOptions.RefreshTokenExpirationDays;
+        });
 
         var key = Encoding.ASCII.GetBytes(jwtOptions.Key 
             ?? throw new InvalidOperationException("JWT Key is not configured"));
+
+        services.AddHttpContextAccessor();
 
         services.AddAuthentication(options =>
         {
@@ -50,13 +53,11 @@ public static partial class ServiceCollectionExtensions
 
         services.AddAuthorization();
 
-        // Register ICurrentUser factory
-        services.AddScoped(sp =>
-        {
-            var httpContextAccessor = sp.GetRequiredService<IHttpContextAccessor>();
-            var principal = httpContextAccessor.HttpContext?.User;
-            return (ICurrentUser)new CurrentUser(principal ?? new System.Security.Claims.ClaimsPrincipal());
-        });
+        // Register JWT token generation service
+        services.AddScoped<IJwtTokenService, JwtTokenService>();
+
+        // Register ICurrentUser implementation
+        services.AddScoped<ICurrentUser, Infrastructure.Authentication.HttpContextCurrentUser>();
 
         return services;
     }

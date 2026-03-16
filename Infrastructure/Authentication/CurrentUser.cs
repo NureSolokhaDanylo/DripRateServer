@@ -1,9 +1,10 @@
 using Application.Interfaces;
+using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
 namespace Infrastructure.Authentication;
 
-public sealed class CurrentUser : ICurrentUser
+public sealed class HttpContextCurrentUser : ICurrentUser
 {
     private readonly ClaimsPrincipal _principal;
 
@@ -17,8 +18,9 @@ public sealed class CurrentUser : ICurrentUser
             .ToList()
             .AsReadOnly();
 
-    public CurrentUser(ClaimsPrincipal principal)
+    public HttpContextCurrentUser(IHttpContextAccessor httpContextAccessor)
     {
+        var principal = httpContextAccessor.HttpContext?.User ?? new ClaimsPrincipal();
         _principal = principal ?? throw new ArgumentNullException(nameof(principal));
     }
 

@@ -4,13 +4,16 @@ using Infrastructure.Persistence;
 using Api.Extensions;
 using Application.Handlers;
 using Microsoft.EntityFrameworkCore;
+using SharedSettings;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddInfrastructure();
-builder.Services.AddApplication();
-builder.Services.AddControllers();
-builder.Services.AddSwaggerDocumentation();
+var services = builder.Services;
+
+services.AddInfrastructure();
+services.AddApplication();
+services.AddControllers();
+services.AddSwaggerDocumentation();
 
 var host = builder.Build();
 
