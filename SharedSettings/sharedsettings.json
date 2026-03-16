@@ -1,5 +1,17 @@
 {
-  "Config": {
-
-   }
+  "Identity": {
+    "PasswordMinLength": 8,
+    "PasswordRequireDigit": true,
+    "PasswordRequireLowercase": true,
+    "PasswordRequireUppercase": true,
+    "PasswordRequireNonAlphanumeric": true,
+    "LockoutMaxFailedAccessAttempts": 5,
+    "LockoutDefaultLockoutTimeSpanMinutes": 5
+  },
+  "Jwt": {
+    "Issuer": "DripRateServer",
+    "Audience": "DripRateServerApi",
+    "ExpirationMinutes": 60,
+    "RefreshTokenExpirationDays": 7
+  }
 }

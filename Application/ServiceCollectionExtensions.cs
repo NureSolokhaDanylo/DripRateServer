@@ -5,5 +5,8 @@ namespace Application;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection (thisIServiceCollection)
+    public static IServiceCollection AddApplication(this IServiceCollection services)
+    {
+        return services;
+    }
 }

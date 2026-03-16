@@ -10,6 +10,7 @@
 *.userosscache
 *.sln.docstates
 *.env
+!*template.env
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -191,6 +192,8 @@ AutoTest.Net/
 
 # Web workbench (sass)
 .sass-cache/
+
+AI_GUIDE.md
 
 # Installshield output folder
 [Ee]xpress/
