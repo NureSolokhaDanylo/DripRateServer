@@ -13,6 +13,7 @@ var services = builder.Services;
 services.AddInfrastructure();
 services.AddApplication();
 services.AddControllers();
+services.AddHttpClient();
 services.AddSwaggerDocumentation();
 
 var host = builder.Build();
