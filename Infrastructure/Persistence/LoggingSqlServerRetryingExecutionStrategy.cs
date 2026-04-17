@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using Microsoft.Data.SqlClient;
@@ -21,11 +22,13 @@ public sealed class LoggingSqlServerRetryingExecutionStrategy : SqlServerRetryin
 
     protected override bool ShouldRetryOn(Exception? exception)
     {
-        if (exception is SqlException sqlEx)
+        bool willRetry = base.ShouldRetryOn(exception);
+        
+        if (willRetry && exception is SqlException sqlEx)
         {
-            // Мы логируем каждую попытку ретрая
-            _logger.LogWarning("Database connection attempt failed. Error: {Message}. Retrying...", sqlEx.Message);
+            _logger.LogWarning("Database transient error detected. Error: {Message}. EF Core will retry automatically...", sqlEx.Message);
         }
-        return base.ShouldRetryOn(exception);
+        
+        return willRetry;
     }
 }

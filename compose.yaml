@@ -3,6 +3,7 @@
 services:
   api:
     image: api
+    restart: always
     build:
       context: .
       dockerfile: Api/Dockerfile
@@ -20,6 +21,7 @@ services:
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2025-latest
     container_name: driprate-sqlserver
+    restart: always
     ports:
       - ${DB_PORT}:1433
     environment:
