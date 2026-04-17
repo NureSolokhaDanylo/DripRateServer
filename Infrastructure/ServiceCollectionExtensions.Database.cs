@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using SharedSettings;
 using SharedSettings.Options;
 
@@ -17,20 +18,24 @@ public static partial class ServiceCollectionExtensions
         var connectionString = configuration.GetConnectionString("DefaultConnection")
             ?? throw new InvalidOperationException("Connection string 'DefaultConnection' was not found.");
 
-        services.AddDbContext<MyDbContext>(options =>
+        services.AddDbContext<MyDbContext>((serviceProvider, options) =>
+        {
+            var logger = serviceProvider.GetRequiredService<ILogger<LoggingSqlServerRetryingExecutionStrategy>>();
+            
             options.UseSqlServer(
                 connectionString,
                 sql => sql
                     .MigrationsAssembly(typeof(MyDbContext).Assembly.FullName)
-                    .EnableRetryOnFailure(
-                        maxRetryCount: 5,
+                    .ExecutionStrategy(dependencies => new LoggingSqlServerRetryingExecutionStrategy(
+                        dependencies,
+                        maxRetryCount: int.MaxValue, // Бесконечно (как ты и просил)
                         maxRetryDelay: TimeSpan.FromSeconds(30),
-                        errorNumbersToAdd: null)));
+                        errorNumbersToAdd: null,
+                        logger: logger)));
+        });
 
-        // Register DatabaseMigrationFacade
-        services.AddScoped<DatabaseMigrationFacade>();
+        services.AddScoped<DatabaseInitializer>();
 
-        // Get password policy options
         var passwordPolicy = SharedConfiguration.GetIOptions2<PasswordPolicyOptions>();
         services.Configure<PasswordPolicyOptions>(_ =>
         {
