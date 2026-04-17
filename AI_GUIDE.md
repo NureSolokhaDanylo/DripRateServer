@@ -98,3 +98,8 @@ The project follows CQRS and Clean Architecture principles adapted for ASP.NET C
 ## 7. Security
 - **Authentication:** The project uses ASP.NET Core Identity with **JWT Bearer** tokens for API authentication.
 - **CSRF Protection:** Since JWT Bearer tokens are used and sent via headers (not cookies), CSRF protection is not strictly required and will not be implemented to keep the architecture simple.
+
+## 8. Database Constraints & Deletion Logic
+- **SQL Server Cascade Restriction:** SQL Server does not support multiple cascade paths to the same table (e.g., `User -> Publication -> Assessment` and `User -> Assessment`).
+- **Implementation Rule:** To resolve this, some relationships are configured with `DeleteBehavior.Restrict` or `NoAction` in the Infrastructure layer.
+- **Manual Cleanup:** Consequently, Application layer **Handlers** (Use Cases) are responsible for performing manual cleanup of these restricted dependencies when deleting a primary entity (e.g., a Handler for "Delete User" must manually delete the user's Assessments or Likes before deleting the User entity itself).

@@ -22,21 +22,6 @@ namespace Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ClothPublication", b =>
-                {
-                    b.Property<Guid>("ClothesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("PublicationId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("ClothesId", "PublicationId");
-
-                    b.HasIndex("PublicationId");
-
-                    b.ToTable("PublicationClothes", (string)null);
-                });
-
             modelBuilder.Entity("Domain.Assessment", b =>
                 {
                     b.Property<Guid>("Id")
@@ -452,6 +437,21 @@ namespace Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("PublicationClothes", b =>
+                {
+                    b.Property<Guid>("ClothesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PublicationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ClothesId", "PublicationId");
+
+                    b.HasIndex("PublicationId");
+
+                    b.ToTable("PublicationClothes");
+                });
+
             modelBuilder.Entity("PublicationTag", b =>
                 {
                     b.Property<Guid>("PublicationId")
@@ -467,21 +467,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("PublicationTags", (string)null);
                 });
 
-            modelBuilder.Entity("ClothPublication", b =>
-                {
-                    b.HasOne("Domain.Cloth", null)
-                        .WithMany()
-                        .HasForeignKey("ClothesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Publication", null)
-                        .WithMany()
-                        .HasForeignKey("PublicationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Domain.Assessment", b =>
                 {
                     b.HasOne("Domain.Publication", "Publication")
@@ -493,7 +478,7 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Publication");
@@ -528,7 +513,7 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("ParentComment");
@@ -561,16 +546,18 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Domain.Comment", "Comment")
                         .WithMany()
-                        .HasForeignKey("CommentId");
+                        .HasForeignKey("CommentId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Domain.Publication", "Publication")
                         .WithMany()
-                        .HasForeignKey("PublicationId");
+                        .HasForeignKey("PublicationId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Domain.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Comment");
@@ -638,6 +625,21 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PublicationClothes", b =>
+                {
+                    b.HasOne("Domain.Cloth", null)
+                        .WithMany()
+                        .HasForeignKey("ClothesId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Publication", null)
+                        .WithMany()
+                        .HasForeignKey("PublicationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

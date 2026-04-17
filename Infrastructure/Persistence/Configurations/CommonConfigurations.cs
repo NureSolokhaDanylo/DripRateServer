@@ -36,11 +36,16 @@ public sealed class CommentConfiguration : IEntityTypeConfiguration<Comment>
         builder.HasKey(c => c.Id);
         builder.Property(c => c.Text).HasMaxLength(1000).IsRequired();
         
-        // Самоссылающаяся связь (реплаи)
+        // Убираем каскад от пользователя, оставляем только от публикации
+        builder.HasOne(c => c.User)
+            .WithMany()
+            .HasForeignKey(c => c.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         builder.HasOne(c => c.ParentComment)
             .WithMany(c => c.Replies)
             .HasForeignKey(c => c.ParentCommentId)
-            .OnDelete(DeleteBehavior.Restrict); // Чтобы не удалять ветку случайно
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.Navigation(c => c.Replies).Metadata.SetField("_replies");
     }
@@ -52,8 +57,13 @@ public sealed class AssessmentConfiguration : IEntityTypeConfiguration<Assessmen
     {
         builder.HasKey(a => a.Id);
         
-        // Ограничение: один пользователь — одна оценка на один пост
         builder.HasIndex(a => new { a.UserId, a.PublicationId }).IsUnique();
+
+        // Убираем каскад от пользователя, оставляем только от публикации
+        builder.HasOne(a => a.User)
+            .WithMany()
+            .HasForeignKey(a => a.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }
 
@@ -81,7 +91,22 @@ public sealed class LikeConfiguration : IEntityTypeConfiguration<Like>
     {
         builder.HasKey(l => l.Id);
 
-        // Гарантируем уникальность лайка от пользователя на объект
+        // Для лайков отключаем все каскады, чтобы не было конфликтов
+        builder.HasOne(l => l.User)
+            .WithMany()
+            .HasForeignKey(l => l.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(l => l.Publication)
+            .WithMany()
+            .HasForeignKey(l => l.PublicationId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(l => l.Comment)
+            .WithMany()
+            .HasForeignKey(l => l.CommentId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         builder.HasIndex(l => new { l.UserId, l.PublicationId })
             .HasFilter("[PublicationId] IS NOT NULL")
             .IsUnique();

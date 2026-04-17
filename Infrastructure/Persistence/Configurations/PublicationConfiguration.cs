@@ -12,8 +12,6 @@ public sealed class PublicationConfiguration : IEntityTypeConfiguration<Publicat
 
         builder.Property(p => p.Description).HasMaxLength(2000);
         
-        // Мапим только приватное поле. EF Core 8+ автоматически поймет, 
-        // что публичное свойство Images (которое только для чтения) связано с этим полем.
         builder.Property<List<string>>("_images")
             .HasColumnName("Images");
 
@@ -22,10 +20,13 @@ public sealed class PublicationConfiguration : IEntityTypeConfiguration<Publicat
             .WithMany()
             .UsingEntity(j => j.ToTable("PublicationTags"));
 
-        // Many-to-Many с одеждой
+        // Many-to-Many с одеждой: Отключаем один из каскадов для SQL Server
         builder.HasMany(p => p.Clothes)
             .WithMany()
-            .UsingEntity(j => j.ToTable("PublicationClothes"));
+            .UsingEntity<Dictionary<string, object>>(
+                "PublicationClothes",
+                j => j.HasOne<Cloth>().WithMany().HasForeignKey("ClothesId").OnDelete(DeleteBehavior.Restrict),
+                j => j.HasOne<Publication>().WithMany().HasForeignKey("PublicationId").OnDelete(DeleteBehavior.Cascade));
 
         builder.HasMany(p => p.Comments)
             .WithOne(c => c.Publication)
@@ -37,7 +38,6 @@ public sealed class PublicationConfiguration : IEntityTypeConfiguration<Publicat
             .HasForeignKey(a => a.PublicationId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // Настройка навигации через приватные поля
         builder.Navigation(p => p.Tags).Metadata.SetField("_tags");
         builder.Navigation(p => p.Clothes).Metadata.SetField("_clothes");
         builder.Navigation(p => p.Comments).Metadata.SetField("_comments");
