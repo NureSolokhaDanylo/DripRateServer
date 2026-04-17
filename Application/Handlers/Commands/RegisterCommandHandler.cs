@@ -1,50 +1,41 @@
 using Application.Commands;
 using Application.Dtos;
 using Application.Interfaces;
+using Domain;
+using ErrorOr;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-namespace Application.Handlers;
+namespace Application.Handlers.Commands;
 
-public sealed class RegisterCommandHandler
+public sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<AuthResponse>>
 {
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly UserManager<User> _userManager;
     private readonly IJwtTokenService _jwtTokenService;
 
     public RegisterCommandHandler(
-        UserManager<IdentityUser> userManager,
+        UserManager<User> userManager,
         IJwtTokenService jwtTokenService)
     {
-        _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-        _jwtTokenService = jwtTokenService ?? throw new ArgumentNullException(nameof(jwtTokenService));
+        _userManager = userManager;
+        _jwtTokenService = jwtTokenService;
     }
 
-    public async Task<AuthResponse> Handle(RegisterCommand command)
+    public async Task<ErrorOr<AuthResponse>> Handle(RegisterCommand command, CancellationToken cancellationToken)
     {
-        var user = new IdentityUser
-        {
-            UserName = command.Username,
-            Email = command.Email
-        };
+        var user = new User(command.Email, command.Username);
 
-        var result = await _userManager.CreateAsync(user, command.Password!);
+        var result = await _userManager.CreateAsync(user, command.Password);
 
         if (!result.Succeeded)
         {
-            var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-            return new AuthResponse
-            {
-                Success = false,
-                Message = $"Registration failed: {errors}"
-            };
+            return result.Errors
+                .Select(e => Error.Validation(e.Code, e.Description))
+                .ToList();
         }
 
         var token = _jwtTokenService.GenerateToken(user);
 
-        return new AuthResponse
-        {
-            Success = true,
-            Message = "Registration successful",
-            AccessToken = token
-        };
+        return new AuthResponse(token, user.Id, user.UserName!, user.Email!);
     }
 }

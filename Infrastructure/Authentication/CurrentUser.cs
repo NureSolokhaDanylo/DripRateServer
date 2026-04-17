@@ -8,7 +8,15 @@ public sealed class HttpContextCurrentUser : ICurrentUser
 {
     private readonly ClaimsPrincipal _principal;
 
-    public string? UserId => _principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    public Guid? UserId
+    {
+        get
+        {
+            var id = _principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            return Guid.TryParse(id, out var guid) ? guid : null;
+        }
+    }
+
     public string? Username => _principal.FindFirst(ClaimTypes.Name)?.Value;
     public bool IsAuthenticated => _principal.Identity?.IsAuthenticated ?? false;
 
@@ -20,8 +28,7 @@ public sealed class HttpContextCurrentUser : ICurrentUser
 
     public HttpContextCurrentUser(IHttpContextAccessor httpContextAccessor)
     {
-        var principal = httpContextAccessor.HttpContext?.User ?? new ClaimsPrincipal();
-        _principal = principal ?? throw new ArgumentNullException(nameof(principal));
+        _principal = httpContextAccessor.HttpContext?.User ?? new ClaimsPrincipal();
     }
 
     public bool IsInRole(string role)

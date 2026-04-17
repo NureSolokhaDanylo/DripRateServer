@@ -1,3 +1,4 @@
+using Api.OpenApi;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text.Json;
@@ -19,6 +20,8 @@ public static class SwaggerServiceCollectionExtensions
 
                 return Task.CompletedTask;
             });
+
+            options.AddOperationTransformer<ErrorCodesTransformer>();
         });
 
         return services;

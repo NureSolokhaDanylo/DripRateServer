@@ -1,3 +1,4 @@
+using Domain;
 using Infrastructure.Persistence;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +27,9 @@ public static partial class ServiceCollectionExtensions
                         maxRetryDelay: TimeSpan.FromSeconds(30),
                         errorNumbersToAdd: null)));
 
+        // Register DatabaseMigrationFacade
+        services.AddScoped<DatabaseMigrationFacade>();
+
         // Get password policy options
         var passwordPolicy = SharedConfiguration.GetIOptions2<PasswordPolicyOptions>();
         services.Configure<PasswordPolicyOptions>(_ =>
@@ -40,7 +44,7 @@ public static partial class ServiceCollectionExtensions
         });
 
         services
-            .AddIdentityCore<IdentityUser>(options =>
+            .AddIdentityCore<User>(options =>
             {
                 options.Password.RequiredLength = passwordPolicy.PasswordMinLength;
                 options.Password.RequireDigit = passwordPolicy.PasswordRequireDigit;
@@ -50,7 +54,7 @@ public static partial class ServiceCollectionExtensions
                 options.Lockout.MaxFailedAccessAttempts = passwordPolicy.LockoutMaxFailedAccessAttempts;
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(passwordPolicy.LockoutDefaultLockoutTimeSpanMinutes);
             })
-            .AddRoles<IdentityRole>()
+            .AddRoles<IdentityRole<Guid>>()
             .AddEntityFrameworkStores<MyDbContext>();
 
         return services;

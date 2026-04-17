@@ -1,7 +1,7 @@
+using Application.Dtos;
+using ErrorOr;
+using MediatR;
+
 namespace Application.Queries;
 
-public sealed class LoginQuery
-{
-    public string? Username { get; set; }
-    public string? Password { get; set; }
-}
+public record LoginQuery(string Username, string Password) : IRequest<ErrorOr<AuthResponse>>;

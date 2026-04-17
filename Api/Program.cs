@@ -2,7 +2,7 @@ using Application;
 using Infrastructure;
 using Infrastructure.Persistence;
 using Api.Extensions;
-using Application.Handlers;
+using Api.Middlewares;
 using Microsoft.EntityFrameworkCore;
 using SharedSettings;
 
@@ -16,9 +16,14 @@ services.AddControllers();
 services.AddHttpClient();
 services.AddSwaggerDocumentation();
 
+services.AddExceptionHandler<GlobalExceptionHandler>();
+services.AddProblemDetails();
+
 var host = builder.Build();
 
 await host.InitializeDatabaseAsync();
+
+host.UseExceptionHandler();
 
 if (host.Environment.IsDevelopment())
 {

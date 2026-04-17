@@ -1,5 +1,5 @@
 using Application.Interfaces;
-using Microsoft.AspNetCore.Identity;
+using Domain;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SharedSettings.Options;
@@ -15,17 +15,17 @@ public sealed class JwtTokenService : IJwtTokenService
 
     public JwtTokenService(IOptions<JwtOptions> jwtOptions)
     {
-        _jwtOptions = jwtOptions ?? throw new ArgumentNullException(nameof(jwtOptions));
+        _jwtOptions = jwtOptions;
     }
 
-    public string GenerateToken(IdentityUser user)
+    public string GenerateToken(User user)
     {
         var key = Encoding.ASCII.GetBytes(_jwtOptions.Value.Key
             ?? throw new InvalidOperationException("JWT Key not configured"));
 
         var claims = new List<Claim>
         {
-            new(ClaimTypes.NameIdentifier, user.Id),
+            new(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new(ClaimTypes.Name, user.UserName ?? ""),
             new(ClaimTypes.Email, user.Email ?? "")
         };

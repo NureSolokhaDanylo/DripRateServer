@@ -2,7 +2,7 @@ namespace Application.Interfaces;
 
 public interface ICurrentUser
 {
-    string? UserId { get; }
+    Guid? UserId { get; }
     string? Username { get; }
     IReadOnlyList<string> Roles { get; }
     bool IsAuthenticated { get; }
