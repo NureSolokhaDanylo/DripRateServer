@@ -17,6 +17,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=${DB_NAME};User Id=${DB_USER};Password=${DB_PASSWORD};TrustServerCertificate=True;Encrypt=False
       - Jwt__Key=${Jwt_Key}
+      - BlobStorage__ConnectionString=${BlobStorage__ConnectionString}
+      - BlobStorage__ContainerName=${BlobStorage__ContainerName}
 
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2025-latest

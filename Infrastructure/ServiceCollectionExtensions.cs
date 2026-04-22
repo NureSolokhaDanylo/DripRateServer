@@ -20,6 +20,7 @@ public static partial class ServiceCollectionExtensions
     {
         services.AddDatabaseConfiguration();
         services.AddAuthenticationConfiguration();
+        services.AddStorageConfiguration();
 
         return services;
     }
