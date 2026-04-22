@@ -34,6 +34,7 @@ public static partial class ServiceCollectionExtensions
                         logger: logger)));
         });
 
+        services.AddScoped<Application.Interfaces.IApplicationDbContext>(sp => sp.GetRequiredService<MyDbContext>());
         services.AddScoped<DatabaseInitializer>();
         services.AddScoped<Application.Interfaces.IStartupScript, Infrastructure.Persistence.Scripts.SeedTagsStartupScript>();
 

@@ -9,6 +9,8 @@ x86/
 [Bb]in/
 [Oo]bj/
 
+AI_GUIDE.md
+
 # Visual Studio 2015/2017/2019/2022 cache/options directory
 .vs/
 

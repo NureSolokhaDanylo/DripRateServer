@@ -101,5 +101,5 @@ The project follows CQRS and Clean Architecture principles adapted for ASP.NET C
 
 ## 8. Database Constraints & Deletion Logic
 - **SQL Server Cascade Restriction:** SQL Server does not support multiple cascade paths to the same table (e.g., `User -> Publication -> Assessment` and `User -> Assessment`).
-- **Implementation Rule:** To resolve this, some relationships are configured with `DeleteBehavior.Restrict` or `NoAction` in the Infrastructure layer.
-- **Manual Cleanup:** Consequently, Application layer **Handlers** (Use Cases) are responsible for performing manual cleanup of these restricted dependencies when deleting a primary entity (e.g., a Handler for "Delete User" must manually delete the user's Assessments or Likes before deleting the User entity itself).
+- **Implementation Rule:** To ensure reliability and avoid database-level conflicts, **ALL** relationships are configured with `DeleteBehavior.Restrict` or `NoAction` (except for simple, non-conflicting many-to-many join tables where EF manages it).
+- **Manual Cleanup:** The logic for deleting related entities **MUST** reside strictly in the **Application layer Handlers**. Handlers are responsible for performing manual cleanup of all dependencies in the correct order before deleting the primary entity. Use `ExecuteDeleteAsync()` for high-performance bulk deletions where possible.
