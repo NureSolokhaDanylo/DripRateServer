@@ -23,16 +23,21 @@ public sealed class DeletePublicationCommandHandler : IRequestHandler<DeletePubl
             return Error.NotFound(description: "Publication not found.");
         }
 
-        await _context.Likes
-            .Where(l => l.PublicationId == request.PublicationId)
-            .ExecuteDeleteAsync(cancellationToken);
+        // Remove publication from all collections (many-to-many relationship)
+        // EF Core doesn't directly expose the junction table in DbSet, so we can't use ExecuteDeleteAsync on it directly easily without raw SQL.
+        // However, we can use raw SQL for the junction table or just let the Publication deletion handle it if it were Cascade.
+        // Given Rule 8 (Restrict), we MUST manually delete entries from "CollectionPublications"
+        await _context.Database.ExecuteSqlRawAsync(
+            "DELETE FROM CollectionPublications WHERE PublicationId = {0}", 
+            request.PublicationId, 
+            cancellationToken);
 
         await _context.Assessments
             .Where(a => a.PublicationId == request.PublicationId)
             .ExecuteDeleteAsync(cancellationToken);
 
-        await _context.Likes
-            .Where(l => l.Comment != null && l.Comment.PublicationId == request.PublicationId)
+        await _context.CommentLikes
+            .Where(l => l.Comment.PublicationId == request.PublicationId)
             .ExecuteDeleteAsync(cancellationToken);
 
         while (true)

@@ -23,35 +23,47 @@ public sealed class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand
             return Error.NotFound(description: "User not found.");
         }
 
-        await _context.Likes
+        // 1. Remove all User's Likes on comments
+        await _context.CommentLikes
             .Where(l => l.UserId == request.UserId)
             .ExecuteDeleteAsync(cancellationToken);
 
+        // 2. Remove all User's Assessments
         await _context.Assessments
             .Where(a => a.UserId == request.UserId)
             .ExecuteDeleteAsync(cancellationToken);
 
+        // 3. Remove all User's Follows
         await _context.Follows
             .Where(f => f.FollowerId == request.UserId || f.FolloweeId == request.UserId)
             .ExecuteDeleteAsync(cancellationToken);
 
-        var userPublicationIds = await _context.Publications
-            .Where(p => p.UserId == request.UserId)
-            .Select(p => p.Id)
-            .ToListAsync(cancellationToken);
+        // 4. Remove all relations between User's Publications and any Collections (including other users' collections)
+        await _context.Database.ExecuteSqlRawAsync(
+            "DELETE FROM CollectionPublications WHERE PublicationId IN (SELECT Id FROM Publications WHERE UserId = {0})", 
+            request.UserId, 
+            cancellationToken);
 
-        foreach (var pubId in userPublicationIds)
-        {
-            await _context.Likes.Where(l => l.PublicationId == pubId).ExecuteDeleteAsync(cancellationToken);
-            await _context.Assessments.Where(a => a.PublicationId == pubId).ExecuteDeleteAsync(cancellationToken);
-        }
+        // 5. Remove all relations inside User's Collections (many-to-many junction)
+        await _context.Database.ExecuteSqlRawAsync(
+            "DELETE FROM CollectionPublications WHERE CollectionId IN (SELECT Id FROM Collections WHERE UserId = {0})", 
+            request.UserId, 
+            cancellationToken);
 
-        await _context.Likes
-            .Where(l => l.Comment != null && l.Comment.UserId == request.UserId)
+        // 6. Remove User's Collections
+        await _context.Collections
+            .Where(c => c.UserId == request.UserId)
             .ExecuteDeleteAsync(cancellationToken);
 
+        // 7. Cleanup after User's Publications (likes on their comments, comments themselves)
+        await _context.CommentLikes
+            .Where(l => l.Comment.Publication.UserId == request.UserId)
+            .ExecuteDeleteAsync(cancellationToken);
+
+        await DeleteUserCommentsByPublicationAsync(request.UserId, cancellationToken);
         await DeleteUserCommentsAsync(request.UserId, cancellationToken);
 
+        // 8. Remove Clothes, Publications and the User itself
         await _context.Clothes
             .Where(c => c.UserId == request.UserId)
             .ExecuteDeleteAsync(cancellationToken);
@@ -65,6 +77,18 @@ public sealed class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand
             .ExecuteDeleteAsync(cancellationToken);
 
         return Result.Deleted;
+    }
+
+    private async Task DeleteUserCommentsByPublicationAsync(Guid userId, CancellationToken cancellationToken)
+    {
+        while (true)
+        {
+            var deletedCount = await _context.Comments
+                .Where(c => c.Publication.UserId == userId && !_context.Comments.Any(reply => reply.ParentCommentId == c.Id))
+                .ExecuteDeleteAsync(cancellationToken);
+
+            if (deletedCount == 0) break;
+        }
     }
 
     private async Task DeleteUserCommentsAsync(Guid userId, CancellationToken cancellationToken)

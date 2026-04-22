@@ -7,6 +7,7 @@ public sealed class Publication
     private readonly List<Comment> _comments = new();
     private readonly List<Assessment> _assessments = new();
     private readonly List<string> _images = new();
+    private readonly List<Collection> _collections = new();
 
     public Guid Id { get; private set; }
     public string Description { get; private set; } = string.Empty;
@@ -20,6 +21,7 @@ public sealed class Publication
     public IReadOnlyCollection<Cloth> Clothes => _clothes.AsReadOnly();
     public IReadOnlyCollection<Comment> Comments => _comments.AsReadOnly();
     public IReadOnlyCollection<Assessment> Assessments => _assessments.AsReadOnly();
+    public IReadOnlyCollection<Collection> Collections => _collections.AsReadOnly();
 
     private Publication() { }
 

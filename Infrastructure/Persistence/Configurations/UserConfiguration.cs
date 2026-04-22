@@ -26,5 +26,11 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Navigation(u => u.Wardrobe).Metadata.SetField("_wardrobe");
         builder.Navigation(u => u.Followers).Metadata.SetField("_followers");
         builder.Navigation(u => u.Following).Metadata.SetField("_following");
+        builder.Navigation(u => u.Collections).Metadata.SetField("_collections");
+        builder.Navigation(u => u.PreferredTags).Metadata.SetField("_preferredTags");
+
+        builder.HasMany(u => u.PreferredTags)
+            .WithMany()
+            .UsingEntity(j => j.ToTable("UserPreferredTags"));
     }
 }

@@ -48,6 +48,7 @@ public sealed class CommentConfiguration : IEntityTypeConfiguration<Comment>
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.Navigation(c => c.Replies).Metadata.SetField("_replies");
+        builder.Navigation(c => c.Likes).Metadata.SetField("_likes");
     }
 }
 
@@ -82,37 +83,5 @@ public sealed class FollowConfiguration : IEntityTypeConfiguration<Follow>
             .WithMany(u => u.Followers)
             .HasForeignKey(f => f.FolloweeId)
             .OnDelete(DeleteBehavior.Restrict);
-    }
-}
-
-public sealed class LikeConfiguration : IEntityTypeConfiguration<Like>
-{
-    public void Configure(EntityTypeBuilder<Like> builder)
-    {
-        builder.HasKey(l => l.Id);
-
-        // Для лайков отключаем все каскады, чтобы не было конфликтов
-        builder.HasOne(l => l.User)
-            .WithMany()
-            .HasForeignKey(l => l.UserId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder.HasOne(l => l.Publication)
-            .WithMany()
-            .HasForeignKey(l => l.PublicationId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder.HasOne(l => l.Comment)
-            .WithMany()
-            .HasForeignKey(l => l.CommentId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder.HasIndex(l => new { l.UserId, l.PublicationId })
-            .HasFilter("[PublicationId] IS NOT NULL")
-            .IsUnique();
-
-        builder.HasIndex(l => new { l.UserId, l.CommentId })
-            .HasFilter("[CommentId] IS NOT NULL")
-            .IsUnique();
     }
 }

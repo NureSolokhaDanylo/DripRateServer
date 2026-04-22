@@ -12,18 +12,22 @@ public sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand, Er
 {
     private readonly UserManager<User> _userManager;
     private readonly IJwtTokenService _jwtTokenService;
+    private readonly IApplicationDbContext _context;
 
     public RegisterCommandHandler(
         UserManager<User> userManager,
-        IJwtTokenService jwtTokenService)
+        IJwtTokenService jwtTokenService,
+        IApplicationDbContext context)
     {
         _userManager = userManager;
         _jwtTokenService = jwtTokenService;
+        _context = context;
     }
 
     public async Task<ErrorOr<AuthResponse>> Handle(RegisterCommand command, CancellationToken cancellationToken)
     {
-        var user = new User(command.Email, command.Username);
+        var userName = command.Username ?? command.Email.Split('@')[0];
+        var user = new User(command.Email, userName);
 
         var result = await _userManager.CreateAsync(user, command.Password);
 
@@ -33,6 +37,10 @@ public sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand, Er
                 .Select(e => Error.Validation(e.Code, e.Description))
                 .ToList();
         }
+
+        // Initialize and save system collections
+        user.InitializeCollections();
+        await _context.SaveChangesAsync(cancellationToken);
 
         var token = _jwtTokenService.GenerateToken(user);
 

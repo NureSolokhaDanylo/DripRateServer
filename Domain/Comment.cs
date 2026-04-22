@@ -3,6 +3,7 @@ namespace Domain;
 public sealed class Comment
 {
     private readonly List<Comment> _replies = new();
+    private readonly List<CommentLike> _likes = new();
 
     public Guid Id { get; private set; }
     public string Text { get; private set; } = string.Empty;
@@ -18,6 +19,7 @@ public sealed class Comment
     public Comment? ParentComment { get; private set; }
 
     public IReadOnlyCollection<Comment> Replies => _replies.AsReadOnly();
+    public IReadOnlyCollection<CommentLike> Likes => _likes.AsReadOnly();
 
     private Comment() { }
 
@@ -33,5 +35,18 @@ public sealed class Comment
     public void AddReply(Comment reply)
     {
         _replies.Add(reply);
+    }
+
+    public void ToggleLike(Guid userId)
+    {
+        var existing = _likes.FirstOrDefault(l => l.UserId == userId);
+        if (existing is not null)
+        {
+            _likes.Remove(existing);
+        }
+        else
+        {
+            _likes.Add(new CommentLike(userId, Id));
+        }
     }
 }

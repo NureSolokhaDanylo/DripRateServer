@@ -1,8 +1,10 @@
 using Api.Attributes;
 using Application.Commands;
 using Application.Dtos;
+using Application.Interfaces;
 using Application.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
@@ -44,6 +46,25 @@ public class AuthController : ApiController
 
         return result.Match(
             authResponse => Ok(authResponse),
+            errors => Problem(errors));
+    }
+
+    [Authorize]
+    [HttpDelete("account")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> DeleteAccount([FromServices] ICurrentUser currentUser)
+    {
+        if (currentUser.UserId is null)
+        {
+            return Unauthorized();
+        }
+
+        var command = new DeleteUserCommand(currentUser.UserId.Value);
+        var result = await _mediator.Send(command);
+
+        return result.Match(
+            _ => NoContent(),
             errors => Problem(errors));
     }
 }

@@ -19,7 +19,8 @@ public sealed class MyDbContext : IdentityDbContext<User, IdentityRole<Guid>, Gu
     public DbSet<Comment> Comments => Set<Comment>();
     public DbSet<Assessment> Assessments => Set<Assessment>();
     public DbSet<Follow> Follows => Set<Follow>();
-    public DbSet<Like> Likes => Set<Like>();
+    public DbSet<CommentLike> CommentLikes => Set<CommentLike>();
+    public DbSet<Collection> Collections => Set<Collection>();
 
     // Регистрация IApplicationDbContext.Users для соответствия интерфейсу, 
     // хотя он уже есть в базовом IdentityDbContext.

@@ -17,10 +17,25 @@ namespace Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.0")
+                .HasAnnotation("ProductVersion", "10.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("CollectionPublications", b =>
+                {
+                    b.Property<Guid>("CollectionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PublicationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("CollectionId", "PublicationId");
+
+                    b.HasIndex("PublicationId");
+
+                    b.ToTable("CollectionPublications");
+                });
 
             modelBuilder.Entity("Domain.Assessment", b =>
                 {
@@ -93,6 +108,43 @@ namespace Infrastructure.Migrations
                     b.ToTable("Clothes");
                 });
 
+            modelBuilder.Entity("Domain.Collection", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<bool>("IsPublic")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSystem")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Collections");
+                });
+
             modelBuilder.Entity("Domain.Comment", b =>
                 {
                     b.Property<Guid>("Id")
@@ -127,6 +179,24 @@ namespace Infrastructure.Migrations
                     b.ToTable("Comments");
                 });
 
+            modelBuilder.Entity("Domain.CommentLike", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CommentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.HasKey("UserId", "CommentId");
+
+                    b.HasIndex("CommentId");
+
+                    b.ToTable("CommentLikes");
+                });
+
             modelBuilder.Entity("Domain.Follow", b =>
                 {
                     b.Property<Guid>("FollowerId")
@@ -140,41 +210,6 @@ namespace Infrastructure.Migrations
                     b.HasIndex("FolloweeId");
 
                     b.ToTable("Follows");
-                });
-
-            modelBuilder.Entity("Domain.Like", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CommentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<Guid?>("PublicationId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CommentId");
-
-                    b.HasIndex("PublicationId");
-
-                    b.HasIndex("UserId", "CommentId")
-                        .IsUnique()
-                        .HasFilter("[CommentId] IS NOT NULL");
-
-                    b.HasIndex("UserId", "PublicationId")
-                        .IsUnique()
-                        .HasFilter("[PublicationId] IS NOT NULL");
-
-                    b.ToTable("Likes");
                 });
 
             modelBuilder.Entity("Domain.Publication", b =>
@@ -467,6 +502,36 @@ namespace Infrastructure.Migrations
                     b.ToTable("PublicationTags", (string)null);
                 });
 
+            modelBuilder.Entity("TagUser", b =>
+                {
+                    b.Property<Guid>("PreferredTagsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("PreferredTagsId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserPreferredTags", (string)null);
+                });
+
+            modelBuilder.Entity("CollectionPublications", b =>
+                {
+                    b.HasOne("Domain.Collection", null)
+                        .WithMany()
+                        .HasForeignKey("CollectionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Publication", null)
+                        .WithMany()
+                        .HasForeignKey("PublicationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Assessment", b =>
                 {
                     b.HasOne("Domain.Publication", "Publication")
@@ -490,6 +555,17 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Domain.User", "User")
                         .WithMany("Wardrobe")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.Collection", b =>
+                {
+                    b.HasOne("Domain.User", "User")
+                        .WithMany("Collections")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -523,6 +599,25 @@ namespace Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Domain.CommentLike", b =>
+                {
+                    b.HasOne("Domain.Comment", "Comment")
+                        .WithMany("Likes")
+                        .HasForeignKey("CommentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Comment");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Domain.Follow", b =>
                 {
                     b.HasOne("Domain.User", "Followee")
@@ -540,31 +635,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("Followee");
 
                     b.Navigation("Follower");
-                });
-
-            modelBuilder.Entity("Domain.Like", b =>
-                {
-                    b.HasOne("Domain.Comment", "Comment")
-                        .WithMany()
-                        .HasForeignKey("CommentId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Domain.Publication", "Publication")
-                        .WithMany()
-                        .HasForeignKey("PublicationId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Domain.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Comment");
-
-                    b.Navigation("Publication");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Domain.Publication", b =>
@@ -659,8 +729,25 @@ namespace Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("TagUser", b =>
+                {
+                    b.HasOne("Domain.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("PreferredTagsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Comment", b =>
                 {
+                    b.Navigation("Likes");
+
                     b.Navigation("Replies");
                 });
 
@@ -673,6 +760,8 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.User", b =>
                 {
+                    b.Navigation("Collections");
+
                     b.Navigation("Followers");
 
                     b.Navigation("Following");
