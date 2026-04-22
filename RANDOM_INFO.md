@@ -1,8 +1,3 @@
-## swagger
-
-swagger url (if you use port 13000): [http://localhost:13000/api/docs/index.html](http://localhost:13000/api/docs/index.html)
-
-
 ## password requirements
 
 default password requirements:

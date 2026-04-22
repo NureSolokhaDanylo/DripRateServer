@@ -14,7 +14,6 @@ services.AddInfrastructure();
 services.AddApplication();
 services.AddControllers();
 services.AddHttpClient();
-services.AddSwaggerDocumentation();
 
 services.AddExceptionHandler<GlobalExceptionHandler>();
 services.AddProblemDetails();
@@ -24,11 +23,6 @@ var host = builder.Build();
 await host.InitializeDatabaseAsync();
 
 host.UseExceptionHandler();
-
-if (host.Environment.IsDevelopment())
-{
-    host.UseSwaggerDocumentation();
-}
 
 host.UseAuthentication();
 host.UseAuthorization();

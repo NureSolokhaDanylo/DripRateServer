@@ -1,4 +1,3 @@
-using Api.Attributes;
 using Application.Commands;
 using Application.Dtos;
 using Application.Interfaces;
@@ -22,7 +21,6 @@ public class AuthController : ApiController
     [HttpPost("register")]
     [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ApiErrors(StatusCodes.Status400BadRequest, "Auth.DuplicateEmail", "Auth.DuplicateUsername")]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
         var command = new RegisterCommand(request.Username, request.Email, request.Password);
@@ -37,7 +35,6 @@ public class AuthController : ApiController
     [HttpPost("login")]
     [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ApiErrors(StatusCodes.Status401Unauthorized, "Auth.InvalidCredentials")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
         var query = new LoginQuery(request.Username, request.Password);

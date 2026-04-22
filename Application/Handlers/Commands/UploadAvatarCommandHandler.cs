@@ -19,8 +19,7 @@ public sealed class UploadAvatarCommandHandler : IRequestHandler<UploadAvatarCom
 
     public async Task<ErrorOr<Updated>> Handle(UploadAvatarCommand request, CancellationToken cancellationToken)
     {
-        var user = await _context.Users
-            .FirstOrDefaultAsync(u => u.Id == request.UserId, cancellationToken);
+        var user = await _context.Users.FindAsync(new object[] { request.UserId }, cancellationToken);
 
         if (user == null)
         {

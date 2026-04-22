@@ -17,8 +17,7 @@ public sealed class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileC
 
     public async Task<ErrorOr<Updated>> Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
     {
-        var user = await _context.Users
-            .FirstOrDefaultAsync(u => u.Id == request.UserId, cancellationToken);
+        var user = await _context.Users.FindAsync(new object[] { request.UserId }, cancellationToken);
 
         if (user == null)
         {

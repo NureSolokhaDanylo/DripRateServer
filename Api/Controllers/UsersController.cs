@@ -155,10 +155,6 @@ public sealed class UsersController : ApiController
     {
         if (_currentUser.UserId == null) return Unauthorized();
 
-        var user = await _mediator.Send(new GetMyProfileQuery(_currentUser.UserId.Value));
-        if (user.IsError) return Problem(user.Errors);
-
-        // We need a specific query for tags, but for now we can fetch them via a new query or reuse.
         // Let's create GetMyPreferencesQuery for cleanliness.
         var query = new GetMyPreferencesQuery(_currentUser.UserId.Value);
         var result = await _mediator.Send(query);

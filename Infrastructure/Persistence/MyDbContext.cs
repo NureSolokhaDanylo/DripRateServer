@@ -22,9 +22,7 @@ public sealed class MyDbContext : IdentityDbContext<User, IdentityRole<Guid>, Gu
     public DbSet<CommentLike> CommentLikes => Set<CommentLike>();
     public DbSet<Collection> Collections => Set<Collection>();
 
-    // Регистрация IApplicationDbContext.Users для соответствия интерфейсу, 
-    // хотя он уже есть в базовом IdentityDbContext.
-    public override DbSet<User> Users => base.Users;
+    public DbSet<User> Users => Set<User>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

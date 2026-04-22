@@ -17,10 +17,15 @@ public sealed class DeletePublicationCommandHandler : IRequestHandler<DeletePubl
 
     public async Task<ErrorOr<Deleted>> Handle(DeletePublicationCommand request, CancellationToken cancellationToken)
     {
-        var publicationExists = await _context.Publications.AnyAsync(p => p.Id == request.PublicationId, cancellationToken);
-        if (!publicationExists)
+        var pub = await _context.Publications.FindAsync(new object[] { request.PublicationId }, cancellationToken);
+        if (pub == null)
         {
             return Error.NotFound(description: "Publication not found.");
+        }
+
+        if (pub.UserId != request.UserId)
+        {
+            return Error.Forbidden(description: "You do not have permission to delete this publication.");
         }
 
         // Remove publication from all collections (many-to-many relationship)
@@ -49,12 +54,8 @@ public sealed class DeletePublicationCommandHandler : IRequestHandler<DeletePubl
             if (deletedCount == 0) break;
         }
 
-        var pub = await _context.Publications.FindAsync(new object[] { request.PublicationId }, cancellationToken);
-        if (pub != null)
-        {
-            _context.Publications.Remove(pub);
-            await _context.SaveChangesAsync(cancellationToken);
-        }
+        _context.Publications.Remove(pub);
+        await _context.SaveChangesAsync(cancellationToken);
 
         return Result.Deleted;
     }
