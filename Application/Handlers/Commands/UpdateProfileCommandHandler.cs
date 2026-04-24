@@ -1,32 +1,33 @@
 using Application.Commands;
 using Application.Interfaces;
+using Domain;
+using Domain.Errors;
 using ErrorOr;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace Application.Handlers.Commands;
 
 public sealed class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand, ErrorOr<Updated>>
 {
-    private readonly IApplicationDbContext _context;
+    private readonly UserManager<User> _userManager;
 
-    public UpdateProfileCommandHandler(IApplicationDbContext context)
+    public UpdateProfileCommandHandler(UserManager<User> userManager)
     {
-        _context = context;
+        _userManager = userManager;
     }
 
     public async Task<ErrorOr<Updated>> Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
     {
-        var user = await _context.Users
-            .FirstOrDefaultAsync(u => u.Id == request.UserId, cancellationToken);
+        var user = await _userManager.FindByIdAsync(request.UserId.ToString());
 
         if (user == null)
         {
-            return Error.NotFound(description: "User not found.");
+            return UserErrors.NotFound;
         }
 
         user.UpdateProfile(request.Bio);
-        await _context.SaveChangesAsync(cancellationToken);
+        await _userManager.UpdateAsync(user);
 
         return Result.Updated;
     }

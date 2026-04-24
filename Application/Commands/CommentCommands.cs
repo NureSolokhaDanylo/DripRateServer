@@ -12,3 +12,7 @@ public record CreateCommentCommand(
 public record ToggleCommentLikeCommand(
     Guid UserId,
     Guid CommentId) : IRequest<ErrorOr<bool>>;
+
+public record DeleteCommentCommand(
+    Guid UserId,
+    Guid CommentId) : IRequest<ErrorOr<Deleted>>;

@@ -1,6 +1,7 @@
 using Application.Commands;
 using Application.Interfaces;
 using Domain;
+using Domain.Errors;
 using ErrorOr;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -20,20 +21,18 @@ public sealed class FollowUserCommandHandler : IRequestHandler<FollowUserCommand
     {
         if (request.FollowerId == request.FolloweeId)
         {
-            return Error.Validation(description: "You cannot follow yourself.");
+            return SocialErrors.CannotFollowSelf;
         }
 
         var followExists = await _context.Follows
             .AnyAsync(f => f.FollowerId == request.FollowerId && f.FolloweeId == request.FolloweeId, cancellationToken);
 
-        if (followExists)
+        if (!followExists)
         {
-            return Result.Success;
+            var follow = new Follow(request.FollowerId, request.FolloweeId);
+            _context.Follows.Add(follow);
+            await _context.SaveChangesAsync(cancellationToken);
         }
-
-        var follow = new Follow(request.FollowerId, request.FolloweeId);
-        _context.Follows.Add(follow);
-        await _context.SaveChangesAsync(cancellationToken);
 
         return Result.Success;
     }

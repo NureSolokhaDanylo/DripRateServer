@@ -1,7 +1,7 @@
 using Application.Dtos;
 using Application.Interfaces;
 using Application.Queries;
-using Domain;
+using Domain.Errors;
 using ErrorOr;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -19,15 +19,13 @@ public sealed class GetMyCollectionsQueryHandler : IRequestHandler<GetMyCollecti
 
     public async Task<ErrorOr<List<CollectionResponse>>> Handle(GetMyCollectionsQuery request, CancellationToken cancellationToken)
     {
-        var result = await _context.Collections
+        var collections = await _context.Collections
             .AsNoTracking()
             .Where(c => c.UserId == request.UserId)
-            .OrderByDescending(c => c.IsSystem)
-            .ThenByDescending(c => c.CreatedAt)
-            .Select(CollectionResponse.Projection)
+            .Select(c => new CollectionResponse(c.Id, c.Name, c.Description, c.IsPublic, c.IsSystem, c.Publications.Count, c.CreatedAt))
             .ToListAsync(cancellationToken);
 
-        return result;
+        return collections;
     }
 }
 
@@ -46,18 +44,17 @@ public sealed class GetCollectionItemsQueryHandler : IRequestHandler<GetCollecti
             .AsNoTracking()
             .FirstOrDefaultAsync(c => c.Id == request.CollectionId, cancellationToken);
 
-        if (collection == null) return Error.NotFound(description: "Collection not found.");
+        if (collection == null) return CollectionErrors.NotFound;
 
         if (!collection.IsPublic && collection.UserId != request.UserId)
         {
-            return Error.Forbidden(description: "This collection is private.");
+            return CollectionErrors.Forbidden;
         }
 
-        // We need to fetch publications that belong to this collection with cursor pagination.
-        // EF Core can join directly through the many-to-many relationship.
-        var query = _context.Publications
+        var query = _context.Collections
             .AsNoTracking()
-            .Where(p => p.Collections.Any(c => c.Id == request.CollectionId));
+            .Where(c => c.Id == request.CollectionId)
+            .SelectMany(c => c.Publications);
 
         if (request.Cursor.HasValue)
         {

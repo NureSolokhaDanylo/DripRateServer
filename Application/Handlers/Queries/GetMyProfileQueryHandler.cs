@@ -1,6 +1,7 @@
 using Application.Dtos;
 using Application.Interfaces;
 using Application.Queries;
+using Domain.Errors;
 using ErrorOr;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -18,17 +19,26 @@ public sealed class GetMyProfileQueryHandler : IRequestHandler<GetMyProfileQuery
 
     public async Task<ErrorOr<UserProfileResponse>> Handle(GetMyProfileQuery request, CancellationToken cancellationToken)
     {
-        var result = await _context.Users
+        var user = await _context.Users
             .AsNoTracking()
-            .Where(u => u.Id == request.UserId)
-            .Select(UserProfileResponse.Projection)
-            .FirstOrDefaultAsync(cancellationToken);
+            .Include(u => u.Followers)
+            .Include(u => u.Following)
+            .Include(u => u.Publications)
+            .FirstOrDefaultAsync(u => u.Id == request.UserId, cancellationToken);
 
-        if (result == null)
+        if (user == null)
         {
-            return Error.NotFound(description: "Profile not found.");
+            return UserErrors.NotFound;
         }
 
-        return result;
+        return new UserProfileResponse(
+            user.Id,
+            user.UserName ?? string.Empty,
+            user.Bio,
+            user.AvatarUrl,
+            user.Followers.Count,
+            user.Following.Count,
+            user.Publications.Count,
+            false);
     }
 }

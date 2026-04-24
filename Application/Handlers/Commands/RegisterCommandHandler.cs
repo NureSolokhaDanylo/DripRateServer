@@ -1,5 +1,4 @@
 using Application.Commands;
-using Application.Dtos;
 using Application.Interfaces;
 using Domain;
 using ErrorOr;
@@ -8,40 +7,33 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Application.Handlers.Commands;
 
-public sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<AuthResponse>>
+public sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<Guid>>
 {
     private readonly UserManager<User> _userManager;
-    private readonly IJwtTokenService _jwtTokenService;
-    private readonly IApplicationDbContext _context;
 
-    public RegisterCommandHandler(
-        UserManager<User> userManager,
-        IJwtTokenService jwtTokenService,
-        IApplicationDbContext context)
+    public RegisterCommandHandler(UserManager<User> userManager)
     {
         _userManager = userManager;
-        _jwtTokenService = jwtTokenService;
-        _context = context;
     }
 
-    public async Task<ErrorOr<AuthResponse>> Handle(RegisterCommand command, CancellationToken cancellationToken)
+    public async Task<ErrorOr<Guid>> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
-        var userName = command.Username ?? command.Email.Split('@')[0];
-        var user = new User(command.Email, userName);
+        var user = new User(request.Email, request.UserName);
 
-        var result = await _userManager.CreateAsync(user, command.Password);
+        var result = await _userManager.CreateAsync(user, request.Password);
 
         if (!result.Succeeded)
         {
-            return result.Errors
+            var errors = result.Errors
                 .Select(e => Error.Validation(e.Code, e.Description))
                 .ToList();
+
+            return errors;
         }
 
-        // Initialize and save system collections
         user.InitializeCollections();
-        await _context.SaveChangesAsync(cancellationToken);
+        await _userManager.UpdateAsync(user);
 
-        return _jwtTokenService.GenerateAuthResponse(user);
+        return user.Id;
     }
 }

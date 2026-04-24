@@ -1,7 +1,9 @@
+using Api.Attributes;
 using Application.Commands;
 using Application.Dtos;
 using Application.Interfaces;
 using Application.Queries;
+using Domain.Errors;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -70,6 +72,9 @@ public sealed class WardrobeController : ApiController
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ApiErrors(StatusCodes.Status404NotFound, ClothErrors.NotFoundCode)]
+    [ApiErrors(StatusCodes.Status403Forbidden, ClothErrors.ForbiddenCode)]
     public async Task<IActionResult> Delete(Guid id)
     {
         if (_currentUser.UserId == null) return Unauthorized();

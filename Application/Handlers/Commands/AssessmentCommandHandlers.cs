@@ -2,6 +2,7 @@ using Application.Commands;
 using Application.Extensions;
 using Application.Interfaces;
 using Domain;
+using Domain.Errors;
 using ErrorOr;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -19,22 +20,26 @@ public sealed class CreateAssessmentCommandHandler : IRequestHandler<CreateAsses
 
     public async Task<ErrorOr<Success>> Handle(CreateAssessmentCommand request, CancellationToken cancellationToken)
     {
-        var publicationResult = await _context.Publications.GetByIdOrErrorAsync(request.PublicationId, cancellationToken);
+        var publicationResult = await _context.Publications.GetByIdOrErrorAsync(
+            request.PublicationId, 
+            PublicationErrors.NotFound, 
+            cancellationToken);
+            
         if (publicationResult.IsError) return publicationResult.Errors;
 
         var publication = publicationResult.Value;
 
         if (publication.UserId == request.UserId)
         {
-            return Error.Validation(description: "You cannot rate your own publication.");
+            return AssessmentErrors.CannotRateOwnPublication;
         }
-...
-        var assessment = await _context.Assessments
-            .FirstOrDefaultAsync(a => a.UserId == request.UserId && a.PublicationId == request.PublicationId, cancellationToken);
 
-        if (assessment != null)
+        var existingAssessment = await _context.Assessments
+            .FirstOrDefaultAsync(a => a.PublicationId == request.PublicationId && a.UserId == request.UserId, cancellationToken);
+
+        if (existingAssessment != null)
         {
-            assessment.UpdateRatings(
+            existingAssessment.UpdateRatings(
                 request.ColorCoordination,
                 request.FitAndProportions,
                 request.Originality,
@@ -42,18 +47,19 @@ public sealed class CreateAssessmentCommandHandler : IRequestHandler<CreateAsses
         }
         else
         {
-            assessment = new Assessment(
+            var assessment = new Assessment(
                 request.UserId,
                 request.PublicationId,
                 request.ColorCoordination,
                 request.FitAndProportions,
                 request.Originality,
                 request.OverallStyle);
-            
+
             _context.Assessments.Add(assessment);
         }
 
         await _context.SaveChangesAsync(cancellationToken);
+
         return Result.Success;
     }
 }

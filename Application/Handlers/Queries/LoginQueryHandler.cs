@@ -1,40 +1,41 @@
-using Application.Dtos;
 using Application.Interfaces;
 using Application.Queries;
 using Domain;
+using Domain.Errors;
 using ErrorOr;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
 namespace Application.Handlers.Queries;
 
-public sealed class LoginQueryHandler : IRequestHandler<LoginQuery, ErrorOr<AuthResponse>>
+public sealed class LoginQueryHandler : IRequestHandler<LoginQuery, ErrorOr<string>>
 {
     private readonly UserManager<User> _userManager;
     private readonly IJwtTokenService _jwtTokenService;
 
-    public LoginQueryHandler(
-        UserManager<User> userManager,
-        IJwtTokenService jwtTokenService)
+    public LoginQueryHandler(UserManager<User> userManager, IJwtTokenService jwtTokenService)
     {
         _userManager = userManager;
         _jwtTokenService = jwtTokenService;
     }
 
-    public async Task<ErrorOr<AuthResponse>> Handle(LoginQuery query, CancellationToken cancellationToken)
+    public async Task<ErrorOr<string>> Handle(LoginQuery request, CancellationToken cancellationToken)
     {
-        var user = await _userManager.FindByNameAsync(query.Username);
+        var user = await _userManager.FindByNameAsync(request.UserNameOrEmail) 
+                   ?? await _userManager.FindByEmailAsync(request.UserNameOrEmail);
+
         if (user == null)
         {
-            return Error.Unauthorized("Auth.InvalidCredentials", "Invalid username or password");
+            return AuthErrors.InvalidCredentials;
         }
 
-        var passwordValid = await _userManager.CheckPasswordAsync(user, query.Password);
-        if (!passwordValid)
+        var isPasswordValid = await _userManager.CheckPasswordAsync(user, request.Password);
+
+        if (!isPasswordValid)
         {
-            return Error.Unauthorized("Auth.InvalidCredentials", "Invalid username or password");
+            return AuthErrors.InvalidCredentials;
         }
 
-        return _jwtTokenService.GenerateAuthResponse(user);
+        return _jwtTokenService.GenerateToken(user);
     }
 }

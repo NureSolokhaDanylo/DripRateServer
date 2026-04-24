@@ -7,7 +7,7 @@ public sealed class LoginQueryValidator : AbstractValidator<LoginQuery>
 {
     public LoginQueryValidator()
     {
-        RuleFor(x => x.Username)
+        RuleFor(x => x.UserNameOrEmail)
             .NotEmpty();
 
         RuleFor(x => x.Password)

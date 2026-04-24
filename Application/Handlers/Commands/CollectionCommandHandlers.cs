@@ -2,6 +2,7 @@ using Application.Commands;
 using Application.Extensions;
 using Application.Interfaces;
 using Domain;
+using Domain.Errors;
 using ErrorOr;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +23,6 @@ public sealed class CreateCollectionCommandHandler : IRequestHandler<CreateColle
         var collection = Collection.CreateUserDefined(request.UserId, request.Name, request.Description, request.IsPublic);
         _context.Collections.Add(collection);
         await _context.SaveChangesAsync(cancellationToken);
-
         return collection.Id;
     }
 }
@@ -39,11 +39,11 @@ public sealed class AddToCollectionCommandHandler : IRequestHandler<AddToCollect
     public async Task<ErrorOr<Success>> Handle(AddToCollectionCommand request, CancellationToken cancellationToken)
     {
         var collectionResult = await _context.Collections
-            .Include(c => c.Publications)
-            .GetOwnedOrErrorAsync(request.CollectionId, request.UserId, cancellationToken);
+            .GetOwnedOrErrorAsync(request.CollectionId, request.UserId, CollectionErrors.Forbidden, cancellationToken);
         if (collectionResult.IsError) return collectionResult.Errors;
 
-        var publicationResult = await _context.Publications.GetByIdOrErrorAsync(request.PublicationId, cancellationToken);
+        var publicationResult = await _context.Publications
+            .GetByIdOrErrorAsync(request.PublicationId, PublicationErrors.NotFound, cancellationToken);
         if (publicationResult.IsError) return publicationResult.Errors;
 
         collectionResult.Value.AddPublication(publicationResult.Value);
@@ -65,11 +65,11 @@ public sealed class RemoveFromCollectionCommandHandler : IRequestHandler<RemoveF
     public async Task<ErrorOr<Success>> Handle(RemoveFromCollectionCommand request, CancellationToken cancellationToken)
     {
         var collectionResult = await _context.Collections
-            .Include(c => c.Publications)
-            .GetOwnedOrErrorAsync(request.CollectionId, request.UserId, cancellationToken);
+            .GetOwnedOrErrorAsync(request.CollectionId, request.UserId, CollectionErrors.Forbidden, cancellationToken);
         if (collectionResult.IsError) return collectionResult.Errors;
 
-        var publicationResult = await _context.Publications.GetByIdOrErrorAsync(request.PublicationId, cancellationToken);
+        var publicationResult = await _context.Publications
+            .GetByIdOrErrorAsync(request.PublicationId, PublicationErrors.NotFound, cancellationToken);
         if (publicationResult.IsError) return publicationResult.Errors;
 
         collectionResult.Value.RemovePublication(publicationResult.Value);
@@ -94,20 +94,23 @@ public sealed class ToggleLikeCommandHandler : IRequestHandler<ToggleLikeCommand
             .Include(c => c.Publications)
             .FirstOrDefaultAsync(c => c.UserId == request.UserId && c.Type == CollectionType.SystemLikes, cancellationToken);
 
-        if (likesCollection == null) return Error.Failure(description: "Likes collection not initialized.");
+        if (likesCollection == null) return CollectionErrors.LikesNotInitialized;
 
-        var publicationResult = await _context.Publications.GetByIdOrErrorAsync(request.PublicationId, cancellationToken);
+        var publicationResult = await _context.Publications
+            .GetByIdOrErrorAsync(request.PublicationId, PublicationErrors.NotFound, cancellationToken);
         if (publicationResult.IsError) return publicationResult.Errors;
 
+        var pub = publicationResult.Value;
         bool isLiked;
+
         if (likesCollection.Publications.Any(p => p.Id == request.PublicationId))
         {
-            likesCollection.RemovePublication(publicationResult.Value);
+            likesCollection.RemovePublication(pub);
             isLiked = false;
         }
         else
         {
-            likesCollection.AddPublication(publicationResult.Value);
+            likesCollection.AddPublication(pub);
             isLiked = true;
         }
 

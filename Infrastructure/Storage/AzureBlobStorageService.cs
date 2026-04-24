@@ -1,52 +1,62 @@
 using Application.Interfaces;
+using Domain.Errors;
+using ErrorOr;
+using Microsoft.Extensions.Configuration;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using ErrorOr;
-using Microsoft.Extensions.Options;
-using SharedSettings.Options;
 
 namespace Infrastructure.Storage;
 
 public sealed class AzureBlobStorageService : IFileStorageService
 {
-    private readonly BlobStorageOptions _options;
     private readonly BlobServiceClient _blobServiceClient;
+    private readonly string _containerName;
 
-    public AzureBlobStorageService(IOptions<BlobStorageOptions> options)
+    public AzureBlobStorageService(IConfiguration configuration)
     {
-        _options = options.Value;
-        _blobServiceClient = new BlobServiceClient(_options.ConnectionString);
+        var connectionString = configuration["BlobStorage:ConnectionString"] 
+            ?? throw new ArgumentNullException("BlobStorage:ConnectionString is missing");
+        _containerName = configuration["BlobStorage:ContainerName"] 
+            ?? throw new ArgumentNullException("BlobStorage:ContainerName is missing");
+            
+        _blobServiceClient = new BlobServiceClient(connectionString);
     }
 
-    public async Task<ErrorOr<string>> UploadFileAsync(
-        Stream content,
-        string contentType,
-        string fileName,
-        CancellationToken cancellationToken = default)
+    public async Task<ErrorOr<string>> UploadFileAsync(Stream stream, string fileName, string contentType, CancellationToken cancellationToken)
     {
         try
         {
-            var containerClient = _blobServiceClient.GetBlobContainerClient(_options.ContainerName);
-            
-            // Note: In production, you might want to ensure the container exists once during startup 
-            // rather than checking on every upload, but for development, this is safer.
+            var containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
             await containerClient.CreateIfNotExistsAsync(PublicAccessType.Blob, cancellationToken: cancellationToken);
 
-            var blobClient = containerClient.GetBlobClient(fileName);
-
-            var blobUploadOptions = new BlobUploadOptions
+            var blobClient = containerClient.GetBlobClient($"{Guid.NewGuid()}_{fileName}");
+            
+            var options = new BlobUploadOptions
             {
                 HttpHeaders = new BlobHttpHeaders { ContentType = contentType }
             };
 
-            await blobClient.UploadAsync(content, blobUploadOptions, cancellationToken);
+            await blobClient.UploadAsync(stream, options, cancellationToken);
 
             return blobClient.Uri.ToString();
         }
         catch (Exception)
         {
-            // Log exception here if a logger was available
-            return Error.Failure("FileStorage.UploadFailed", "Failed to upload file to Azure Blob Storage.");
+            return FileErrors.ProcessingFailed;
+        }
+    }
+
+    public async Task DeleteFileAsync(string fileUrl, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var uri = new Uri(fileUrl);
+            var blobClient = new BlobClient(uri);
+            await blobClient.DeleteIfExistsAsync(DeleteSnapshotsOption.IncludeSnapshots, cancellationToken: cancellationToken);
+        }
+        catch (Exception)
+        {
+            // Logging would be appropriate here
         }
     }
 }

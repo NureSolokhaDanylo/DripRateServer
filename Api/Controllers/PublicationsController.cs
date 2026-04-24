@@ -3,6 +3,7 @@ using Application.Commands;
 using Application.Dtos;
 using Application.Interfaces;
 using Application.Queries;
+using Domain.Errors;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -49,7 +50,7 @@ public sealed class PublicationsController : ApiController
     [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(PublicationResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ApiErrors(StatusCodes.Status404NotFound, "Publication.NotFound")]
+    [ApiErrors(StatusCodes.Status404NotFound, PublicationErrors.NotFoundCode)]
     public async Task<IActionResult> Get(Guid id)
     {
         var query = new GetPublicationQuery(id);
@@ -64,8 +65,8 @@ public sealed class PublicationsController : ApiController
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ApiErrors(StatusCodes.Status403Forbidden, "Publication.Forbidden")]
-    [ApiErrors(StatusCodes.Status404NotFound, "Publication.NotFound")]
+    [ApiErrors(StatusCodes.Status403Forbidden, PublicationErrors.ForbiddenCode)]
+    [ApiErrors(StatusCodes.Status404NotFound, PublicationErrors.NotFoundCode)]
     public async Task<IActionResult> Delete(Guid id)
     {
         if (_currentUser.UserId == null) return Unauthorized();

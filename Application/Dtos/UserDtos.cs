@@ -10,7 +10,8 @@ public record UserProfileResponse(
     string? AvatarUrl,
     int FollowersCount,
     int FollowingCount,
-    int PublicationsCount)
+    int PublicationsCount,
+    bool IsFollowing)
 {
     public static Expression<Func<User, UserProfileResponse>> Projection => u => new UserProfileResponse(
         u.Id,
@@ -19,7 +20,8 @@ public record UserProfileResponse(
         u.AvatarUrl,
         u.Followers.Count,
         u.Following.Count,
-        u.Publications.Count
+        u.Publications.Count,
+        false // Default for projection, will be filled in handler if needed
     );
 }
 

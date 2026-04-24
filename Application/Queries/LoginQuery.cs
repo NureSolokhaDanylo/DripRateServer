@@ -4,4 +4,4 @@ using MediatR;
 
 namespace Application.Queries;
 
-public record LoginQuery(string Username, string Password) : IRequest<ErrorOr<AuthResponse>>;
+public record LoginQuery(string UserNameOrEmail, string Password) : IRequest<ErrorOr<string>>;

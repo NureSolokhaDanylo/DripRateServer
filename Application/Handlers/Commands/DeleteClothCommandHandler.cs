@@ -2,13 +2,13 @@ using Application.Commands;
 using Application.Extensions;
 using Application.Interfaces;
 using Application.Interfaces.Internal;
+using Domain.Errors;
 using ErrorOr;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Handlers.Commands;
 
-public sealed class DeleteClothCommandHandler : IRequestHandler<DeleteClothCommand, ErrorOr<Deleted>>
+internal sealed class DeleteClothCommandHandler : IRequestHandler<DeleteClothCommand, ErrorOr<Deleted>>
 {
     private readonly IApplicationDbContext _context;
     private readonly IDeletionService _deletionService;
@@ -21,15 +21,17 @@ public sealed class DeleteClothCommandHandler : IRequestHandler<DeleteClothComma
 
     public async Task<ErrorOr<Deleted>> Handle(DeleteClothCommand request, CancellationToken cancellationToken)
     {
-        var clothResult = await _context.Clothes.GetOwnedOrErrorAsync(request.ClothId, request.UserId, cancellationToken);
+        var clothResult = await _context.Clothes.GetOwnedOrErrorAsync(
+            request.ClothId, 
+            request.UserId, 
+            ClothErrors.Forbidden, 
+            cancellationToken);
+            
         if (clothResult.IsError) return clothResult.Errors;
 
-        var cloth = clothResult.Value;
-
-        // Rule 8: Delegate manual cleanup to internal service
         await _deletionService.DeleteClothContentAsync(request.ClothId, cancellationToken);
-
-        _context.Clothes.Remove(cloth);
+        
+        _context.Clothes.Remove(clothResult.Value);
         await _context.SaveChangesAsync(cancellationToken);
 
         return Result.Deleted;

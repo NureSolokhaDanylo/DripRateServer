@@ -3,6 +3,7 @@ using Application.Commands;
 using Application.Dtos;
 using Application.Interfaces;
 using Application.Queries;
+using Domain.Errors;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -88,10 +89,10 @@ public sealed class UsersController : ApiController
     [HttpGet("{username}")]
     [ProducesResponseType(typeof(UserProfileResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ApiErrors(StatusCodes.Status404NotFound, "User.NotFound")]
+    [ApiErrors(StatusCodes.Status404NotFound, UserErrors.NotFoundCode)]
     public async Task<IActionResult> GetByUsername(string username)
     {
-        var query = new GetUserProfileQuery(username);
+        var query = new GetUserProfileQuery(username, _currentUser.UserId);
         var result = await _mediator.Send(query);
 
         return result.Match(

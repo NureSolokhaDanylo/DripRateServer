@@ -31,7 +31,8 @@ public sealed class GetFollowersQueryHandler : IRequestHandler<GetFollowersQuery
                 f.Follower.AvatarUrl,
                 f.Follower.Followers.Count,
                 f.Follower.Following.Count,
-                f.Follower.Publications.Count
+                f.Follower.Publications.Count,
+                false
             ))
             .ToListAsync(cancellationToken);
 
@@ -63,7 +64,8 @@ public sealed class GetFollowingQueryHandler : IRequestHandler<GetFollowingQuery
                 f.Followee.AvatarUrl,
                 f.Followee.Followers.Count,
                 f.Followee.Following.Count,
-                f.Followee.Publications.Count
+                f.Followee.Publications.Count,
+                false
             ))
             .ToListAsync(cancellationToken);
 

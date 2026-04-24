@@ -3,6 +3,7 @@ using Application.Commands;
 using Application.Dtos;
 using Application.Interfaces;
 using Application.Queries;
+using Domain.Errors;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,24 +21,26 @@ public class AuthController : ApiController
     }
 
     [HttpPost("register")]
-    [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ApiErrors(StatusCodes.Status400BadRequest, "Auth.DuplicateEmail", "Auth.DuplicateUsername")]
+    [ApiErrors(StatusCodes.Status400BadRequest, AuthErrors.EmailAlreadyTakenCode, AuthErrors.UserNameAlreadyTakenCode)]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
-        var command = new RegisterCommand(request.Username, request.Email, request.Password);
+        // Use request.Username ?? string.Empty if we want to handle nulls, 
+        // but RegisterCommand expects string.
+        var command = new RegisterCommand(request.Username ?? string.Empty, request.Email, request.Password);
 
         var result = await _mediator.Send(command);
 
         return result.Match(
-            authResponse => Ok(authResponse),
+            id => Ok(id),
             errors => Problem(errors));
     }
 
     [HttpPost("login")]
-    [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ApiErrors(StatusCodes.Status401Unauthorized, "Auth.InvalidCredentials")]
+    [ApiErrors(StatusCodes.Status401Unauthorized, AuthErrors.InvalidCredentialsCode)]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
         var query = new LoginQuery(request.Username, request.Password);
@@ -45,7 +48,7 @@ public class AuthController : ApiController
         var result = await _mediator.Send(query);
 
         return result.Match(
-            authResponse => Ok(authResponse),
+            token => Ok(token),
             errors => Problem(errors));
     }
 

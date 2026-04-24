@@ -2,13 +2,14 @@ using Application.Commands;
 using Application.Extensions;
 using Application.Interfaces;
 using Application.Interfaces.Internal;
+using Domain.Errors;
 using ErrorOr;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Handlers.Commands;
 
-public sealed class UploadAvatarCommandHandler : IRequestHandler<UploadAvatarCommand, ErrorOr<Updated>>
+internal sealed class UploadAvatarCommandHandler : IRequestHandler<UploadAvatarCommand, ErrorOr<Updated>>
 {
     private readonly IApplicationDbContext _context;
     private readonly IFileService _fileService;
@@ -21,7 +22,7 @@ public sealed class UploadAvatarCommandHandler : IRequestHandler<UploadAvatarCom
 
     public async Task<ErrorOr<Updated>> Handle(UploadAvatarCommand request, CancellationToken cancellationToken)
     {
-        var userResult = await _context.Users.GetByIdOrErrorAsync(request.UserId, cancellationToken);
+        var userResult = await _context.Users.GetByIdOrErrorAsync(request.UserId, UserErrors.NotFound, cancellationToken);
         if (userResult.IsError) return userResult.Errors;
 
         var user = userResult.Value;

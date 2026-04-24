@@ -7,9 +7,9 @@ public sealed class RegisterCommandValidator : AbstractValidator<RegisterCommand
 {
     public RegisterCommandValidator()
     {
-        RuleFor(x => x.Username)
+        RuleFor(x => x.UserName)
             .Length(3, 50)
-            .When(x => !string.IsNullOrEmpty(x.Username));
+            .When(x => !string.IsNullOrEmpty(x.UserName));
 
         RuleFor(x => x.Email)
             .NotEmpty()

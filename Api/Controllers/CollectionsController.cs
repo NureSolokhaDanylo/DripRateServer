@@ -1,7 +1,9 @@
+using Api.Attributes;
 using Application.Commands;
 using Application.Dtos;
 using Application.Interfaces;
 using Application.Queries;
+using Domain.Errors;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -58,6 +60,8 @@ public sealed class CollectionsController : ApiController
     [ProducesResponseType(typeof(List<PublicationResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ApiErrors(StatusCodes.Status404NotFound, CollectionErrors.NotFoundCode)]
+    [ApiErrors(StatusCodes.Status403Forbidden, CollectionErrors.ForbiddenCode)]
     public async Task<IActionResult> GetItems(Guid id, [FromQuery] DateTimeOffset? cursor, [FromQuery] int take = 20)
     {
         if (_currentUser.UserId == null) return Unauthorized();
@@ -72,6 +76,10 @@ public sealed class CollectionsController : ApiController
 
     [HttpPost("{id:guid}/items/{pubId:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ApiErrors(StatusCodes.Status404NotFound, CollectionErrors.NotFoundCode, PublicationErrors.NotFoundCode)]
+    [ApiErrors(StatusCodes.Status403Forbidden, CollectionErrors.ForbiddenCode)]
     public async Task<IActionResult> AddItem(Guid id, Guid pubId)
     {
         if (_currentUser.UserId == null) return Unauthorized();
@@ -86,6 +94,10 @@ public sealed class CollectionsController : ApiController
 
     [HttpDelete("{id:guid}/items/{pubId:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ApiErrors(StatusCodes.Status404NotFound, CollectionErrors.NotFoundCode, PublicationErrors.NotFoundCode)]
+    [ApiErrors(StatusCodes.Status403Forbidden, CollectionErrors.ForbiddenCode)]
     public async Task<IActionResult> RemoveItem(Guid id, Guid pubId)
     {
         if (_currentUser.UserId == null) return Unauthorized();

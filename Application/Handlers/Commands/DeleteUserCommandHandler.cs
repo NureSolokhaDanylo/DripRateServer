@@ -1,39 +1,44 @@
 using Application.Commands;
-using Application.Extensions;
 using Application.Interfaces;
 using Application.Interfaces.Internal;
+using Domain;
+using Domain.Errors;
 using ErrorOr;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace Application.Handlers.Commands;
 
-public sealed class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, ErrorOr<Deleted>>
+internal sealed class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, ErrorOr<Deleted>>
 {
     private readonly IApplicationDbContext _context;
+    private readonly UserManager<User> _userManager;
     private readonly IDeletionService _deletionService;
 
-    public DeleteUserCommandHandler(IApplicationDbContext context, IDeletionService deletionService)
+    public DeleteUserCommandHandler(IApplicationDbContext context, UserManager<User> userManager, IDeletionService deletionService)
     {
         _context = context;
+        _userManager = userManager;
         _deletionService = deletionService;
     }
 
     public async Task<ErrorOr<Deleted>> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
-        var userExists = await _context.Users.AnyAsync(u => u.Id == request.UserId, cancellationToken);
-        if (!userExists)
+        var user = await _userManager.FindByIdAsync(request.UserId.ToString());
+
+        if (user == null)
         {
-            return Error.NotFound("User.NotFound", "User not found.");
+            return UserErrors.NotFound;
         }
 
-        // Delegate complex cleanup to internal service (Rule 8)
-        await _deletionService.DeleteUserContentAsync(request.UserId, cancellationToken);
+        await _deletionService.DeleteUserContentAsync(user.Id, cancellationToken);
+        
+        var result = await _userManager.DeleteAsync(user);
 
-        // Finally delete the user itself
-        await _context.Users
-            .Where(u => u.Id == request.UserId)
-            .ExecuteDeleteAsync(cancellationToken);
+        if (!result.Succeeded)
+        {
+            return UserErrors.DeleteFailed;
+        }
 
         return Result.Deleted;
     }

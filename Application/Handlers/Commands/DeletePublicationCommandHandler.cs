@@ -2,13 +2,13 @@ using Application.Commands;
 using Application.Extensions;
 using Application.Interfaces;
 using Application.Interfaces.Internal;
+using Domain.Errors;
 using ErrorOr;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Handlers.Commands;
 
-public sealed class DeletePublicationCommandHandler : IRequestHandler<DeletePublicationCommand, ErrorOr<Deleted>>
+internal sealed class DeletePublicationCommandHandler : IRequestHandler<DeletePublicationCommand, ErrorOr<Deleted>>
 {
     private readonly IApplicationDbContext _context;
     private readonly IDeletionService _deletionService;
@@ -21,15 +21,17 @@ public sealed class DeletePublicationCommandHandler : IRequestHandler<DeletePubl
 
     public async Task<ErrorOr<Deleted>> Handle(DeletePublicationCommand request, CancellationToken cancellationToken)
     {
-        var pubResult = await _context.Publications.GetOwnedOrErrorAsync(request.PublicationId, request.UserId, cancellationToken);
+        var pubResult = await _context.Publications.GetOwnedOrErrorAsync(
+            request.PublicationId, 
+            request.UserId, 
+            PublicationErrors.Forbidden, 
+            cancellationToken);
+            
         if (pubResult.IsError) return pubResult.Errors;
 
-        var pub = pubResult.Value;
-
-        // Rule 8 (Restrict): Delegate complex cleanup to internal service
         await _deletionService.DeletePublicationContentAsync(request.PublicationId, cancellationToken);
-
-        _context.Publications.Remove(pub);
+        
+        _context.Publications.Remove(pubResult.Value);
         await _context.SaveChangesAsync(cancellationToken);
 
         return Result.Deleted;

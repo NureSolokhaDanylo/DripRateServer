@@ -9,16 +9,14 @@ public static class QueryableExtensions
     public static async Task<ErrorOr<T>> GetByIdOrErrorAsync<T>(
         this IQueryable<T> query,
         Guid id,
-        CancellationToken cancellationToken,
-        string? errorDescription = null) where T : class
+        Error error,
+        CancellationToken cancellationToken) where T : class
     {
-        // We use reflection to find the Id property, assuming standard naming convention
-        // For more robustness, one could use EF Core metadata here
         var entity = await query.FirstOrDefaultAsync(CreateIdPredicate<T>(id), cancellationToken);
 
         if (entity == null)
         {
-            return Error.NotFound(description: errorDescription ?? $"{typeof(T).Name} not found.");
+            return error;
         }
 
         return entity;
@@ -28,14 +26,14 @@ public static class QueryableExtensions
         this IQueryable<T> query,
         Guid id,
         Guid userId,
-        CancellationToken cancellationToken,
-        string? errorDescription = null) where T : class
+        Error error,
+        CancellationToken cancellationToken) where T : class
     {
         var entity = await query.FirstOrDefaultAsync(CreateOwnedPredicate<T>(id, userId), cancellationToken);
 
         if (entity == null)
         {
-            return Error.NotFound(description: errorDescription ?? $"{typeof(T).Name} not found or access denied.");
+            return error;
         }
 
         return entity;

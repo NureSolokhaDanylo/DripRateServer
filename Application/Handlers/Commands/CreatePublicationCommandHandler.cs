@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Handlers.Commands;
 
-public sealed class CreatePublicationCommandHandler : IRequestHandler<CreatePublicationCommand, ErrorOr<Guid>>
+internal sealed class CreatePublicationCommandHandler : IRequestHandler<CreatePublicationCommand, ErrorOr<Guid>>
 {
     private readonly IApplicationDbContext _context;
     private readonly IFileService _fileService;
