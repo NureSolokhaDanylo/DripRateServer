@@ -21,15 +21,7 @@ public sealed class GetMyProfileQueryHandler : IRequestHandler<GetMyProfileQuery
         var result = await _context.Users
             .AsNoTracking()
             .Where(u => u.Id == request.UserId)
-            .Select(u => new UserProfileResponse(
-                u.Id,
-                u.UserName ?? string.Empty,
-                u.Bio,
-                u.AvatarUrl,
-                u.Followers.Count,
-                u.Following.Count,
-                u.Publications.Count
-            ))
+            .Select(UserProfileResponse.Projection)
             .FirstOrDefaultAsync(cancellationToken);
 
         if (result == null)

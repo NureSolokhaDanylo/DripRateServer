@@ -41,16 +41,7 @@ public sealed class GetGlobalFeedQueryHandler : IRequestHandler<GetGlobalFeedQue
         var result = await query
             .OrderByDescending(p => p.CreatedAt)
             .Take(request.Take)
-            .Select(p => new PublicationResponse(
-                p.Id,
-                p.Description,
-                p.Images.FirstOrDefault() ?? string.Empty,
-                p.CreatedAt,
-                p.UserId,
-                p.User.UserName ?? string.Empty,
-                p.Tags.Select(t => new TagResponse(t.Id, t.Name, t.Category)).ToList(),
-                p.Clothes.Select(c => new ClothResponse(c.Id, c.Name, c.Brand, c.PhotoUrl)).ToList()
-            ))
+            .Select(PublicationResponse.Projection)
             .ToListAsync(cancellationToken);
 
         return result;
@@ -85,16 +76,7 @@ public sealed class GetSubscriptionFeedQueryHandler : IRequestHandler<GetSubscri
         var result = await query
             .OrderByDescending(p => p.CreatedAt)
             .Take(request.Take)
-            .Select(p => new PublicationResponse(
-                p.Id,
-                p.Description,
-                p.Images.FirstOrDefault() ?? string.Empty,
-                p.CreatedAt,
-                p.UserId,
-                p.User.UserName ?? string.Empty,
-                p.Tags.Select(t => new TagResponse(t.Id, t.Name, t.Category)).ToList(),
-                p.Clothes.Select(c => new ClothResponse(c.Id, c.Name, c.Brand, c.PhotoUrl)).ToList()
-            ))
+            .Select(PublicationResponse.Projection)
             .ToListAsync(cancellationToken);
 
         return result;
@@ -124,16 +106,7 @@ public sealed class GetUserFeedQueryHandler : IRequestHandler<GetUserFeedQuery, 
         var result = await query
             .OrderByDescending(p => p.CreatedAt)
             .Take(request.Take)
-            .Select(p => new PublicationResponse(
-                p.Id,
-                p.Description,
-                p.Images.FirstOrDefault() ?? string.Empty,
-                p.CreatedAt,
-                p.UserId,
-                p.User.UserName ?? string.Empty,
-                p.Tags.Select(t => new TagResponse(t.Id, t.Name, t.Category)).ToList(),
-                p.Clothes.Select(c => new ClothResponse(c.Id, c.Name, c.Brand, c.PhotoUrl)).ToList()
-            ))
+            .Select(PublicationResponse.Projection)
             .ToListAsync(cancellationToken);
 
         return result;

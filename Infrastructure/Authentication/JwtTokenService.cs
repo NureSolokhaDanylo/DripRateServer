@@ -1,3 +1,4 @@
+using Application.Dtos;
 using Application.Interfaces;
 using Domain;
 using Microsoft.Extensions.Options;
@@ -16,6 +17,12 @@ public sealed class JwtTokenService : IJwtTokenService
     public JwtTokenService(IOptions<JwtOptions> jwtOptions)
     {
         _jwtOptions = jwtOptions;
+    }
+
+    public AuthResponse GenerateAuthResponse(User user)
+    {
+        var token = GenerateToken(user);
+        return new AuthResponse(token, user.Id, user.UserName!, user.Email!);
     }
 
     public string GenerateToken(User user)

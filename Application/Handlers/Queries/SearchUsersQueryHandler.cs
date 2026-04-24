@@ -24,15 +24,7 @@ public sealed class SearchUsersQueryHandler : IRequestHandler<SearchUsersQuery, 
             .AsNoTracking()
             .Where(u => u.UserName != null && u.UserName.ToLower().Contains(search))
             .Take(request.Take)
-            .Select(u => new UserProfileResponse(
-                u.Id,
-                u.UserName ?? string.Empty,
-                u.Bio,
-                u.AvatarUrl,
-                u.Followers.Count,
-                u.Following.Count,
-                u.Publications.Count
-            ))
+            .Select(UserProfileResponse.Projection)
             .ToListAsync(cancellationToken);
 
         return result;

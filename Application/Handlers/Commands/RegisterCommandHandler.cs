@@ -42,8 +42,6 @@ public sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand, Er
         user.InitializeCollections();
         await _context.SaveChangesAsync(cancellationToken);
 
-        var token = _jwtTokenService.GenerateToken(user);
-
-        return new AuthResponse(token, user.Id, user.UserName!, user.Email!);
+        return _jwtTokenService.GenerateAuthResponse(user);
     }
 }

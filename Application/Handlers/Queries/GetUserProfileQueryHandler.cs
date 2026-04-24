@@ -21,20 +21,12 @@ public sealed class GetUserProfileQueryHandler : IRequestHandler<GetUserProfileQ
         var result = await _context.Users
             .AsNoTracking()
             .Where(u => u.UserName == request.Username)
-            .Select(u => new UserProfileResponse(
-                u.Id,
-                u.UserName ?? string.Empty,
-                u.Bio,
-                u.AvatarUrl,
-                u.Followers.Count,
-                u.Following.Count,
-                u.Publications.Count
-            ))
+            .Select(UserProfileResponse.Projection)
             .FirstOrDefaultAsync(cancellationToken);
 
         if (result == null)
         {
-            return Error.NotFound(description: "User not found.");
+            return Error.NotFound("User.NotFound", "User not found.");
         }
 
         return result;

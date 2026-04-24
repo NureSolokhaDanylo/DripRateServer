@@ -2,15 +2,19 @@ namespace Domain;
 
 public sealed class Tag
 {
-    public Guid Id { get; private set; }
-    public string Name { get; private set; } = string.Empty;
-    public string Category { get; private set; } = string.Empty;
+    private Guid _id;
+    private string _name = string.Empty;
+    private string _category = string.Empty;
+
+    public Guid Id => _id;
+    public string Name => _name;
+    public string Category => _category;
 
     private Tag() { }
 
     public Tag(string name, string category)
     {
-        Name = name;
-        Category = category;
+        _name = name;
+        _category = category;
     }
 }

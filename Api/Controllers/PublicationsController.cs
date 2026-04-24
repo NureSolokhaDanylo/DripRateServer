@@ -1,3 +1,4 @@
+using Api.Attributes;
 using Application.Commands;
 using Application.Dtos;
 using Application.Interfaces;
@@ -48,6 +49,7 @@ public sealed class PublicationsController : ApiController
     [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(PublicationResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ApiErrors(StatusCodes.Status404NotFound, "Publication.NotFound")]
     public async Task<IActionResult> Get(Guid id)
     {
         var query = new GetPublicationQuery(id);
@@ -62,20 +64,13 @@ public sealed class PublicationsController : ApiController
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ApiErrors(StatusCodes.Status403Forbidden, "Publication.Forbidden")]
+    [ApiErrors(StatusCodes.Status404NotFound, "Publication.NotFound")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        // Ownership check before dispatching command
-        // We could also do this inside the handler, but this is a simple check.
-        // For a more complex system, the handler should handle authorization.
-        
-        // Let's first fetch to check owner
-        var query = new GetPublicationQuery(id);
-        var getResult = await _mediator.Send(query);
-        
-        if (getResult.IsError) return Problem(getResult.Errors);
-        if (getResult.Value.UserId != _currentUser.UserId) return Forbid();
+        if (_currentUser.UserId == null) return Unauthorized();
 
-        var command = new DeletePublicationCommand(id);
+        var command = new DeletePublicationCommand(id, _currentUser.UserId.Value);
         var result = await _mediator.Send(command);
 
         return result.Match(

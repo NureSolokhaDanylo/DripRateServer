@@ -30,18 +30,7 @@ public sealed class GetCommentsQueryHandler : IRequestHandler<GetCommentsQuery, 
         var result = await query
             .OrderByDescending(c => c.CreatedAt)
             .Take(request.Take)
-            .Select(c => new CommentResponse(
-                c.Id,
-                c.Text,
-                c.CreatedAt,
-                c.UserId,
-                c.User.UserName ?? string.Empty,
-                c.User.AvatarUrl,
-                c.Likes.Count,
-                request.UserId.HasValue && c.Likes.Any(l => l.UserId == request.UserId.Value),
-                c.ParentCommentId,
-                c.Replies.Count
-            ))
+            .Select(CommentResponse.GetProjection(request.UserId))
             .ToListAsync(cancellationToken);
 
         return result;

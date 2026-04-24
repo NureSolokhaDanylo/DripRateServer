@@ -24,15 +24,7 @@ public sealed class GetMyCollectionsQueryHandler : IRequestHandler<GetMyCollecti
             .Where(c => c.UserId == request.UserId)
             .OrderByDescending(c => c.IsSystem)
             .ThenByDescending(c => c.CreatedAt)
-            .Select(c => new CollectionResponse(
-                c.Id,
-                c.Name,
-                c.Description,
-                c.IsPublic,
-                c.IsSystem,
-                c.Publications.Count,
-                c.CreatedAt
-            ))
+            .Select(CollectionResponse.Projection)
             .ToListAsync(cancellationToken);
 
         return result;
@@ -75,16 +67,7 @@ public sealed class GetCollectionItemsQueryHandler : IRequestHandler<GetCollecti
         var result = await query
             .OrderByDescending(p => p.CreatedAt)
             .Take(request.Take)
-            .Select(p => new PublicationResponse(
-                p.Id,
-                p.Description,
-                p.Images.FirstOrDefault() ?? string.Empty,
-                p.CreatedAt,
-                p.UserId,
-                p.User.UserName ?? string.Empty,
-                p.Tags.Select(t => new TagResponse(t.Id, t.Name, t.Category)).ToList(),
-                p.Clothes.Select(c => new ClothResponse(c.Id, c.Name, c.Brand, c.PhotoUrl)).ToList()
-            ))
+            .Select(PublicationResponse.Projection)
             .ToListAsync(cancellationToken);
 
         return result;

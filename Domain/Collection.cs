@@ -9,18 +9,28 @@ public enum CollectionType
 
 public sealed class Collection
 {
+    private Guid _id;
+    private string _name = string.Empty;
+    private string? _description;
+    private bool _isPublic;
+    private bool _isSystem;
+    private CollectionType _type;
+    private DateTimeOffset _createdAt;
+    private Guid _userId;
+    private User _user = null!;
+
     private readonly List<Publication> _publications = new();
 
-    public Guid Id { get; private set; }
-    public string Name { get; private set; } = string.Empty;
-    public string? Description { get; private set; }
-    public bool IsPublic { get; private set; }
-    public bool IsSystem { get; private set; }
-    public CollectionType Type { get; private set; }
-    public DateTimeOffset CreatedAt { get; private set; }
+    public Guid Id => _id;
+    public string Name => _name;
+    public string? Description => _description;
+    public bool IsPublic => _isPublic;
+    public bool IsSystem => _isSystem;
+    public CollectionType Type => _type;
+    public DateTimeOffset CreatedAt => _createdAt;
 
-    public Guid UserId { get; private set; }
-    public User User { get; private set; } = null!;
+    public Guid UserId => _userId;
+    public User User => _user;
 
     public IReadOnlyCollection<Publication> Publications => _publications.AsReadOnly();
 
@@ -28,13 +38,13 @@ public sealed class Collection
 
     private Collection(Guid userId, string name, string? description, bool isPublic, bool isSystem, CollectionType type)
     {
-        UserId = userId;
-        Name = name;
-        Description = description;
-        IsPublic = isPublic;
-        IsSystem = isSystem;
-        Type = type;
-        CreatedAt = DateTimeOffset.UtcNow;
+        _userId = userId;
+        _name = name;
+        _description = description;
+        _isPublic = isPublic;
+        _isSystem = isSystem;
+        _type = type;
+        _createdAt = DateTimeOffset.UtcNow;
     }
 
     public static Collection CreateUserDefined(Guid userId, string name, string? description, bool isPublic)

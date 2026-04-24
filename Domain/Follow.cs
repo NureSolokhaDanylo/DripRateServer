@@ -2,17 +2,22 @@ namespace Domain;
 
 public sealed class Follow
 {
-    public Guid FollowerId { get; private set; }
-    public User Follower { get; private set; } = null!;
+    private Guid _followerId;
+    private User _follower = null!;
+    private Guid _followeeId;
+    private User _followee = null!;
 
-    public Guid FolloweeId { get; private set; }
-    public User Followee { get; private set; } = null!;
+    public Guid FollowerId => _followerId;
+    public User Follower => _follower;
+
+    public Guid FolloweeId => _followeeId;
+    public User Followee => _followee;
 
     private Follow() { }
 
     public Follow(Guid followerId, Guid followeeId)
     {
-        FollowerId = followerId;
-        FolloweeId = followeeId;
+        _followerId = followerId;
+        _followeeId = followeeId;
     }
 }

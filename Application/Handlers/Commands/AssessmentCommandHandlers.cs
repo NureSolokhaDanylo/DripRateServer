@@ -1,4 +1,5 @@
 using Application.Commands;
+using Application.Extensions;
 using Application.Interfaces;
 using Domain;
 using ErrorOr;
@@ -18,14 +19,16 @@ public sealed class CreateAssessmentCommandHandler : IRequestHandler<CreateAsses
 
     public async Task<ErrorOr<Success>> Handle(CreateAssessmentCommand request, CancellationToken cancellationToken)
     {
-        var publication = await _context.Publications.FindAsync(new object[] { request.PublicationId }, cancellationToken);
-        if (publication == null) return Error.NotFound(description: "Publication not found.");
+        var publicationResult = await _context.Publications.GetByIdOrErrorAsync(request.PublicationId, cancellationToken);
+        if (publicationResult.IsError) return publicationResult.Errors;
+
+        var publication = publicationResult.Value;
 
         if (publication.UserId == request.UserId)
         {
             return Error.Validation(description: "You cannot rate your own publication.");
         }
-
+...
         var assessment = await _context.Assessments
             .FirstOrDefaultAsync(a => a.UserId == request.UserId && a.PublicationId == request.PublicationId, cancellationToken);
 

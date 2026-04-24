@@ -9,9 +9,18 @@ public sealed class PublicationConfiguration : IEntityTypeConfiguration<Publicat
     public void Configure(EntityTypeBuilder<Publication> builder)
     {
         builder.HasKey(p => p.Id);
+        builder.Property(p => p.Id).HasField("_id");
 
-        builder.Property(p => p.Description).HasMaxLength(2000);
+        builder.Property(p => p.Description).HasMaxLength(2000).HasField("_description");
+        builder.Property(p => p.CreatedAt).HasField("_createdAt");
+        builder.Property(p => p.UserId).HasField("_userId");
+
+        builder.HasOne(p => p.User)
+            .WithMany(u => u.Publications)
+            .HasForeignKey(p => p.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
         
+        // Мапим поле напрямую для коллекции строк
         builder.Property<List<string>>("_images")
             .HasColumnName("Images");
 
@@ -20,7 +29,7 @@ public sealed class PublicationConfiguration : IEntityTypeConfiguration<Publicat
             .WithMany()
             .UsingEntity(j => j.ToTable("PublicationTags"));
 
-        // Many-to-Many с одеждой: Отключаем один из каскадов для SQL Server
+        // Many-to-Many с одеждой
         builder.HasMany(p => p.Clothes)
             .WithMany()
             .UsingEntity<Dictionary<string, object>>(
@@ -38,6 +47,7 @@ public sealed class PublicationConfiguration : IEntityTypeConfiguration<Publicat
             .HasForeignKey(a => a.PublicationId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        builder.Navigation(p => p.User).Metadata.SetField("_user");
         builder.Navigation(p => p.Tags).Metadata.SetField("_tags");
         builder.Navigation(p => p.Clothes).Metadata.SetField("_clothes");
         builder.Navigation(p => p.Comments).Metadata.SetField("_comments");

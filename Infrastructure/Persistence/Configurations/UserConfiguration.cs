@@ -18,8 +18,8 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
             .HasForeignKey(c => c.UserId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.Property(u => u.AvatarUrl).HasMaxLength(2048);
-        builder.Property(u => u.Bio).HasMaxLength(500);
+        builder.Property(u => u.AvatarUrl).HasMaxLength(2048).HasField("_avatarUrl");
+        builder.Property(u => u.Bio).HasMaxLength(500).HasField("_bio");
 
         // Навигация через приватные поля
         builder.Navigation(u => u.Publications).Metadata.SetField("_publications");

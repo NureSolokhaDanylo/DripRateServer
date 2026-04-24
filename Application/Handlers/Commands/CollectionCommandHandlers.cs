@@ -1,4 +1,5 @@
 using Application.Commands;
+using Application.Extensions;
 using Application.Interfaces;
 using Domain;
 using ErrorOr;
@@ -37,16 +38,15 @@ public sealed class AddToCollectionCommandHandler : IRequestHandler<AddToCollect
 
     public async Task<ErrorOr<Success>> Handle(AddToCollectionCommand request, CancellationToken cancellationToken)
     {
-        var collection = await _context.Collections
+        var collectionResult = await _context.Collections
             .Include(c => c.Publications)
-            .FirstOrDefaultAsync(c => c.Id == request.CollectionId && c.UserId == request.UserId, cancellationToken);
+            .GetOwnedOrErrorAsync(request.CollectionId, request.UserId, cancellationToken);
+        if (collectionResult.IsError) return collectionResult.Errors;
 
-        if (collection == null) return Error.NotFound(description: "Collection not found.");
+        var publicationResult = await _context.Publications.GetByIdOrErrorAsync(request.PublicationId, cancellationToken);
+        if (publicationResult.IsError) return publicationResult.Errors;
 
-        var publication = await _context.Publications.FindAsync(new object[] { request.PublicationId }, cancellationToken);
-        if (publication == null) return Error.NotFound(description: "Publication not found.");
-
-        collection.AddPublication(publication);
+        collectionResult.Value.AddPublication(publicationResult.Value);
         await _context.SaveChangesAsync(cancellationToken);
 
         return Result.Success;
@@ -64,16 +64,15 @@ public sealed class RemoveFromCollectionCommandHandler : IRequestHandler<RemoveF
 
     public async Task<ErrorOr<Success>> Handle(RemoveFromCollectionCommand request, CancellationToken cancellationToken)
     {
-        var collection = await _context.Collections
+        var collectionResult = await _context.Collections
             .Include(c => c.Publications)
-            .FirstOrDefaultAsync(c => c.Id == request.CollectionId && c.UserId == request.UserId, cancellationToken);
+            .GetOwnedOrErrorAsync(request.CollectionId, request.UserId, cancellationToken);
+        if (collectionResult.IsError) return collectionResult.Errors;
 
-        if (collection == null) return Error.NotFound(description: "Collection not found.");
+        var publicationResult = await _context.Publications.GetByIdOrErrorAsync(request.PublicationId, cancellationToken);
+        if (publicationResult.IsError) return publicationResult.Errors;
 
-        var publication = await _context.Publications.FindAsync(new object[] { request.PublicationId }, cancellationToken);
-        if (publication == null) return Error.NotFound(description: "Publication not found.");
-
-        collection.RemovePublication(publication);
+        collectionResult.Value.RemovePublication(publicationResult.Value);
         await _context.SaveChangesAsync(cancellationToken);
 
         return Result.Success;
@@ -97,18 +96,18 @@ public sealed class ToggleLikeCommandHandler : IRequestHandler<ToggleLikeCommand
 
         if (likesCollection == null) return Error.Failure(description: "Likes collection not initialized.");
 
-        var publication = await _context.Publications.FindAsync(new object[] { request.PublicationId }, cancellationToken);
-        if (publication == null) return Error.NotFound(description: "Publication not found.");
+        var publicationResult = await _context.Publications.GetByIdOrErrorAsync(request.PublicationId, cancellationToken);
+        if (publicationResult.IsError) return publicationResult.Errors;
 
         bool isLiked;
         if (likesCollection.Publications.Any(p => p.Id == request.PublicationId))
         {
-            likesCollection.RemovePublication(publication);
+            likesCollection.RemovePublication(publicationResult.Value);
             isLiked = false;
         }
         else
         {
-            likesCollection.AddPublication(publication);
+            likesCollection.AddPublication(publicationResult.Value);
             isLiked = true;
         }
 

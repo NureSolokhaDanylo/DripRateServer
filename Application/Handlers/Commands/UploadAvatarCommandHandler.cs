@@ -1,5 +1,7 @@
 using Application.Commands;
+using Application.Extensions;
 using Application.Interfaces;
+using Application.Interfaces.Internal;
 using ErrorOr;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -9,32 +11,27 @@ namespace Application.Handlers.Commands;
 public sealed class UploadAvatarCommandHandler : IRequestHandler<UploadAvatarCommand, ErrorOr<Updated>>
 {
     private readonly IApplicationDbContext _context;
-    private readonly IFileStorageService _storageService;
+    private readonly IFileService _fileService;
 
-    public UploadAvatarCommandHandler(IApplicationDbContext context, IFileStorageService storageService)
+    public UploadAvatarCommandHandler(IApplicationDbContext context, IFileService fileService)
     {
         _context = context;
-        _storageService = storageService;
+        _fileService = fileService;
     }
 
     public async Task<ErrorOr<Updated>> Handle(UploadAvatarCommand request, CancellationToken cancellationToken)
     {
-        var user = await _context.Users
-            .FirstOrDefaultAsync(u => u.Id == request.UserId, cancellationToken);
+        var userResult = await _context.Users.GetByIdOrErrorAsync(request.UserId, cancellationToken);
+        if (userResult.IsError) return userResult.Errors;
 
-        if (user == null)
-        {
-            return Error.NotFound(description: "User not found.");
-        }
+        var user = userResult.Value;
 
         // Upload to storage
-        var extension = Path.GetExtension(request.FileName);
-        var uniqueFileName = $"avatars/{user.Id}/{Guid.NewGuid()}{extension}";
-        
-        var uploadResult = await _storageService.UploadFileAsync(
+        var uploadResult = await _fileService.UploadAvatarAsync(
+            user.Id,
             request.ImageStream, 
+            request.FileName, 
             request.ContentType, 
-            uniqueFileName, 
             cancellationToken);
 
         if (uploadResult.IsError)

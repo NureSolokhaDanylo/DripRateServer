@@ -19,6 +19,9 @@ public static class ServiceCollectionExtensions
 
         services.AddValidatorsFromAssembly(assembly);
 
+        services.AddScoped<Interfaces.Internal.IFileService, Services.FileService>();
+        services.AddScoped<Interfaces.Internal.IDeletionService, Services.DeletionService>();
+
         return services;
     }
 }

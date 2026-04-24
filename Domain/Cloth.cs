@@ -2,31 +2,41 @@ namespace Domain;
 
 public sealed class Cloth
 {
-    public Guid Id { get; private set; }
-    public string Name { get; private set; } = string.Empty;
-    public string? Brand { get; private set; }
-    public string? PhotoUrl { get; private set; }
-    public string? StoreLink { get; private set; }
-    public decimal? EstimatedPrice { get; private set; }
+    private Guid _id;
+    private string _name = string.Empty;
+    private string? _brand;
+    private string? _photoUrl;
+    private string? _storeLink;
+    private decimal? _estimatedPrice;
     
-    public Guid UserId { get; private set; }
-    public User User { get; private set; } = null!;
+    private Guid _userId;
+    private User _user = null!;
+
+    public Guid Id => _id;
+    public string Name => _name;
+    public string? Brand => _brand;
+    public string? PhotoUrl => _photoUrl;
+    public string? StoreLink => _storeLink;
+    public decimal? EstimatedPrice => _estimatedPrice;
+    
+    public Guid UserId => _userId;
+    public User User => _user;
 
     private Cloth() { }
 
     public Cloth(Guid userId, string name, string? brand = null)
     {
-        UserId = userId;
-        Name = name;
-        Brand = brand;
+        _userId = userId;
+        _name = name;
+        _brand = brand;
     }
 
     public void UpdateInfo(string name, string? brand, string? photoUrl, string? storeLink, decimal? price)
     {
-        Name = name;
-        Brand = brand;
-        PhotoUrl = photoUrl;
-        StoreLink = storeLink;
-        EstimatedPrice = price;
+        _name = name;
+        _brand = brand;
+        _photoUrl = photoUrl;
+        _storeLink = storeLink;
+        _estimatedPrice = price;
     }
 }

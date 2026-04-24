@@ -35,8 +35,6 @@ public sealed class LoginQueryHandler : IRequestHandler<LoginQuery, ErrorOr<Auth
             return Error.Unauthorized("Auth.InvalidCredentials", "Invalid username or password");
         }
 
-        var token = _jwtTokenService.GenerateToken(user);
-
-        return new AuthResponse(token, user.Id, user.UserName!, user.Email!);
+        return _jwtTokenService.GenerateAuthResponse(user);
     }
 }

@@ -2,6 +2,12 @@ namespace Domain;
 
 public sealed class Publication
 {
+    private Guid _id;
+    private string _description = string.Empty;
+    private DateTimeOffset _createdAt;
+    private Guid _userId;
+    private User _user = null!;
+
     private readonly List<Tag> _tags = new();
     private readonly List<Cloth> _clothes = new();
     private readonly List<Comment> _comments = new();
@@ -9,12 +15,11 @@ public sealed class Publication
     private readonly List<string> _images = new();
     private readonly List<Collection> _collections = new();
 
-    public Guid Id { get; private set; }
-    public string Description { get; private set; } = string.Empty;
-    public DateTimeOffset CreatedAt { get; private set; }
-    
-    public Guid UserId { get; private set; }
-    public User User { get; private set; } = null!;
+    public Guid Id => _id;
+    public string Description => _description;
+    public DateTimeOffset CreatedAt => _createdAt;
+    public Guid UserId => _userId;
+    public User User => _user;
 
     public IReadOnlyCollection<string> Images => _images.AsReadOnly();
     public IReadOnlyCollection<Tag> Tags => _tags.AsReadOnly();
@@ -27,9 +32,9 @@ public sealed class Publication
 
     public Publication(Guid userId, string description, IEnumerable<string> images)
     {
-        UserId = userId;
-        Description = description;
-        CreatedAt = DateTimeOffset.UtcNow;
+        _userId = userId;
+        _description = description;
+        _createdAt = DateTimeOffset.UtcNow;
         _images.AddRange(images);
     }
 
