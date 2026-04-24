@@ -18,7 +18,7 @@ public sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand, Er
 
     public async Task<ErrorOr<Guid>> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
-        var user = new User(request.Email, request.UserName);
+        var user = new User(request.Email, request.DisplayName);
 
         var result = await _userManager.CreateAsync(user, request.Password);
 

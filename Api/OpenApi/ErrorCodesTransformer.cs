@@ -29,13 +29,47 @@ public sealed class ErrorCodesTransformer : IOpenApiOperationTransformer
 
         if (allCodes.Length > 0)
         {
-            var array = new JsonArray();
-            foreach (var code in allCodes)
+            var enumValues = allCodes.Select(c => JsonValue.Create(c) as JsonNode).ToList();
+
+            foreach (var response in operation.Responses)
             {
-                array.Add(code);
+                if (response.Key.StartsWith("4") || response.Key.StartsWith("5"))
+                {
+                    foreach (var content in response.Value.Content)
+                    {
+                        var originalSchema = content.Value.Schema;
+                        
+                        if (originalSchema != null)
+                        {
+                            var schema = new OpenApiSchema();
+                            schema.AllOf ??= new List<IOpenApiSchema>();
+                            schema.AllOf.Add(originalSchema);
+                            
+                            var extensionSchema = new OpenApiSchema 
+                            { 
+                                Type = JsonSchemaType.Object,
+                                Properties = new Dictionary<string, IOpenApiSchema>()
+                            };
+                            
+                            var codeSchema = new OpenApiSchema 
+                            { 
+                                Type = JsonSchemaType.String, 
+                                Enum = enumValues 
+                            };
+                            
+                            extensionSchema.Properties.Add("code", codeSchema);
+                            schema.AllOf.Add(extensionSchema);
+                            
+                            content.Value.Schema = schema;
+                        }
+                    }
+                }
             }
 
+            // Extension for backward compatibility
             operation.Extensions ??= new Dictionary<string, IOpenApiExtension>();
+            var array = new JsonArray();
+            foreach (var code in allCodes) array.Add(code);
             operation.Extensions["x-error-codes"] = new JsonNodeExtension(array);
         }
 

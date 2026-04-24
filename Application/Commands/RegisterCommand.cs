@@ -4,4 +4,4 @@ using MediatR;
 
 namespace Application.Commands;
 
-public record RegisterCommand(string UserName, string Email, string Password) : IRequest<ErrorOr<Guid>>;
+public record RegisterCommand(string DisplayName, string Email, string Password) : IRequest<ErrorOr<Guid>>;

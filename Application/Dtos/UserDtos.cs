@@ -5,7 +5,7 @@ namespace Application.Dtos;
 
 public record UserProfileResponse(
     Guid Id,
-    string Username,
+    string DisplayName,
     string? Bio,
     string? AvatarUrl,
     int FollowersCount,
@@ -15,7 +15,7 @@ public record UserProfileResponse(
 {
     public static Expression<Func<User, UserProfileResponse>> Projection => u => new UserProfileResponse(
         u.Id,
-        u.UserName ?? string.Empty,
+        u.DisplayName,
         u.Bio,
         u.AvatarUrl,
         u.Followers.Count,
@@ -26,4 +26,8 @@ public record UserProfileResponse(
 }
 
 public record UpdateProfileRequest(
+    string? DisplayName,
     string? Bio);
+
+public record UploadAvatarRequest(
+    Microsoft.AspNetCore.Http.IFormFile File);

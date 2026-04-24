@@ -23,12 +23,12 @@ public class AuthController : ApiController
     [HttpPost("register")]
     [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ApiErrors(StatusCodes.Status400BadRequest, AuthErrors.EmailAlreadyTakenCode, AuthErrors.UserNameAlreadyTakenCode)]
+    [ApiErrors(StatusCodes.Status400BadRequest, AuthErrors.EmailAlreadyTakenCode)]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
-        // Use request.Username ?? string.Empty if we want to handle nulls, 
+        // Use request.DisplayName ?? string.Empty if we want to handle nulls, 
         // but RegisterCommand expects string.
-        var command = new RegisterCommand(request.Username ?? string.Empty, request.Email, request.Password);
+        var command = new RegisterCommand(request.DisplayName ?? string.Empty, request.Email, request.Password);
 
         var result = await _mediator.Send(command);
 
@@ -43,7 +43,7 @@ public class AuthController : ApiController
     [ApiErrors(StatusCodes.Status401Unauthorized, AuthErrors.InvalidCredentialsCode)]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
-        var query = new LoginQuery(request.Username, request.Password);
+        var query = new LoginQuery(request.Email, request.Password);
 
         var result = await _mediator.Send(query);
 

@@ -22,7 +22,7 @@ public sealed class SearchUsersQueryHandler : IRequestHandler<SearchUsersQuery, 
 
         var result = await _context.Users
             .AsNoTracking()
-            .Where(u => u.UserName != null && u.UserName.ToLower().Contains(search))
+            .Where(u => u.DisplayName.ToLower().Contains(search))
             .Take(request.Take)
             .Select(UserProfileResponse.Projection)
             .ToListAsync(cancellationToken);

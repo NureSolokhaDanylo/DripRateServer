@@ -10,7 +10,9 @@ public sealed class OperationIdTransformer : IOpenApiOperationTransformer
     {
         if (context.Description.ActionDescriptor is ControllerActionDescriptor controllerActionDescriptor)
         {
-            operation.OperationId ??= controllerActionDescriptor.ActionName;
+            var controllerName = controllerActionDescriptor.ControllerName;
+            var actionName = controllerActionDescriptor.ActionName;
+            operation.OperationId = $"{controllerName}_{actionName}";
         }
 
         return Task.CompletedTask;

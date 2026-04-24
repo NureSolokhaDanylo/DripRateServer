@@ -45,6 +45,7 @@ public sealed class UsersController : ApiController
 
         var command = new UpdateProfileCommand(
             _currentUser.UserId.Value,
+            request.DisplayName,
             request.Bio);
 
         var result = await _mediator.Send(command);
@@ -56,16 +57,16 @@ public sealed class UsersController : ApiController
 
     [HttpPatch("@me/avatar")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> UpdateAvatar([FromForm] IFormFile file)
+    public async Task<IActionResult> UpdateAvatar([FromForm] UploadAvatarRequest request)
     {
         if (_currentUser.UserId == null) return Unauthorized();
 
-        using var stream = file.OpenReadStream();
+        using var stream = request.File.OpenReadStream();
         var command = new UploadAvatarCommand(
             _currentUser.UserId.Value,
             stream,
-            file.ContentType,
-            file.FileName);
+            request.File.ContentType,
+            request.File.FileName);
 
         var result = await _mediator.Send(command);
 

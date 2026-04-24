@@ -22,7 +22,7 @@ public sealed class JwtTokenService : IJwtTokenService
     public AuthResponse GenerateAuthResponse(User user)
     {
         var token = GenerateToken(user);
-        return new AuthResponse(token, user.Id, user.UserName!, user.Email!);
+        return new AuthResponse(token, user.Id, user.DisplayName, user.Email!);
     }
 
     public string GenerateToken(User user)

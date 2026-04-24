@@ -26,7 +26,7 @@ public sealed class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileC
             return UserErrors.NotFound;
         }
 
-        user.UpdateProfile(request.Bio);
+        user.UpdateProfile(request.DisplayName, request.Bio);
         await _userManager.UpdateAsync(user);
 
         return Result.Updated;

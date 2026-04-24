@@ -10,6 +10,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 var services = builder.Services;
 
+services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 services.AddInfrastructure();
 services.AddApplication();
 services.AddControllers();
@@ -30,7 +40,10 @@ if (host.Environment.IsDevelopment())
     host.UseOpenApiDocumentation();
 }
 
+host.UseCors();
 host.UseAuthentication();
 host.UseAuthorization();
+
+host.MapControllers();
 
 await host.RunAsync();

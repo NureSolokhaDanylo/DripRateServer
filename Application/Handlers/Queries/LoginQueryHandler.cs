@@ -21,8 +21,7 @@ public sealed class LoginQueryHandler : IRequestHandler<LoginQuery, ErrorOr<stri
 
     public async Task<ErrorOr<string>> Handle(LoginQuery request, CancellationToken cancellationToken)
     {
-        var user = await _userManager.FindByNameAsync(request.UserNameOrEmail) 
-                   ?? await _userManager.FindByEmailAsync(request.UserNameOrEmail);
+        var user = await _userManager.FindByEmailAsync(request.Email);
 
         if (user == null)
         {

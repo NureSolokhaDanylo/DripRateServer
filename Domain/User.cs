@@ -14,9 +14,7 @@ public sealed class User : IdentityUser<Guid>
     private readonly List<Collection> _collections = new();
     private readonly List<Tag> _preferredTags = new();
 
-    public new string? Email { get => base.Email; private set => base.Email = value; }
-    public new string? UserName { get => base.UserName; private set => base.UserName = value; }
-
+    public string DisplayName { get; private set; } = null!;
     public string? AvatarUrl => _avatarUrl;
     public string? Bio => _bio;
 
@@ -29,14 +27,19 @@ public sealed class User : IdentityUser<Guid>
 
     private User() { }
 
-    public User(string email, string userName)
+    public User(string email, string displayName)
     {
         Email = email;
-        UserName = userName;
+        UserName = email;
+        DisplayName = displayName;
     }
 
-    public void UpdateProfile(string? bio)
+    public void UpdateProfile(string? displayName, string? bio)
     {
+        if (!string.IsNullOrWhiteSpace(displayName))
+        {
+            DisplayName = displayName;
+        }
         _bio = bio;
     }
 

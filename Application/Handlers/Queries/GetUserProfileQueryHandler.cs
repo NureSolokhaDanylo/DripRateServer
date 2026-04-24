@@ -24,7 +24,7 @@ public sealed class GetUserProfileQueryHandler : IRequestHandler<GetUserProfileQ
             .Include(u => u.Followers)
             .Include(u => u.Following)
             .Include(u => u.Publications)
-            .FirstOrDefaultAsync(u => u.UserName == request.Username, cancellationToken);
+            .FirstOrDefaultAsync(u => u.DisplayName == request.Username, cancellationToken);
 
         if (user == null)
         {
@@ -36,9 +36,9 @@ public sealed class GetUserProfileQueryHandler : IRequestHandler<GetUserProfileQ
 
         return new UserProfileResponse(
             user.Id,
-            user.UserName ?? string.Empty,
-            user.AvatarUrl,
+            user.DisplayName,
             user.Bio,
+            user.AvatarUrl,
             user.Followers.Count,
             user.Following.Count,
             user.Publications.Count,
