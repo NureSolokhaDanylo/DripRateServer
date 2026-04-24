@@ -23,11 +23,11 @@ if (-not (Test-Path $OpenApiFolder)) {
     New-Item -ItemType Directory -Path $OpenApiFolder | Out-Null
 }
 
-Write-Host "Downloading OpenAPI JSON from $BaseUrl/openapi/swagger.json..."
+Write-Host "Downloading OpenAPI JSON from $BaseUrl/openapi/openapi.json..."
 
 try {
     # Download the JSON file
-    $jsonUrl = "$BaseUrl/openapi/swagger.json"
+    $jsonUrl = "$BaseUrl/openapi/openapi.json"
     $tempFile = Join-Path $env:TEMP "openapi_temp_$(Get-Random).json"
     
     Invoke-WebRequest -Uri $jsonUrl -OutFile $tempFile -TimeoutSec 10
@@ -48,7 +48,7 @@ try {
     }
 
     # Copy to root
-    $rootJsonPath = Join-Path $RootFolder "swagger.json"
+    $rootJsonPath = Join-Path $RootFolder "openapi.json"
     Copy-Item -Path $tempFile -Destination $rootJsonPath -Force
     Write-Host "✓ Saved to root: $rootJsonPath"
 

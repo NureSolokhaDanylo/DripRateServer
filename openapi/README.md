@@ -10,8 +10,8 @@ This folder contains versioned snapshots of the OpenAPI documentation.
 
 ## Endpoints
 
-- **JSON**: `GET /openapi/swagger.json`
-- **YAML**: `GET /openapi/swagger.yaml`
+- **JSON**: `GET /openapi/openapi.json`
+- **YAML**: `GET /openapi/openapi.yaml`
 
 ## Scripts
 
@@ -31,7 +31,7 @@ Run the appropriate script from the `Scripts` folder to download the latest Open
 
 The scripts will:
 1. Download the JSON from the running API
-2. Save it to the project root as `swagger.json`
+2. Save it to the project root as `openapi.json`
 3. Check if the content matches any existing versioned file
 4. If unique, save it as `openapiXXXX.json` with the next available version number
 5. If duplicate content is found, skip saving to avoid redundant files

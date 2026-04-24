@@ -14,7 +14,7 @@ services.AddInfrastructure();
 services.AddApplication();
 services.AddControllers();
 services.AddHttpClient();
-services.AddSwaggerDocumentation();
+services.AddOpenApiDocumentation();
 
 services.AddExceptionHandler<GlobalExceptionHandler>();
 services.AddProblemDetails();
@@ -27,7 +27,7 @@ host.UseExceptionHandler();
 
 if (host.Environment.IsDevelopment())
 {
-    host.UseSwaggerDocumentation();
+    host.UseOpenApiDocumentation();
 }
 
 host.UseAuthentication();

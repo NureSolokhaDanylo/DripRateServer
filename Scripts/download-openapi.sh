@@ -24,10 +24,10 @@ ROOT_FOLDER="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # Ensure folder exists
 mkdir -p "$OPENAPI_FOLDER"
 
-echo "Downloading OpenAPI JSON from $BASE_URL/openapi/swagger.json..."
+echo "Downloading OpenAPI JSON from $BASE_URL/openapi/openapi.json..."
 
 # Download the JSON file
-JSON_URL="$BASE_URL/openapi/swagger.json"
+JSON_URL="$BASE_URL/openapi/openapi.json"
 TEMP_FILE=$(mktemp)
 
 if ! curl -f -s "$JSON_URL" -o "$TEMP_FILE" --max-time 10; then
@@ -44,7 +44,7 @@ if ! jq empty "$TEMP_FILE" 2>/dev/null; then
 fi
 
 # Copy to root
-ROOT_JSON_PATH="$ROOT_FOLDER/swagger.json"
+ROOT_JSON_PATH="$ROOT_FOLDER/openapi.json"
 cp "$TEMP_FILE" "$ROOT_JSON_PATH"
 echo "✓ Saved to root: $ROOT_JSON_PATH"
 

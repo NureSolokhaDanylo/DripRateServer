@@ -10,6 +10,9 @@ public sealed class ErrorCodesTransformer : IOpenApiOperationTransformer
 {
     public Task TransformAsync(OpenApiOperation operation, OpenApiOperationTransformerContext context, CancellationToken cancellationToken)
     {
+        ArgumentNullException.ThrowIfNull(operation);
+        ArgumentNullException.ThrowIfNull(context);
+
         if (context.Description.ActionDescriptor is not ControllerActionDescriptor controllerActionDescriptor)
         {
             return Task.CompletedTask;
@@ -18,7 +21,11 @@ public sealed class ErrorCodesTransformer : IOpenApiOperationTransformer
         var attributes = controllerActionDescriptor.MethodInfo.GetCustomAttributes(typeof(ApiErrorsAttribute), true)
             .Cast<ApiErrorsAttribute>();
 
-        var allCodes = attributes.SelectMany(a => a.Codes).Distinct().ToArray();
+        var allCodes = attributes
+            .SelectMany(a => a.Codes ?? Array.Empty<string>())
+            .Where(c => c != null)
+            .Distinct()
+            .ToArray();
 
         if (allCodes.Length > 0)
         {
@@ -28,8 +35,8 @@ public sealed class ErrorCodesTransformer : IOpenApiOperationTransformer
                 array.Add(code);
             }
 
-            // Using JsonNodeExtension if available in Microsoft.OpenApi
-            operation.Extensions.Add("x-error-codes", new JsonNodeExtension(array));
+            operation.Extensions ??= new Dictionary<string, IOpenApiExtension>();
+            operation.Extensions["x-error-codes"] = new JsonNodeExtension(array);
         }
 
         return Task.CompletedTask;

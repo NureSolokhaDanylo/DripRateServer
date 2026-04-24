@@ -6,9 +6,9 @@ using YamlDotNet.Serialization;
 
 namespace Api.Extensions;
 
-public static class SwaggerServiceCollectionExtensions
+public static class OpenApiServiceCollectionExtensions
 {
-    public static IServiceCollection AddSwaggerDocumentation(this IServiceCollection services)
+    public static IServiceCollection AddOpenApiDocumentation(this IServiceCollection services)
     {
         services.AddOpenApi(options =>
         {
@@ -27,20 +27,20 @@ public static class SwaggerServiceCollectionExtensions
         return services;
     }
 
-    public static WebApplication UseSwaggerDocumentation(this WebApplication app)
+    public static WebApplication UseOpenApiDocumentation(this WebApplication app)
     {
         if (app.Environment.IsDevelopment())
         {
-            app.MapOpenApi();
+            app.MapOpenApi("/openapi/openapi.json");
             
             // Add YAML endpoint
-            app.MapGet("/openapi/swagger.yaml", async (HttpClient httpClient) =>
+            app.MapGet("/openapi/openapi.yaml", async (HttpContext context, HttpClient httpClient) =>
             {
                 try
                 {
-                    var scheme = app.Urls.FirstOrDefault()?.StartsWith("https") ?? false ? "https" : "http";
-                    var host = app.Urls.FirstOrDefault()?.Replace("https://", "").Replace("http://", "") ?? "localhost";
-                    var jsonUrl = $"{scheme}://{host}/openapi/swagger.json";
+                    var scheme = context.Request.Scheme;
+                    var host = context.Request.Host;
+                    var jsonUrl = $"{scheme}://{host}/openapi/openapi.json";
                     
                     var jsonContent = await httpClient.GetStringAsync(jsonUrl);
                     var jsonObject = JsonSerializer.Deserialize<object>(jsonContent);
