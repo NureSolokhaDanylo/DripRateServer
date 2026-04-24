@@ -22,6 +22,8 @@ public static class OpenApiServiceCollectionExtensions
             });
 
             options.AddOperationTransformer<ErrorCodesTransformer>();
+            options.AddOperationTransformer<OperationIdTransformer>();
+            options.AddSchemaTransformer<SchemaTypeTransformer>();
         });
 
         return services;
