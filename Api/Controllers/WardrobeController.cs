@@ -52,6 +52,37 @@ public sealed class WardrobeController : ApiController
             errors => Problem(errors));
     }
 
+    [HttpPut("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ApiErrors(ClothErrors.NotFoundCode, ClothErrors.ForbiddenCode, FileErrors.ProcessingFailedCode)]
+    public async Task<IActionResult> Update(Guid id, [FromForm] UpdateClothRequest request)
+    {
+        Stream? photoStream = null;
+        if (request.Photo != null)
+        {
+            photoStream = request.Photo.OpenReadStream();
+        }
+
+        var command = new UpdateClothCommand(
+            _currentUser.UserId.Value,
+            id,
+            request.Name,
+            request.Brand,
+            request.StoreLink,
+            request.EstimatedPrice,
+            photoStream,
+            request.Photo?.ContentType,
+            request.Photo?.FileName);
+
+        var result = await _mediator.Send(command);
+
+        if (photoStream != null) await photoStream.DisposeAsync();
+
+        return result.Match(
+            _ => NoContent(),
+            errors => Problem(errors));
+    }
+
     [HttpGet]
     [ProducesResponseType(typeof(List<ClothResponseDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetWardrobe(

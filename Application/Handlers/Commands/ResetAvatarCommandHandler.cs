@@ -12,11 +12,16 @@ namespace Application.Handlers.Commands;
 internal sealed class ResetAvatarCommandHandler : IRequestHandler<ResetAvatarCommand, ErrorOr<Updated>>
 {
     private readonly IApplicationDbContext _context;
+    private readonly IFileStorageService _storageService;
     private readonly BlobStorageOptions _blobOptions;
 
-    public ResetAvatarCommandHandler(IApplicationDbContext context, IOptions<BlobStorageOptions> blobOptions)
+    public ResetAvatarCommandHandler(
+        IApplicationDbContext context, 
+        IFileStorageService storageService,
+        IOptions<BlobStorageOptions> blobOptions)
     {
         _context = context;
+        _storageService = storageService;
         _blobOptions = blobOptions.Value;
     }
 
@@ -26,10 +31,16 @@ internal sealed class ResetAvatarCommandHandler : IRequestHandler<ResetAvatarCom
         if (userResult.IsError) return userResult.Errors;
 
         var user = userResult.Value;
+        var oldAvatarUrl = user.AvatarUrl;
         
         user.UpdateAvatar(_blobOptions.DefaultAvatarUrl);
         
         await _context.SaveChangesAsync(cancellationToken);
+
+        if (!string.IsNullOrEmpty(oldAvatarUrl) && oldAvatarUrl != _blobOptions.DefaultAvatarUrl)
+        {
+            await _storageService.DeleteFileAsync(oldAvatarUrl, cancellationToken);
+        }
 
         return Result.Updated;
     }

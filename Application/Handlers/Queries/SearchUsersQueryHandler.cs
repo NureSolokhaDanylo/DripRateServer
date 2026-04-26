@@ -22,7 +22,7 @@ public sealed class SearchUsersQueryHandler : IRequestHandler<SearchUsersQuery, 
 
         var result = await _context.Users
             .AsNoTracking()
-            .Where(u => u.DisplayName.ToLower().Contains(search) || (u.UserName != null && u.UserName.ToLower().Contains(search)))
+            .Where(u => u.DisplayName.ToLower().Contains(search))
             .OrderBy(u => u.DisplayName)
             .ThenBy(u => u.Id)
             .Skip(request.Skip)

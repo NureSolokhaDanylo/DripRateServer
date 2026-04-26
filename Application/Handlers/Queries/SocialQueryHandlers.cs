@@ -21,12 +21,12 @@ public sealed class GetFollowersQueryHandler : IRequestHandler<GetFollowersQuery
         var result = await _context.Follows
             .AsNoTracking()
             .Where(f => f.FolloweeId == request.UserId)
-            .OrderBy(f => f.Follower.UserName)
+            .OrderBy(f => f.Follower.DisplayName)
             .Skip(request.Skip)
             .Take(request.Take)
             .Select(f => new UserProfileResponse(
                 f.FollowerId,
-                f.Follower.UserName ?? string.Empty,
+                f.Follower.DisplayName,
                 f.Follower.Bio,
                 f.Follower.AvatarUrl,
                 f.Follower.Followers.Count,
@@ -54,12 +54,12 @@ public sealed class GetFollowingQueryHandler : IRequestHandler<GetFollowingQuery
         var result = await _context.Follows
             .AsNoTracking()
             .Where(f => f.FollowerId == request.UserId)
-            .OrderBy(f => f.Followee.UserName)
+            .OrderBy(f => f.Followee.DisplayName)
             .Skip(request.Skip)
             .Take(request.Take)
             .Select(f => new UserProfileResponse(
                 f.FolloweeId,
-                f.Followee.UserName ?? string.Empty,
+                f.Followee.DisplayName,
                 f.Followee.Bio,
                 f.Followee.AvatarUrl,
                 f.Followee.Followers.Count,

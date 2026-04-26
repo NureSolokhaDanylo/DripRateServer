@@ -8,7 +8,7 @@ public record CommentResponse(
     string Text,
     DateTimeOffset CreatedAt,
     Guid UserId,
-    string Username,
+    string UserDisplayName,
     string AvatarUrl,
     int LikesCount,
     bool IsLikedByMe,

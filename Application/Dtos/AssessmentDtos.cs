@@ -10,7 +10,7 @@ public record AssessmentResponse(
 
 public record IndividualAssessmentResponse(
     Guid UserId,
-    string Username,
+    string UserDisplayName,
     string AvatarUrl,
     int ColorCoordination,
     int FitAndProportions,

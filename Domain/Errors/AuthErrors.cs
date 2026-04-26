@@ -10,7 +10,7 @@ public static class AuthErrors
 
     public static Error InvalidCredentials => Error.Unauthorized(
         code: InvalidCredentialsCode,
-        description: "Invalid email/username or password.");
+        description: "Invalid email or password.");
 
     public static Error EmailAlreadyTaken => Error.Conflict(
         code: EmailAlreadyTakenCode,

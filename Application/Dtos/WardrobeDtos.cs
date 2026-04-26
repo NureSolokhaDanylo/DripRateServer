@@ -9,6 +9,13 @@ public record AddClothRequest(
     decimal? EstimatedPrice,
     IFormFile? Photo);
 
+public record UpdateClothRequest(
+    string Name,
+    string? Brand,
+    string? StoreLink,
+    decimal? EstimatedPrice,
+    IFormFile? Photo);
+
 public record ClothResponseDto(
     Guid Id,
     string Name,

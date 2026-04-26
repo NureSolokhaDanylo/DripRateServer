@@ -19,6 +19,7 @@ services:
       - Jwt__Key=${Jwt_Key}
       - BlobStorage__ConnectionString=${BlobStorage__ConnectionString}
       - BlobStorage__ContainerName=${BlobStorage__ContainerName}
+      - BlobStorage__DefaultAvatarUrl=${BlobStorage__DefaultAvatarUrl}
 
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2025-latest

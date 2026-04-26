@@ -33,7 +33,6 @@ public sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand, Er
             var errors = result.Errors.Select(e => e.Code switch
             {
                 "DuplicateEmail" => AuthErrors.EmailAlreadyTaken,
-                "DuplicateUserName" => AuthErrors.EmailAlreadyTaken, // Assuming username/email uniqueness is treated similarly here
                 _ => Error.Validation(e.Code, e.Description)
             }).ToList();
 
