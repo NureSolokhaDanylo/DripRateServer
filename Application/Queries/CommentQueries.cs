@@ -7,5 +7,6 @@ namespace Application.Queries;
 public record GetCommentsQuery(
     Guid PublicationId,
     Guid? UserId,
-    DateTimeOffset? Cursor,
+    Guid? ParentCommentId = null,
+    DateTimeOffset? Cursor = null,
     int Take = 30) : IRequest<ErrorOr<List<CommentResponse>>>;

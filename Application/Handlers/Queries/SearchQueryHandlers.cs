@@ -38,8 +38,9 @@ public sealed class SearchPublicationsQueryHandler : IRequestHandler<SearchPubli
 
         var result = await query
             .OrderByDescending(p => p.CreatedAt)
+            .ThenByDescending(p => p.Id)
             .Take(request.Take)
-            .Select(PublicationResponse.Projection)
+            .Select(PublicationResponse.GetProjection(request.UserId))
             .ToListAsync(cancellationToken);
 
         return result;
@@ -63,6 +64,8 @@ public sealed class SearchCollectionsQueryHandler : IRequestHandler<SearchCollec
             .AsNoTracking()
             .Where(c => c.IsPublic && (c.Name.ToLower().Contains(search) || (c.Description != null && c.Description.ToLower().Contains(search))))
             .OrderByDescending(c => c.CreatedAt)
+            .ThenBy(c => c.Id)
+            .Skip(request.Skip)
             .Take(request.Take)
             .Select(CollectionResponse.Projection)
             .ToListAsync(cancellationToken);

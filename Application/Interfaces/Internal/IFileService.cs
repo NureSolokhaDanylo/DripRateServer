@@ -16,4 +16,10 @@ internal interface IFileService
         string fileName,
         string contentType,
         CancellationToken cancellationToken);
+
+    Task<ErrorOr<string>> UploadClothPhotoAsync(
+        Stream stream,
+        string fileName,
+        string contentType,
+        CancellationToken cancellationToken);
 }

@@ -1,21 +1,23 @@
+using Api.Attributes;
 using Application.Dtos;
 using Application.Interfaces;
 using Application.Queries;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
 
-[Authorize]
+[AuthorizeWithError]
 [Route("api/[controller]")]
 public sealed class SearchController : ApiController
 {
     private readonly ISender _mediator;
+    private readonly ICurrentUser _currentUser;
 
-    public SearchController(ISender mediator)
+    public SearchController(ISender mediator, ICurrentUser currentUser)
     {
         _mediator = mediator;
+        _currentUser = currentUser;
     }
 
     [HttpGet("publications")]
@@ -26,7 +28,7 @@ public sealed class SearchController : ApiController
         [FromQuery] DateTimeOffset? cursor, 
         [FromQuery] int take = 20)
     {
-        var q = new SearchPublicationsQuery(query, tags, cursor, take);
+        var q = new SearchPublicationsQuery(query, tags, _currentUser.UserId, cursor, take);
         var result = await _mediator.Send(q);
 
         return result.Match(
@@ -36,9 +38,9 @@ public sealed class SearchController : ApiController
 
     [HttpGet("users")]
     [ProducesResponseType(typeof(List<UserProfileResponse>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> SearchUsers([FromQuery] string query, [FromQuery] int take = 20)
+    public async Task<IActionResult> SearchUsers([FromQuery] string query, [FromQuery] int skip = 0, [FromQuery] int take = 20)
     {
-        var q = new SearchUsersQuery(query, take);
+        var q = new SearchUsersQuery(query, skip, take);
         var result = await _mediator.Send(q);
 
         return result.Match(
@@ -48,9 +50,9 @@ public sealed class SearchController : ApiController
 
     [HttpGet("collections")]
     [ProducesResponseType(typeof(List<CollectionResponse>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> SearchCollections([FromQuery] string query, [FromQuery] int take = 20)
+    public async Task<IActionResult> SearchCollections([FromQuery] string query, [FromQuery] int skip = 0, [FromQuery] int take = 20)
     {
-        var q = new SearchCollectionsQuery(query, take);
+        var q = new SearchCollectionsQuery(query, skip, take);
         var result = await _mediator.Send(q);
 
         return result.Match(

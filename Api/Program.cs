@@ -22,7 +22,36 @@ services.AddCors(options =>
 
 services.AddInfrastructure();
 services.AddApplication();
-services.AddControllers();
+services.AddControllers()
+    .ConfigureApiBehaviorOptions(options =>
+    {
+        options.InvalidModelStateResponseFactory = context =>
+        {
+            var validationErrors = context.ModelState
+                .Where(e => e.Value?.Errors.Count > 0)
+                .SelectMany(kvp => kvp.Value!.Errors.Select(e => new
+                {
+                    Code = "General.Validation",
+                    Message = e.ErrorMessage,
+                    Field = kvp.Key
+                }))
+                .ToList();
+
+            var problemDetails = new Microsoft.AspNetCore.Mvc.ProblemDetails
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Title = "One or more validation errors occurred.",
+                Type = "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+                Extensions = 
+                { 
+                    { "code", "General.Validation" },
+                    { "validationErrors", validationErrors } 
+                }
+            };
+
+            return new Microsoft.AspNetCore.Mvc.BadRequestObjectResult(problemDetails);
+        };
+    });
 services.AddHttpClient();
 services.AddOpenApiDocumentation();
 

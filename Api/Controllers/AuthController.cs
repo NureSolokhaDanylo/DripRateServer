@@ -22,8 +22,7 @@ public class AuthController : ApiController
 
     [HttpPost("register")]
     [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ApiErrors(StatusCodes.Status400BadRequest, AuthErrors.EmailAlreadyTakenCode)]
+    [ApiErrors(AuthErrors.EmailAlreadyTakenCode)]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
         // Use request.DisplayName ?? string.Empty if we want to handle nulls, 
@@ -39,8 +38,7 @@ public class AuthController : ApiController
 
     [HttpPost("login")]
     [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ApiErrors(StatusCodes.Status401Unauthorized, AuthErrors.InvalidCredentialsCode)]
+    [ApiErrors(AuthErrors.InvalidCredentialsCode)]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
         var query = new LoginQuery(request.Email, request.Password);
@@ -52,17 +50,28 @@ public class AuthController : ApiController
             errors => Problem(errors));
     }
 
-    [Authorize]
+    [AuthorizeWithError]
+    [HttpPut("password")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ApiErrors(UserErrors.NotFoundCode)]
+    public async Task<IActionResult> ChangePassword(
+        [FromBody] ChangePasswordRequest request,
+        [FromServices] ICurrentUser currentUser)
+    {
+        var command = new ChangePasswordCommand(currentUser.UserId.Value, request.OldPassword, request.NewPassword);
+        var result = await _mediator.Send(command);
+
+        return result.Match(
+            _ => NoContent(),
+            errors => Problem(errors));
+    }
+
+    [AuthorizeWithError]
     [HttpDelete("account")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ApiErrors(UserErrors.NotFoundCode, UserErrors.DeleteFailedCode)]
     public async Task<IActionResult> DeleteAccount([FromServices] ICurrentUser currentUser)
     {
-        if (currentUser.UserId is null)
-        {
-            return Unauthorized();
-        }
-
         var command = new DeleteUserCommand(currentUser.UserId.Value);
         var result = await _mediator.Send(command);
 

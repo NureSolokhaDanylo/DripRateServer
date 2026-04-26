@@ -4,8 +4,9 @@ namespace Domain;
 
 public sealed class User : IdentityUser<Guid>
 {
-    private string? _avatarUrl;
+    private string _avatarUrl = null!;
     private string? _bio;
+    private DateTimeOffset _createdAt;
 
     private readonly List<Publication> _publications = new();
     private readonly List<Cloth> _wardrobe = new();
@@ -15,8 +16,9 @@ public sealed class User : IdentityUser<Guid>
     private readonly List<Tag> _preferredTags = new();
 
     public string DisplayName { get; private set; } = null!;
-    public string? AvatarUrl => _avatarUrl;
+    public string AvatarUrl => _avatarUrl;
     public string? Bio => _bio;
+    public DateTimeOffset CreatedAt => _createdAt;
 
     public IReadOnlyCollection<Publication> Publications => _publications.AsReadOnly();
     public IReadOnlyCollection<Cloth> Wardrobe => _wardrobe.AsReadOnly();
@@ -32,6 +34,7 @@ public sealed class User : IdentityUser<Guid>
         Email = email;
         UserName = email;
         DisplayName = displayName;
+        _createdAt = DateTimeOffset.UtcNow;
     }
 
     public void UpdateProfile(string? displayName, string? bio)
@@ -43,7 +46,7 @@ public sealed class User : IdentityUser<Guid>
         _bio = bio;
     }
 
-    public void UpdateAvatar(string? avatarUrl)
+    public void UpdateAvatar(string avatarUrl)
     {
         _avatarUrl = avatarUrl;
     }
@@ -55,6 +58,11 @@ public sealed class User : IdentityUser<Guid>
         if (!_collections.Any(c => c.Type == CollectionType.SystemLikes))
         {
             _collections.Add(Collection.CreateLikes(Id));
+        }
+
+        if (!_collections.Any(c => c.Type == CollectionType.SystemSaved))
+        {
+            _collections.Add(Collection.CreateSaved(Id));
         }
     }
 

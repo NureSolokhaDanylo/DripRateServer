@@ -23,7 +23,8 @@ public sealed class GlobalExceptionHandler : IExceptionHandler
         {
             Status = StatusCodes.Status500InternalServerError,
             Title = "An internal server error occurred.",
-            Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1"
+            Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1",
+            Extensions = { { "code", "General.InternalServerError" } }
         };
 
         httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;

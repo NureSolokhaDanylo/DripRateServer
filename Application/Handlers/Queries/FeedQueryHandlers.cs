@@ -40,8 +40,9 @@ public sealed class GetGlobalFeedQueryHandler : IRequestHandler<GetGlobalFeedQue
 
         var result = await query
             .OrderByDescending(p => p.CreatedAt)
+            .ThenByDescending(p => p.Id)
             .Take(request.Take)
-            .Select(PublicationResponse.Projection)
+            .Select(PublicationResponse.GetProjection(request.UserId))
             .ToListAsync(cancellationToken);
 
         return result;
@@ -75,8 +76,9 @@ public sealed class GetSubscriptionFeedQueryHandler : IRequestHandler<GetSubscri
 
         var result = await query
             .OrderByDescending(p => p.CreatedAt)
+            .ThenByDescending(p => p.Id)
             .Take(request.Take)
-            .Select(PublicationResponse.Projection)
+            .Select(PublicationResponse.GetProjection(request.UserId))
             .ToListAsync(cancellationToken);
 
         return result;
@@ -96,7 +98,7 @@ public sealed class GetUserFeedQueryHandler : IRequestHandler<GetUserFeedQuery, 
     {
         var query = _context.Publications
             .AsNoTracking()
-            .Where(p => p.User.UserName == request.Username);
+            .Where(p => p.UserId == request.UserId);
 
         if (request.Cursor.HasValue)
         {
@@ -105,8 +107,61 @@ public sealed class GetUserFeedQueryHandler : IRequestHandler<GetUserFeedQuery, 
 
         var result = await query
             .OrderByDescending(p => p.CreatedAt)
+            .ThenByDescending(p => p.Id)
             .Take(request.Take)
-            .Select(PublicationResponse.Projection)
+            .Select(PublicationResponse.GetProjection(request.CurrentUserId))
+            .ToListAsync(cancellationToken);
+
+        return result;
+    }
+}
+
+public sealed class GetTopFeedQueryHandler : IRequestHandler<GetTopFeedQuery, ErrorOr<List<PublicationResponse>>>
+{
+    private readonly IApplicationDbContext _context;
+
+    public GetTopFeedQueryHandler(IApplicationDbContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<ErrorOr<List<PublicationResponse>>> Handle(GetTopFeedQuery request, CancellationToken cancellationToken)
+    {
+        var query = _context.Publications.AsNoTracking();
+
+        // Time filter
+        var now = DateTimeOffset.UtcNow;
+        query = request.Period switch
+        {
+            TopFeedPeriod.Weekly => query.Where(p => p.CreatedAt >= now.AddDays(-7)),
+            TopFeedPeriod.Monthly => query.Where(p => p.CreatedAt >= now.AddDays(-30)),
+            _ => query
+        };
+
+        // Scope filter (Friends/Following)
+        if (request.OnlyFollowing)
+        {
+            var followingIds = await _context.Follows
+                .Where(f => f.FollowerId == request.UserId)
+                .Select(f => f.FolloweeId)
+                .ToListAsync(cancellationToken);
+
+            query = query.Where(p => followingIds.Contains(p.UserId));
+        }
+
+        // Tags filter
+        if (request.TagIds != null && request.TagIds.Any())
+        {
+            query = query.Where(p => p.Tags.Any(t => request.TagIds.Contains(t.Id)));
+        }
+
+        var result = await query
+            .OrderByDescending(p => p.AverageRating)
+            .ThenByDescending(p => p.AssessmentsCount)
+            .ThenByDescending(p => p.Id)
+            .Skip(request.Skip)
+            .Take(request.Take)
+            .Select(PublicationResponse.GetProjection(request.UserId))
             .ToListAsync(cancellationToken);
 
         return result;

@@ -12,6 +12,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="Application" />
+    <InternalsVisibleTo Include="Application.UnitTests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Domains/" />
   </ItemGroup>
 

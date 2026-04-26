@@ -24,7 +24,7 @@ public sealed class MyDbContext : IdentityDbContext<User, IdentityRole<Guid>, Gu
 
     // Регистрация IApplicationDbContext.Users для соответствия интерфейсу, 
     // хотя он уже есть в базовом IdentityDbContext.
-    public override DbSet<User> Users => base.Users;
+    public override DbSet<User> Users => Set<User>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

@@ -1,20 +1,21 @@
 using Application.Commands;
 using Application.Interfaces;
+using Application.Interfaces.Internal;
 using Domain;
 using ErrorOr;
 using MediatR;
 
 namespace Application.Handlers.Commands;
 
-public sealed class AddClothCommandHandler : IRequestHandler<AddClothCommand, ErrorOr<Guid>>
+internal sealed class AddClothCommandHandler : IRequestHandler<AddClothCommand, ErrorOr<Guid>>
 {
     private readonly IApplicationDbContext _context;
-    private readonly IFileStorageService _storageService;
+    private readonly IFileService _fileService;
 
-    public AddClothCommandHandler(IApplicationDbContext context, IFileStorageService storageService)
+    public AddClothCommandHandler(IApplicationDbContext context, IFileService fileService)
     {
         _context = context;
-        _storageService = storageService;
+        _fileService = fileService;
     }
 
     public async Task<ErrorOr<Guid>> Handle(AddClothCommand request, CancellationToken cancellationToken)
@@ -23,13 +24,10 @@ public sealed class AddClothCommandHandler : IRequestHandler<AddClothCommand, Er
 
         if (request.PhotoStream != null && request.PhotoFileName != null && request.PhotoContentType != null)
         {
-            var extension = Path.GetExtension(request.PhotoFileName);
-            var uniqueFileName = $"cloth_{Guid.NewGuid()}{extension}";
-
-            var uploadResult = await _storageService.UploadFileAsync(
+            var uploadResult = await _fileService.UploadClothPhotoAsync(
                 request.PhotoStream,
+                request.PhotoFileName,
                 request.PhotoContentType,
-                uniqueFileName,
                 cancellationToken);
 
             if (uploadResult.IsError)

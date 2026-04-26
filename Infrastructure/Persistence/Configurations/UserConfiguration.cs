@@ -18,8 +18,9 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
             .HasForeignKey(c => c.UserId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.Property(u => u.AvatarUrl).HasMaxLength(2048).HasField("_avatarUrl");
+        builder.Property(u => u.AvatarUrl).IsRequired().HasMaxLength(2048).HasField("_avatarUrl");
         builder.Property(u => u.Bio).HasMaxLength(500).HasField("_bio");
+        builder.Property(u => u.CreatedAt).HasField("_createdAt");
 
         // Навигация через приватные поля
         builder.Navigation(u => u.Publications).Metadata.SetField("_publications");
@@ -31,6 +32,14 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.HasMany(u => u.PreferredTags)
             .WithMany()
-            .UsingEntity(j => j.ToTable("UserPreferredTags"));
+            .UsingEntity<Dictionary<string, object>>(
+                "UserPreferredTag",
+                j => j.HasOne<Tag>().WithMany().HasForeignKey("TagId").OnDelete(DeleteBehavior.Restrict),
+                j => j.HasOne<User>().WithMany().HasForeignKey("UserId").OnDelete(DeleteBehavior.Restrict),
+                j =>
+                {
+                    j.ToTable("UserPreferredTags");
+                    j.HasIndex("TagId");
+                });
     }
 }

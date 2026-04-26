@@ -8,6 +8,7 @@ public sealed class Cloth
     private string? _photoUrl;
     private string? _storeLink;
     private decimal? _estimatedPrice;
+    private DateTimeOffset _createdAt;
     
     private Guid _userId;
     private User _user = null!;
@@ -18,6 +19,7 @@ public sealed class Cloth
     public string? PhotoUrl => _photoUrl;
     public string? StoreLink => _storeLink;
     public decimal? EstimatedPrice => _estimatedPrice;
+    public DateTimeOffset CreatedAt => _createdAt;
     
     public Guid UserId => _userId;
     public User User => _user;
@@ -29,6 +31,7 @@ public sealed class Cloth
         _userId = userId;
         _name = name;
         _brand = brand;
+        _createdAt = DateTimeOffset.UtcNow;
     }
 
     public void UpdateInfo(string name, string? brand, string? photoUrl, string? storeLink, decimal? price)

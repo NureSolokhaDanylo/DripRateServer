@@ -6,7 +6,7 @@ public static class AssessmentErrors
 {
     public const string CannotRateOwnPublicationCode = "Assessment.CannotRateOwnPublication";
 
-    public static Error CannotRateOwnPublication => Error.Validation(
+    public static Error CannotRateOwnPublication => Error.Conflict(
         code: CannotRateOwnPublicationCode,
         description: "You cannot rate your own publication.");
 }

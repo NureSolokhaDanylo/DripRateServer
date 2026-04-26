@@ -22,7 +22,7 @@ public sealed class AzureBlobStorageService : IFileStorageService
         _blobServiceClient = new BlobServiceClient(connectionString);
     }
 
-    public async Task<ErrorOr<string>> UploadFileAsync(Stream stream, string fileName, string contentType, CancellationToken cancellationToken)
+    public async Task<ErrorOr<string>> UploadFileAsync(Stream stream, string contentType, string fileName, CancellationToken cancellationToken = default)
     {
         try
         {

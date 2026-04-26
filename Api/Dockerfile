@@ -12,6 +12,7 @@ WORKDIR /src
 COPY ["DripRateServer.slnx", "./"]
 COPY ["Api/Api.csproj", "Api/"]
 COPY ["Application/Application.csproj", "Application/"]
+COPY ["Application.UnitTests/Application.UnitTests.csproj", "Application.UnitTests/"]
 COPY ["Domain/Domain.csproj", "Domain/"]
 COPY ["Infrastructure/Infrastructure.csproj", "Infrastructure/"]
 COPY ["SharedSettings/SharedSettings.csproj", "SharedSettings/"]

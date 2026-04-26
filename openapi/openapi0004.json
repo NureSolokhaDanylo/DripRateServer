@@ -11,19 +11,6 @@
     }
   ],
   "paths": {
-    "/openapi/openapi.yaml": {
-      "get": {
-        "tags": [
-          "Api"
-        ],
-        "operationId": "OpenAPI YAML",
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/api/Auth/register": {
       "post": {
         "tags": [
@@ -87,11 +74,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "DuplicateEmail",
-                            "DuplicateUserName"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Auth_RegisterErrorCode"
                         }
                       }
                     }
@@ -108,11 +91,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "DuplicateEmail",
-                            "DuplicateUserName"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Auth_RegisterErrorCode"
                         }
                       }
                     }
@@ -129,11 +108,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "DuplicateEmail",
-                            "DuplicateUserName"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Auth_RegisterErrorCode"
                         }
                       }
                     }
@@ -142,11 +117,7 @@
               }
             }
           }
-        },
-        "x-error-codes": [
-          "DuplicateEmail",
-          "DuplicateUserName"
-        ]
+        }
       }
     },
     "/api/Auth/login": {
@@ -209,10 +180,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Auth.InvalidCredentials"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Auth_LoginErrorCode"
                         }
                       }
                     }
@@ -229,10 +197,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Auth.InvalidCredentials"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Auth_LoginErrorCode"
                         }
                       }
                     }
@@ -249,10 +214,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Auth.InvalidCredentials"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Auth_LoginErrorCode"
                         }
                       }
                     }
@@ -261,10 +223,152 @@
               }
             }
           }
+        }
+      }
+    },
+    "/api/Auth/password": {
+      "put": {
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "Auth_ChangePassword",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordRequest"
+              }
+            }
+          },
+          "required": true
         },
-        "x-error-codes": [
-          "Auth.InvalidCredentials"
-        ]
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Auth_ChangePasswordErrorCode"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Auth_ChangePasswordErrorCode"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Auth_ChangePasswordErrorCode"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Auth_ChangePasswordErrorCode"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Auth_ChangePasswordErrorCode"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Auth_ChangePasswordErrorCode"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/Auth/account": {
@@ -282,17 +386,53 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Auth_DeleteAccountErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Auth_DeleteAccountErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Auth_DeleteAccountErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -470,11 +610,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Collection.NotFound",
-                            "Collection.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Collections_GetItemsErrorCode"
                         }
                       }
                     }
@@ -491,11 +627,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Collection.NotFound",
-                            "Collection.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Collections_GetItemsErrorCode"
                         }
                       }
                     }
@@ -512,11 +644,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Collection.NotFound",
-                            "Collection.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Collections_GetItemsErrorCode"
                         }
                       }
                     }
@@ -538,11 +666,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Collection.NotFound",
-                            "Collection.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Collections_GetItemsErrorCode"
                         }
                       }
                     }
@@ -559,11 +683,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Collection.NotFound",
-                            "Collection.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Collections_GetItemsErrorCode"
                         }
                       }
                     }
@@ -580,11 +700,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Collection.NotFound",
-                            "Collection.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Collections_GetItemsErrorCode"
                         }
                       }
                     }
@@ -593,11 +709,7 @@
               }
             }
           }
-        },
-        "x-error-codes": [
-          "Collection.NotFound",
-          "Collection.Forbidden"
-        ]
+        }
       }
     },
     "/api/Collections/{id}/items/{pubId}": {
@@ -643,12 +755,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Collection.NotFound",
-                            "Publication.NotFound",
-                            "Collection.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Collections_AddItemErrorCode"
                         }
                       }
                     }
@@ -665,12 +772,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Collection.NotFound",
-                            "Publication.NotFound",
-                            "Collection.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Collections_AddItemErrorCode"
                         }
                       }
                     }
@@ -687,12 +789,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Collection.NotFound",
-                            "Publication.NotFound",
-                            "Collection.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Collections_AddItemErrorCode"
                         }
                       }
                     }
@@ -714,12 +811,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Collection.NotFound",
-                            "Publication.NotFound",
-                            "Collection.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Collections_AddItemErrorCode"
                         }
                       }
                     }
@@ -736,12 +828,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Collection.NotFound",
-                            "Publication.NotFound",
-                            "Collection.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Collections_AddItemErrorCode"
                         }
                       }
                     }
@@ -758,12 +845,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Collection.NotFound",
-                            "Publication.NotFound",
-                            "Collection.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Collections_AddItemErrorCode"
                         }
                       }
                     }
@@ -772,12 +854,7 @@
               }
             }
           }
-        },
-        "x-error-codes": [
-          "Collection.NotFound",
-          "Publication.NotFound",
-          "Collection.Forbidden"
-        ]
+        }
       },
       "delete": {
         "tags": [
@@ -821,12 +898,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Collection.NotFound",
-                            "Publication.NotFound",
-                            "Collection.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Collections_RemoveItemErrorCode"
                         }
                       }
                     }
@@ -843,12 +915,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Collection.NotFound",
-                            "Publication.NotFound",
-                            "Collection.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Collections_RemoveItemErrorCode"
                         }
                       }
                     }
@@ -865,12 +932,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Collection.NotFound",
-                            "Publication.NotFound",
-                            "Collection.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Collections_RemoveItemErrorCode"
                         }
                       }
                     }
@@ -892,12 +954,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Collection.NotFound",
-                            "Publication.NotFound",
-                            "Collection.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Collections_RemoveItemErrorCode"
                         }
                       }
                     }
@@ -914,12 +971,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Collection.NotFound",
-                            "Publication.NotFound",
-                            "Collection.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Collections_RemoveItemErrorCode"
                         }
                       }
                     }
@@ -936,12 +988,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Collection.NotFound",
-                            "Publication.NotFound",
-                            "Collection.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Collections_RemoveItemErrorCode"
                         }
                       }
                     }
@@ -950,12 +997,7 @@
               }
             }
           }
-        },
-        "x-error-codes": [
-          "Collection.NotFound",
-          "Publication.NotFound",
-          "Collection.Forbidden"
-        ]
+        }
       }
     },
     "/api/Feed/global": {
@@ -1190,7 +1232,7 @@
         "operationId": "Publications_Create",
         "requestBody": {
           "content": {
-            "application/x-www-form-urlencoded": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
@@ -1199,6 +1241,12 @@
                   },
                   "Image": {
                     "$ref": "#/components/schemas/IFormFile"
+                  },
+                  "Images": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/IFormFile"
+                    }
                   },
                   "TagIds": {
                     "type": "array",
@@ -1249,17 +1297,53 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_CreateErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_CreateErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_CreateErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1318,10 +1402,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Publication.NotFound"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Publications_GetErrorCode"
                         }
                       }
                     }
@@ -1338,10 +1419,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Publication.NotFound"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Publications_GetErrorCode"
                         }
                       }
                     }
@@ -1358,10 +1436,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Publication.NotFound"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Publications_GetErrorCode"
                         }
                       }
                     }
@@ -1370,10 +1445,7 @@
               }
             }
           }
-        },
-        "x-error-codes": [
-          "Publication.NotFound"
-        ]
+        }
       },
       "delete": {
         "tags": [
@@ -1408,11 +1480,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Publication.Forbidden",
-                            "Publication.NotFound"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Publications_DeleteErrorCode"
                         }
                       }
                     }
@@ -1429,11 +1497,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Publication.Forbidden",
-                            "Publication.NotFound"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Publications_DeleteErrorCode"
                         }
                       }
                     }
@@ -1450,11 +1514,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Publication.Forbidden",
-                            "Publication.NotFound"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Publications_DeleteErrorCode"
                         }
                       }
                     }
@@ -1476,11 +1536,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Publication.Forbidden",
-                            "Publication.NotFound"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Publications_DeleteErrorCode"
                         }
                       }
                     }
@@ -1497,11 +1553,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Publication.Forbidden",
-                            "Publication.NotFound"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Publications_DeleteErrorCode"
                         }
                       }
                     }
@@ -1518,11 +1570,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Publication.Forbidden",
-                            "Publication.NotFound"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Publications_DeleteErrorCode"
                         }
                       }
                     }
@@ -1531,11 +1579,7 @@
               }
             }
           }
-        },
-        "x-error-codes": [
-          "Publication.Forbidden",
-          "Publication.NotFound"
-        ]
+        }
       }
     },
     "/api/Publications/{id}/like": {
@@ -1581,17 +1625,53 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_ToggleLikeErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_ToggleLikeErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_ToggleLikeErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1665,17 +1745,53 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_AddCommentErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_AddCommentErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_AddCommentErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1749,6 +1865,151 @@
         }
       }
     },
+    "/api/Publications/{id}/comments/{commentId}": {
+      "delete": {
+        "tags": [
+          "Publications"
+        ],
+        "operationId": "Publications_DeleteComment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "commentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_DeleteCommentErrorCode"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_DeleteCommentErrorCode"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_DeleteCommentErrorCode"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_DeleteCommentErrorCode"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_DeleteCommentErrorCode"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_DeleteCommentErrorCode"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Publications/{id}/comments/{commentId}/like": {
       "post": {
         "tags": [
@@ -1801,17 +2062,53 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_ToggleCommentLikeErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_ToggleCommentLikeErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_ToggleCommentLikeErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1865,17 +2162,53 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_CreateAssessmentErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_CreateAssessmentErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_CreateAssessmentErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -2184,7 +2517,7 @@
         "operationId": "Users_UpdateAvatar",
         "requestBody": {
           "content": {
-            "application/x-www-form-urlencoded": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
@@ -2312,10 +2645,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "User.NotFound"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Users_GetByUsernameErrorCode"
                         }
                       }
                     }
@@ -2332,10 +2662,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "User.NotFound"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Users_GetByUsernameErrorCode"
                         }
                       }
                     }
@@ -2352,10 +2679,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "User.NotFound"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Users_GetByUsernameErrorCode"
                         }
                       }
                     }
@@ -2364,10 +2688,7 @@
               }
             }
           }
-        },
-        "x-error-codes": [
-          "User.NotFound"
-        ]
+        }
       }
     },
     "/api/Users/{id}/follow": {
@@ -2646,7 +2967,7 @@
         "operationId": "Wardrobe_Add",
         "requestBody": {
           "content": {
-            "application/x-www-form-urlencoded": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
@@ -2702,17 +3023,53 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Wardrobe_AddErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Wardrobe_AddErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Wardrobe_AddErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -2820,11 +3177,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Cloth.NotFound",
-                            "Cloth.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Wardrobe_DeleteErrorCode"
                         }
                       }
                     }
@@ -2841,11 +3194,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Cloth.NotFound",
-                            "Cloth.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Wardrobe_DeleteErrorCode"
                         }
                       }
                     }
@@ -2862,11 +3211,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Cloth.NotFound",
-                            "Cloth.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Wardrobe_DeleteErrorCode"
                         }
                       }
                     }
@@ -2888,11 +3233,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Cloth.NotFound",
-                            "Cloth.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Wardrobe_DeleteErrorCode"
                         }
                       }
                     }
@@ -2909,11 +3250,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Cloth.NotFound",
-                            "Cloth.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Wardrobe_DeleteErrorCode"
                         }
                       }
                     }
@@ -2930,11 +3267,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Cloth.NotFound",
-                            "Cloth.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Wardrobe_DeleteErrorCode"
                         }
                       }
                     }
@@ -2943,11 +3276,7 @@
               }
             }
           }
-        },
-        "x-error-codes": [
-          "Cloth.NotFound",
-          "Cloth.Forbidden"
-        ]
+        }
       }
     }
   },
@@ -2993,6 +3322,55 @@
             "pattern": "^-?(?:0|[1-9]\\d*)$",
             "type": "integer",
             "format": "int32"
+          }
+        }
+      },
+      "Auth_ChangePasswordErrorCode": {
+        "enum": [
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
+      },
+      "Auth_DeleteAccountErrorCode": {
+        "enum": [
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
+      },
+      "Auth_LoginErrorCode": {
+        "enum": [
+          "Auth.InvalidCredentials",
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
+      },
+      "Auth_RegisterErrorCode": {
+        "enum": [
+          "DuplicateEmail",
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
+      },
+      "ChangePasswordRequest": {
+        "required": [
+          "oldPassword",
+          "newPassword"
+        ],
+        "type": "object",
+        "properties": {
+          "oldPassword": {
+            "type": "string"
+          },
+          "newPassword": {
+            "type": "string"
           }
         }
       },
@@ -3113,6 +3491,54 @@
             "format": "date-time"
           }
         }
+      },
+      "Collections_AddItemErrorCode": {
+        "enum": [
+          "Collection.NotFound",
+          "Publication.NotFound",
+          "Collection.Forbidden",
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
+      },
+      "Collections_CreateErrorCode": {
+        "enum": [
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
+      },
+      "Collections_GetItemsErrorCode": {
+        "enum": [
+          "Collection.NotFound",
+          "Collection.Forbidden",
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
+      },
+      "Collections_GetMyCollectionsErrorCode": {
+        "enum": [
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
+      },
+      "Collections_RemoveItemErrorCode": {
+        "enum": [
+          "Collection.NotFound",
+          "Publication.NotFound",
+          "Collection.Forbidden",
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
       },
       "CommentResponse": {
         "required": [
@@ -3247,24 +3673,56 @@
           }
         }
       },
+      "Feed_GetGlobalErrorCode": {
+        "enum": [
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
+      },
+      "Feed_GetSubscriptionsErrorCode": {
+        "enum": [
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
+      },
+      "Feed_GetUserFeedErrorCode": {
+        "enum": [
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
+      },
       "IFormFile": {
         "type": "string",
         "format": "binary"
       },
       "LoginRequest": {
         "required": [
-          "username",
+          "email",
           "password"
         ],
         "type": "object",
         "properties": {
-          "username": {
+          "email": {
             "type": "string"
           },
           "password": {
             "type": "string"
           }
         }
+      },
+      "Meta_GetTagsErrorCode": {
+        "enum": [
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
       },
       "ProblemDetails": {
         "type": "object",
@@ -3300,6 +3758,26 @@
               "null",
               "string"
             ]
+          },
+          "code": {
+            "type": "string"
+          },
+          "validationErrors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "field": {
+                  "type": "string"
+                }
+              }
+            }
           }
         }
       },
@@ -3308,6 +3786,7 @@
           "id",
           "description",
           "imageUrl",
+          "imageUrls",
           "createdAt",
           "userId",
           "username",
@@ -3325,6 +3804,12 @@
           },
           "imageUrl": {
             "type": "string"
+          },
+          "imageUrls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "createdAt": {
             "type": "string",
@@ -3351,15 +3836,103 @@
           }
         }
       },
+      "Publications_AddCommentErrorCode": {
+        "enum": [
+          "Publication.NotFound",
+          "Comment.ParentNotFound",
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
+      },
+      "Publications_CreateAssessmentErrorCode": {
+        "enum": [
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
+      },
+      "Publications_CreateErrorCode": {
+        "enum": [
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
+      },
+      "Publications_DeleteCommentErrorCode": {
+        "enum": [
+          "Comment.NotFound",
+          "Comment.Forbidden",
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
+      },
+      "Publications_DeleteErrorCode": {
+        "enum": [
+          "Publication.Forbidden",
+          "Publication.NotFound",
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
+      },
+      "Publications_GetAssessmentsErrorCode": {
+        "enum": [
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
+      },
+      "Publications_GetCommentsErrorCode": {
+        "enum": [
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
+      },
+      "Publications_GetErrorCode": {
+        "enum": [
+          "Publication.NotFound",
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
+      },
+      "Publications_ToggleCommentLikeErrorCode": {
+        "enum": [
+          "Comment.NotFound",
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
+      },
+      "Publications_ToggleLikeErrorCode": {
+        "enum": [
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
+      },
       "RegisterRequest": {
         "required": [
-          "username",
+          "displayName",
           "email",
           "password"
         ],
         "type": "object",
         "properties": {
-          "username": {
+          "displayName": {
             "type": [
               "null",
               "string"
@@ -3372,6 +3945,30 @@
             "type": "string"
           }
         }
+      },
+      "Search_SearchCollectionsErrorCode": {
+        "enum": [
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
+      },
+      "Search_SearchPublicationsErrorCode": {
+        "enum": [
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
+      },
+      "Search_SearchUsersErrorCode": {
+        "enum": [
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
       },
       "TagResponse": {
         "required": [
@@ -3395,10 +3992,17 @@
       },
       "UpdateProfileRequest": {
         "required": [
+          "displayName",
           "bio"
         ],
         "type": "object",
         "properties": {
+          "displayName": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
           "bio": {
             "type": [
               "null",
@@ -3410,7 +4014,7 @@
       "UserProfileResponse": {
         "required": [
           "id",
-          "username",
+          "displayName",
           "bio",
           "avatarUrl",
           "followersCount",
@@ -3424,7 +4028,7 @@
             "type": "string",
             "format": "uuid"
           },
-          "username": {
+          "displayName": {
             "type": "string"
           },
           "bio": {
@@ -3458,13 +4062,126 @@
             "type": "boolean"
           }
         }
+      },
+      "Users_FollowErrorCode": {
+        "enum": [
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
+      },
+      "Users_GetByUsernameErrorCode": {
+        "enum": [
+          "User.NotFound",
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
+      },
+      "Users_GetFollowersErrorCode": {
+        "enum": [
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
+      },
+      "Users_GetFollowingErrorCode": {
+        "enum": [
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
+      },
+      "Users_GetMeErrorCode": {
+        "enum": [
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
+      },
+      "Users_GetMyPreferencesErrorCode": {
+        "enum": [
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
+      },
+      "Users_SearchErrorCode": {
+        "enum": [
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
+      },
+      "Users_SetMyPreferencesErrorCode": {
+        "enum": [
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
+      },
+      "Users_UnfollowErrorCode": {
+        "enum": [
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
+      },
+      "Users_UpdateAvatarErrorCode": {
+        "enum": [
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
+      },
+      "Users_UpdateProfileErrorCode": {
+        "enum": [
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
+      },
+      "Wardrobe_AddErrorCode": {
+        "enum": [
+          "File.ProcessingFailed",
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
+      },
+      "Wardrobe_DeleteErrorCode": {
+        "enum": [
+          "Cloth.NotFound",
+          "Cloth.Forbidden",
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
+      },
+      "Wardrobe_GetErrorCode": {
+        "enum": [
+          "General.Validation",
+          "ModelState.Invalid",
+          "General.InternalServerError"
+        ],
+        "type": "string"
       }
     }
   },
   "tags": [
-    {
-      "name": "Api"
-    },
     {
       "name": "Auth"
     },

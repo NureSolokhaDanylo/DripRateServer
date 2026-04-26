@@ -13,6 +13,8 @@ public sealed class CommentLikeConfiguration : IEntityTypeConfiguration<CommentL
         builder.Property(cl => cl.CommentId).HasField("_commentId");
         builder.Property(cl => cl.CreatedAt).HasField("_createdAt");
 
+        builder.HasIndex(cl => cl.CommentId);
+
         builder.HasOne(cl => cl.Comment)
             .WithMany(c => c.Likes)
             .HasForeignKey(cl => cl.CommentId)

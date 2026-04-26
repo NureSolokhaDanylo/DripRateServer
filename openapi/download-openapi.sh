@@ -59,7 +59,7 @@ if [[ -n "$EXISTING_FILES" ]]; then
     # Extract version numbers from filenames
     LAST_VERSION=$(echo "$EXISTING_FILES" | grep -oP 'openapi\K\d+' | sort -n | tail -1)
     if [[ -n "$LAST_VERSION" ]]; then
-        NEXT_VERSION=$((LAST_VERSION + 1))
+        NEXT_VERSION=$((10#$LAST_VERSION + 1))
     fi
 fi
 

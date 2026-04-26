@@ -33,7 +33,7 @@ public sealed class GetMyProfileQueryHandler : IRequestHandler<GetMyProfileQuery
 
         return new UserProfileResponse(
             user.Id,
-            user.UserName ?? string.Empty,
+            user.DisplayName,
             user.Bio,
             user.AvatarUrl,
             user.Followers.Count,

@@ -22,6 +22,20 @@ public sealed class SchemaTypeTransformer : IOpenApiSchemaTransformer
             }
         }
 
+        // Fix missing Null type for nullable properties/parameters (common in multipart/form-data)
+        var targetType = context.JsonPropertyInfo?.PropertyType ?? context.ParameterDescription?.Type;
+        if (targetType != null && IsNullable(targetType))
+        {
+            schema.Type |= JsonSchemaType.Null;
+        }
+
         return Task.CompletedTask;
+    }
+
+    private static bool IsNullable(Type type)
+    {
+        if (!type.IsValueType) return true; 
+        if (Nullable.GetUnderlyingType(type) != null) return true;
+        return false;
     }
 }

@@ -39,11 +39,21 @@ public sealed class CreateAssessmentCommandHandler : IRequestHandler<CreateAsses
 
         if (existingAssessment != null)
         {
+            var oldAssessmentClone = new Assessment(
+                existingAssessment.UserId,
+                existingAssessment.PublicationId,
+                existingAssessment.ColorCoordination,
+                existingAssessment.FitAndProportions,
+                existingAssessment.Originality,
+                existingAssessment.OverallStyle);
+
             existingAssessment.UpdateRatings(
                 request.ColorCoordination,
                 request.FitAndProportions,
                 request.Originality,
                 request.OverallStyle);
+
+            publication.ApplyAssessment(oldAssessmentClone, existingAssessment);
         }
         else
         {
@@ -56,6 +66,7 @@ public sealed class CreateAssessmentCommandHandler : IRequestHandler<CreateAsses
                 request.OverallStyle);
 
             _context.Assessments.Add(assessment);
+            publication.ApplyAssessment(null, assessment);
         }
 
         await _context.SaveChangesAsync(cancellationToken);

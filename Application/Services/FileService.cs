@@ -20,7 +20,7 @@ internal sealed class FileService : IFileService
         string contentType,
         CancellationToken cancellationToken)
     {
-        var extension = Path.GetExtension(fileName);
+        var extension = GetExtensionFromContentType(contentType);
         var uniqueFileName = $"avatars/{userId}/{Guid.NewGuid()}{extension}";
         
         return await _storageService.UploadFileAsync(
@@ -36,7 +36,7 @@ internal sealed class FileService : IFileService
         string contentType,
         CancellationToken cancellationToken)
     {
-        var extension = Path.GetExtension(fileName);
+        var extension = GetExtensionFromContentType(contentType);
         var uniqueFileName = $"publications/{Guid.NewGuid()}{extension}";
         
         return await _storageService.UploadFileAsync(
@@ -44,5 +44,33 @@ internal sealed class FileService : IFileService
             contentType, 
             uniqueFileName, 
             cancellationToken);
+    }
+
+    public async Task<ErrorOr<string>> UploadClothPhotoAsync(
+        Stream stream,
+        string fileName,
+        string contentType,
+        CancellationToken cancellationToken)
+    {
+        var extension = GetExtensionFromContentType(contentType);
+        var uniqueFileName = $"clothes/{Guid.NewGuid()}{extension}";
+        
+        return await _storageService.UploadFileAsync(
+            stream, 
+            contentType, 
+            uniqueFileName, 
+            cancellationToken);
+    }
+
+    private static string GetExtensionFromContentType(string contentType)
+    {
+        return contentType.ToLowerInvariant() switch
+        {
+            "image/jpeg" => ".jpg",
+            "image/png" => ".png",
+            "image/webp" => ".webp",
+            "image/gif" => ".gif",
+            _ => ".bin"
+        };
     }
 }

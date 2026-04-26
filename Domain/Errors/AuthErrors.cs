@@ -6,7 +6,7 @@ public static class AuthErrors
 {
     public const string InvalidCredentialsCode = "Auth.InvalidCredentials";
     public const string EmailAlreadyTakenCode = "DuplicateEmail";
-    public const string UserNameAlreadyTakenCode = "DuplicateUserName";
+    public const string UnauthorizedCode = "Auth.Unauthorized";
 
     public static Error InvalidCredentials => Error.Unauthorized(
         code: InvalidCredentialsCode,
@@ -16,7 +16,7 @@ public static class AuthErrors
         code: EmailAlreadyTakenCode,
         description: "A user with this email already exists.");
 
-    public static Error UserNameAlreadyTaken => Error.Conflict(
-        code: UserNameAlreadyTakenCode,
-        description: "This username is already taken.");
+    public static Error Unauthorized => Error.Unauthorized(
+        code: UnauthorizedCode,
+        description: "You must be authenticated to access this resource.");
 }

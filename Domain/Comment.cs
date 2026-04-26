@@ -11,6 +11,8 @@ public sealed class Comment
     private Publication _publication = null!;
     private Guid? _parentCommentId;
     private Comment? _parentComment;
+    private int _likesCount;
+    private int _repliesCount;
 
     private readonly List<Comment> _replies = new();
     private readonly List<CommentLike> _likes = new();
@@ -18,6 +20,8 @@ public sealed class Comment
     public Guid Id => _id;
     public string Text => _text;
     public DateTimeOffset CreatedAt => _createdAt;
+    public int LikesCount => _likesCount;
+    public int RepliesCount => _repliesCount;
 
     public Guid UserId => _userId;
     public User User => _user;
@@ -42,9 +46,18 @@ public sealed class Comment
         _createdAt = DateTimeOffset.UtcNow;
     }
 
-    public void AddReply(Comment reply)
+    internal void AddReply(Comment reply)
     {
         _replies.Add(reply);
+        _repliesCount++;
+    }
+
+    internal void RemoveReply(Comment reply)
+    {
+        if (_replies.Remove(reply))
+        {
+            _repliesCount = Math.Max(0, _repliesCount - 1);
+        }
     }
 
     public void ToggleLike(Guid userId)
@@ -53,10 +66,12 @@ public sealed class Comment
         if (existing is not null)
         {
             _likes.Remove(existing);
+            _likesCount--;
         }
         else
         {
             _likes.Add(new CommentLike(userId, _id));
+            _likesCount++;
         }
     }
 }

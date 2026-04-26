@@ -5,12 +5,11 @@ using Application.Interfaces;
 using Application.Queries;
 using Domain.Errors;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
 
-[Authorize]
+[AuthorizeWithError]
 [Route("api/[controller]")]
 public sealed class WardrobeController : ApiController
 {
@@ -25,11 +24,9 @@ public sealed class WardrobeController : ApiController
 
     [HttpPost]
     [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ApiErrors(FileErrors.ProcessingFailedCode)]
     public async Task<IActionResult> Add([FromForm] AddClothRequest request)
     {
-        if (_currentUser.UserId == null) return Unauthorized();
-
         Stream? photoStream = null;
         if (request.Photo != null)
         {
@@ -57,11 +54,13 @@ public sealed class WardrobeController : ApiController
 
     [HttpGet]
     [ProducesResponseType(typeof(List<ClothResponseDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> Get([FromQuery] string? query, [FromQuery] int skip = 0, [FromQuery] int take = 20)
+    public async Task<IActionResult> GetWardrobe(
+        [FromQuery] string? query, 
+        [FromQuery] string? sortBy = "newest",
+        [FromQuery] int skip = 0, 
+        [FromQuery] int take = 20)
     {
-        if (_currentUser.UserId == null) return Unauthorized();
-
-        var q = new GetWardrobeQuery(_currentUser.UserId.Value, query, skip, take);
+        var q = new GetWardrobeQuery(_currentUser.UserId.Value, query, sortBy, skip, take);
         var result = await _mediator.Send(q);
 
         return result.Match(
@@ -71,14 +70,9 @@ public sealed class WardrobeController : ApiController
 
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    [ApiErrors(StatusCodes.Status404NotFound, ClothErrors.NotFoundCode)]
-    [ApiErrors(StatusCodes.Status403Forbidden, ClothErrors.ForbiddenCode)]
+    [ApiErrors(ClothErrors.NotFoundCode, ClothErrors.ForbiddenCode)]
     public async Task<IActionResult> Delete(Guid id)
     {
-        if (_currentUser.UserId == null) return Unauthorized();
-
         var command = new DeleteClothCommand(_currentUser.UserId.Value, id);
         var result = await _mediator.Send(command);
 

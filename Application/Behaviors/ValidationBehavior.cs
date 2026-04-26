@@ -33,7 +33,10 @@ public sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<
         var errors = validationResults
             .SelectMany(result => result.Errors)
             .Where(f => f != null)
-            .Select(failure => Error.Validation(failure.PropertyName, failure.ErrorMessage))
+            .Select(failure => Error.Validation(
+                code: failure.ErrorCode,
+                description: failure.ErrorMessage,
+                metadata: new Dictionary<string, object> { { "FieldName", failure.PropertyName } }))
             .ToList();
 
         if (errors.Count != 0)

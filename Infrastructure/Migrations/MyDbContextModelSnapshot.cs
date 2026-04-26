@@ -22,7 +22,7 @@ namespace Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("CollectionPublications", b =>
+            modelBuilder.Entity("CollectionPublication", b =>
                 {
                     b.Property<Guid>("CollectionId")
                         .HasColumnType("uniqueidentifier");
@@ -34,7 +34,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("PublicationId");
 
-                    b.ToTable("CollectionPublications");
+                    b.ToTable("CollectionPublications", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Assessment", b =>
@@ -45,6 +45,9 @@ namespace Infrastructure.Migrations
 
                     b.Property<int>("ColorCoordination")
                         .HasColumnType("int");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int>("FitAndProportions")
                         .HasColumnType("int");
@@ -63,7 +66,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PublicationId");
+                    b.HasIndex("PublicationId", "CreatedAt");
 
                     b.HasIndex("UserId", "PublicationId")
                         .IsUnique();
@@ -80,6 +83,9 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Brand")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<decimal?>("EstimatedPrice")
                         .HasPrecision(18, 2)
@@ -102,6 +108,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
 
                     b.HasIndex("UserId");
 
@@ -154,11 +162,17 @@ namespace Infrastructure.Migrations
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<int>("LikesCount")
+                        .HasColumnType("int");
+
                     b.Property<Guid?>("ParentCommentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("PublicationId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("RepliesCount")
+                        .HasColumnType("int");
 
                     b.Property<string>("Text")
                         .IsRequired()
@@ -172,9 +186,9 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("ParentCommentId");
 
-                    b.HasIndex("PublicationId");
-
                     b.HasIndex("UserId");
+
+                    b.HasIndex("PublicationId", "CreatedAt");
 
                     b.ToTable("Comments");
                 });
@@ -205,6 +219,9 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("FolloweeId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
                     b.HasKey("FollowerId", "FolloweeId");
 
                     b.HasIndex("FolloweeId");
@@ -229,12 +246,62 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("_assessmentsCount")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0)
+                        .HasColumnName("AssessmentsCount");
+
+                    b.Property<double>("_averageRating")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("float")
+                        .HasDefaultValue(0.0)
+                        .HasColumnName("AverageRating");
+
+                    b.Property<int>("_commentsCount")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0)
+                        .HasColumnName("CommentsCount");
+
                     b.PrimitiveCollection<string>("_images")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("Images");
 
+                    b.Property<int>("_likesCount")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0)
+                        .HasColumnName("LikesCount");
+
+                    b.Property<int>("_ratingColorSum")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0)
+                        .HasColumnName("RatingColorSum");
+
+                    b.Property<int>("_ratingFitSum")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0)
+                        .HasColumnName("RatingFitSum");
+
+                    b.Property<int>("_ratingOriginalitySum")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0)
+                        .HasColumnName("RatingOriginalitySum");
+
+                    b.Property<int>("_ratingStyleSum")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0)
+                        .HasColumnName("RatingStyleSum");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
 
                     b.HasIndex("UserId");
 
@@ -277,6 +344,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("AvatarUrl")
+                        .IsRequired()
                         .HasMaxLength(2048)
                         .HasColumnType("nvarchar(2048)");
 
@@ -287,6 +355,9 @@ namespace Infrastructure.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
@@ -478,13 +549,15 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("PublicationClothes", b =>
                 {
-                    b.Property<Guid>("ClothesId")
+                    b.Property<Guid>("ClothId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("PublicationId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("ClothesId", "PublicationId");
+                    b.HasKey("ClothId", "PublicationId");
+
+                    b.HasIndex("ClothId");
 
                     b.HasIndex("PublicationId");
 
@@ -496,32 +569,34 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("PublicationId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("TagsId")
+                    b.Property<Guid>("TagId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("PublicationId", "TagsId");
+                    b.HasKey("PublicationId", "TagId");
 
-                    b.HasIndex("TagsId");
+                    b.HasIndex("TagId");
 
                     b.ToTable("PublicationTags", (string)null);
                 });
 
-            modelBuilder.Entity("TagUser", b =>
+            modelBuilder.Entity("UserPreferredTag", b =>
                 {
-                    b.Property<Guid>("PreferredTagsId")
+                    b.Property<Guid>("TagId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("PreferredTagsId", "UserId");
+                    b.HasKey("TagId", "UserId");
+
+                    b.HasIndex("TagId");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("UserPreferredTags", (string)null);
                 });
 
-            modelBuilder.Entity("CollectionPublications", b =>
+            modelBuilder.Entity("CollectionPublication", b =>
                 {
                     b.HasOne("Domain.Collection", null)
                         .WithMany()
@@ -707,7 +782,7 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Domain.Cloth", null)
                         .WithMany()
-                        .HasForeignKey("ClothesId")
+                        .HasForeignKey("ClothId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -723,28 +798,28 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Publication", null)
                         .WithMany()
                         .HasForeignKey("PublicationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Tag", null)
                         .WithMany()
-                        .HasForeignKey("TagsId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TagUser", b =>
+            modelBuilder.Entity("UserPreferredTag", b =>
                 {
                     b.HasOne("Domain.Tag", null)
                         .WithMany()
-                        .HasForeignKey("PreferredTagsId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 

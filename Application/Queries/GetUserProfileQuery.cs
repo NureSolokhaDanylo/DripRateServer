@@ -4,4 +4,4 @@ using MediatR;
 
 namespace Application.Queries;
 
-public record GetUserProfileQuery(string Username, Guid? CurrentUserId = null) : IRequest<ErrorOr<UserProfileResponse>>;
+public record GetUserProfileQuery(Guid UserId, Guid? CurrentUserId = null) : IRequest<ErrorOr<UserProfileResponse>>;

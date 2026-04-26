@@ -27,3 +27,8 @@ public record CreateCollectionRequest(
     string Name,
     string? Description,
     bool IsPublic);
+
+public record UpdateCollectionRequest(
+    string Name,
+    string? Description,
+    bool IsPublic);

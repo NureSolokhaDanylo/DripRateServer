@@ -18,9 +18,16 @@ public sealed class GetCommentsQueryHandler : IRequestHandler<GetCommentsQuery, 
 
     public async Task<ErrorOr<List<CommentResponse>>> Handle(GetCommentsQuery request, CancellationToken cancellationToken)
     {
+        var followingIds = request.UserId.HasValue 
+            ? await _context.Follows
+                .Where(f => f.FollowerId == request.UserId.Value)
+                .Select(f => f.FolloweeId)
+                .ToListAsync(cancellationToken)
+            : new List<Guid>();
+
         var query = _context.Comments
             .AsNoTracking()
-            .Where(c => c.PublicationId == request.PublicationId);
+            .Where(c => c.PublicationId == request.PublicationId && c.ParentCommentId == request.ParentCommentId);
 
         if (request.Cursor.HasValue)
         {
@@ -28,7 +35,10 @@ public sealed class GetCommentsQueryHandler : IRequestHandler<GetCommentsQuery, 
         }
 
         var result = await query
-            .OrderByDescending(c => c.CreatedAt)
+            .OrderByDescending(c => followingIds.Contains(c.UserId))
+            .ThenByDescending(c => c.LikesCount)
+            .ThenByDescending(c => c.CreatedAt)
+            .ThenByDescending(c => c.Id)
             .Take(request.Take)
             .Select(CommentResponse.GetProjection(request.UserId))
             .ToListAsync(cancellationToken);

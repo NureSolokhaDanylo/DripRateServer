@@ -22,6 +22,9 @@ public sealed class AddClothCommandValidator : AbstractValidator<AddClothCommand
         RuleFor(x => x.EstimatedPrice)
             .GreaterThanOrEqualTo(0);
 
+        RuleFor(x => x.PhotoStream)
+            .Must(s => s == null || s.Length <= 5 * 1024 * 1024).WithMessage("File size must not exceed 5 MB.");
+
         RuleFor(x => x.PhotoContentType)
             .Must(x => string.IsNullOrEmpty(x) || x.StartsWith("image/"))
             .WithMessage("Only image files are allowed.");

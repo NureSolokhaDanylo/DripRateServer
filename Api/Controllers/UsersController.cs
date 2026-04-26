@@ -5,12 +5,11 @@ using Application.Interfaces;
 using Application.Queries;
 using Domain.Errors;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
 
-[Authorize]
+[AuthorizeWithError]
 [Route("api/[controller]")]
 public sealed class UsersController : ApiController
 {
@@ -25,10 +24,9 @@ public sealed class UsersController : ApiController
 
     [HttpGet("@me")]
     [ProducesResponseType(typeof(UserProfileResponse), StatusCodes.Status200OK)]
+    [ApiErrors(UserErrors.NotFoundCode)]
     public async Task<IActionResult> GetMe()
     {
-        if (_currentUser.UserId == null) return Unauthorized();
-
         var query = new GetMyProfileQuery(_currentUser.UserId.Value);
         var result = await _mediator.Send(query);
 
@@ -39,10 +37,9 @@ public sealed class UsersController : ApiController
 
     [HttpPatch("@me")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ApiErrors(UserErrors.NotFoundCode)]
     public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileRequest request)
     {
-        if (_currentUser.UserId == null) return Unauthorized();
-
         var command = new UpdateProfileCommand(
             _currentUser.UserId.Value,
             request.DisplayName,
@@ -57,10 +54,9 @@ public sealed class UsersController : ApiController
 
     [HttpPatch("@me/avatar")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ApiErrors(UserErrors.NotFoundCode, FileErrors.ProcessingFailedCode)]
     public async Task<IActionResult> UpdateAvatar([FromForm] UploadAvatarRequest request)
     {
-        if (_currentUser.UserId == null) return Unauthorized();
-
         using var stream = request.File.OpenReadStream();
         var command = new UploadAvatarCommand(
             _currentUser.UserId.Value,
@@ -75,11 +71,24 @@ public sealed class UsersController : ApiController
             errors => Problem(errors));
     }
 
+    [HttpDelete("@me/avatar")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ApiErrors(UserErrors.NotFoundCode)]
+    public async Task<IActionResult> ResetAvatar()
+    {
+        var command = new ResetAvatarCommand(_currentUser.UserId.Value);
+        var result = await _mediator.Send(command);
+
+        return result.Match(
+            _ => NoContent(),
+            errors => Problem(errors));
+    }
+
     [HttpGet("search")]
     [ProducesResponseType(typeof(List<UserProfileResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> Search([FromQuery] string query, [FromQuery] int take = 20)
     {
-        var q = new SearchUsersQuery(query, take);
+        var q = new SearchUsersQuery(query, 0, take);
         var result = await _mediator.Send(q);
 
         return result.Match(
@@ -87,13 +96,12 @@ public sealed class UsersController : ApiController
             errors => Problem(errors));
     }
 
-    [HttpGet("{username}")]
+    [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(UserProfileResponse), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ApiErrors(StatusCodes.Status404NotFound, UserErrors.NotFoundCode)]
-    public async Task<IActionResult> GetByUsername(string username)
+    [ApiErrors(UserErrors.NotFoundCode)]
+    public async Task<IActionResult> GetById(Guid id)
     {
-        var query = new GetUserProfileQuery(username, _currentUser.UserId);
+        var query = new GetUserProfileQuery(id, _currentUser.UserId);
         var result = await _mediator.Send(query);
 
         return result.Match(
@@ -103,10 +111,9 @@ public sealed class UsersController : ApiController
 
     [HttpPost("{id:guid}/follow")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ApiErrors(UserErrors.NotFoundCode, SocialErrors.CannotFollowSelfCode)]
     public async Task<IActionResult> Follow(Guid id)
     {
-        if (_currentUser.UserId == null) return Unauthorized();
-
         var command = new FollowUserCommand(_currentUser.UserId.Value, id);
         var result = await _mediator.Send(command);
 
@@ -117,10 +124,9 @@ public sealed class UsersController : ApiController
 
     [HttpDelete("{id:guid}/follow")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ApiErrors(UserErrors.NotFoundCode)]
     public async Task<IActionResult> Unfollow(Guid id)
     {
-        if (_currentUser.UserId == null) return Unauthorized();
-
         var command = new UnfollowUserCommand(_currentUser.UserId.Value, id);
         var result = await _mediator.Send(command);
 
@@ -157,9 +163,6 @@ public sealed class UsersController : ApiController
     [ProducesResponseType(typeof(List<TagResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetMyPreferences()
     {
-        if (_currentUser.UserId == null) return Unauthorized();
-
-        // Let's create GetMyPreferencesQuery for cleanliness.
         var query = new GetMyPreferencesQuery(_currentUser.UserId.Value);
         var result = await _mediator.Send(query);
 
@@ -170,10 +173,9 @@ public sealed class UsersController : ApiController
 
     [HttpPut("@me/preferences")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ApiErrors(UserErrors.NotFoundCode)]
     public async Task<IActionResult> SetMyPreferences([FromBody] List<Guid> tagIds)
     {
-        if (_currentUser.UserId == null) return Unauthorized();
-
         var command = new SetPreferencesCommand(_currentUser.UserId.Value, tagIds);
         var result = await _mediator.Send(command);
 

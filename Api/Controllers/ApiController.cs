@@ -1,4 +1,5 @@
 using ErrorOr;
+using Domain.Errors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
@@ -21,31 +22,60 @@ public abstract class ApiController : ControllerBase
         return Problem(errors[0]);
     }
 
-    private IActionResult Problem(Error error)
+    protected IActionResult Problem(Error error)
     {
-        var statusCode = error.Type switch
+        if (error.Type == ErrorType.Validation)
+        {
+            return Problem(
+                statusCode: StatusCodes.Status400BadRequest,
+                title: error.Description,
+                extensions: new Dictionary<string, object?> { { "code", "General.Validation" } });
+        }
+
+        if (ApiErrorRegistry.TryGet(error.Code, out var metadata))
+        {
+            return Problem(
+                statusCode: metadata.StatusCode,
+                title: error.Description,
+                extensions: new Dictionary<string, object?> { { "code", error.Code } });
+        }
+
+        var fallbackStatusCode = error.Type switch
         {
             ErrorType.Conflict => StatusCodes.Status409Conflict,
-            ErrorType.Validation => StatusCodes.Status400BadRequest,
             ErrorType.NotFound => StatusCodes.Status404NotFound,
             ErrorType.Unauthorized => StatusCodes.Status401Unauthorized,
+            ErrorType.Forbidden => StatusCodes.Status403Forbidden,
             _ => StatusCodes.Status500InternalServerError,
         };
 
-        return Problem(statusCode: statusCode, title: error.Description);
+        return Problem(
+            statusCode: fallbackStatusCode,
+            title: "An internal server error occurred.",
+            extensions: new Dictionary<string, object?> { { "code", "General.InternalServerError" } });
     }
 
     private IActionResult ValidationProblem(List<Error> errors)
     {
-        var modelStateDictionary = new Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary();
-
-        foreach (var error in errors)
+        var validationErrors = errors.Select(e => new
         {
-            modelStateDictionary.AddModelError(
-                error.Code,
-                error.Description);
-        }
+            Code = e.Code,
+            Message = e.Description,
+            Field = e.Metadata?.TryGetValue("FieldName", out var fieldName) == true ? fieldName?.ToString() : null
+        }).ToList();
 
-        return ValidationProblem(modelStateDictionary);
+        var problemDetails = new ProblemDetails
+        {
+            Status = StatusCodes.Status400BadRequest,
+            Title = "One or more validation errors occurred.",
+            Type = "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+            Extensions = 
+            { 
+                { "code", "General.Validation" },
+                { "validationErrors", validationErrors } 
+            }
+        };
+
+        return new ObjectResult(problemDetails) { StatusCode = StatusCodes.Status400BadRequest };
     }
 }

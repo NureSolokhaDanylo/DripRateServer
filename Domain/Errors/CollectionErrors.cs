@@ -7,6 +7,7 @@ public static class CollectionErrors
     public const string NotFoundCode = "Collection.NotFound";
     public const string ForbiddenCode = "Collection.Forbidden";
     public const string LikesNotInitializedCode = "Collection.LikesNotInitialized";
+    public const string NameAlreadyExistsCode = "Collection.NameAlreadyExists";
 
     public static Error NotFound => Error.NotFound(
         code: NotFoundCode,
@@ -19,4 +20,8 @@ public static class CollectionErrors
     public static Error LikesNotInitialized => Error.Failure(
         code: LikesNotInitializedCode,
         description: "User's internal likes collection is not properly initialized.");
+
+    public static Error NameAlreadyExists => Error.Conflict(
+        code: NameAlreadyExistsCode,
+        description: "A collection with this name already exists.");
 }

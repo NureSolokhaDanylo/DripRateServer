@@ -19,17 +19,18 @@ public sealed class GetPublicationQueryHandler : IRequestHandler<GetPublicationQ
 
     public async Task<ErrorOr<PublicationResponse>> Handle(GetPublicationQuery request, CancellationToken cancellationToken)
     {
-        var publication = await _context.Publications
+        var result = await _context.Publications
             .AsNoTracking()
             .Where(p => p.Id == request.Id)
-            .Select(PublicationResponse.Projection)
+            .Select(PublicationResponse.GetProjection(request.UserId))
             .FirstOrDefaultAsync(cancellationToken);
 
-        if (publication == null)
+
+        if (result == null)
         {
             return PublicationErrors.NotFound;
         }
 
-        return publication;
+        return result;
     }
 }

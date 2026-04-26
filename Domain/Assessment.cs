@@ -7,6 +7,7 @@ public sealed class Assessment
     private int _fitAndProportions;
     private int _originality;
     private int _overallStyle;
+    private DateTimeOffset _createdAt;
     private Guid _userId;
     private User _user = null!;
     private Guid _publicationId;
@@ -19,6 +20,7 @@ public sealed class Assessment
     public int FitAndProportions => _fitAndProportions;
     public int Originality => _originality;
     public int OverallStyle => _overallStyle;
+    public DateTimeOffset CreatedAt => _createdAt;
 
     public Guid UserId => _userId;
     public User User => _user;
@@ -32,6 +34,7 @@ public sealed class Assessment
     {
         _userId = userId;
         _publicationId = publicationId;
+        _createdAt = DateTimeOffset.UtcNow;
         
         UpdateRatings(color, fit, originality, style);
     }

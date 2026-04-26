@@ -11,24 +11,12 @@
     }
   ],
   "paths": {
-    "/openapi/openapi.yaml": {
-      "get": {
-        "tags": [
-          "Api"
-        ],
-        "operationId": "OpenAPI YAML",
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/api/Auth/register": {
       "post": {
         "tags": [
           "Auth"
         ],
+        "operationId": "Auth_Register",
         "requestBody": {
           "content": {
             "application/json": {
@@ -78,26 +66,58 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Auth_RegisterErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Auth_RegisterErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Auth_RegisterErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
           }
-        },
-        "x-error-codes": [
-          "DuplicateEmail",
-          "DuplicateUserName"
-        ]
+        }
       }
     },
     "/api/Auth/login": {
@@ -105,6 +125,7 @@
         "tags": [
           "Auth"
         ],
+        "operationId": "Auth_Login",
         "requestBody": {
           "content": {
             "application/json": {
@@ -151,6 +172,115 @@
             "content": {
               "text/plain": {
                 "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Auth_LoginErrorCode"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Auth_LoginErrorCode"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Auth_LoginErrorCode"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Auth/password": {
+      "put": {
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "Auth_ChangePassword",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
                   "$ref": "#/components/schemas/ProblemDetails"
                 }
               },
@@ -166,10 +296,7 @@
               }
             }
           }
-        },
-        "x-error-codes": [
-          "Auth.InvalidCredentials"
-        ]
+        }
       }
     },
     "/api/Auth/account": {
@@ -177,6 +304,7 @@
         "tags": [
           "Auth"
         ],
+        "operationId": "Auth_DeleteAccount",
         "responses": {
           "204": {
             "description": "No Content"
@@ -209,6 +337,7 @@
         "tags": [
           "Collections"
         ],
+        "operationId": "Collections_GetMyCollections",
         "responses": {
           "200": {
             "description": "OK",
@@ -247,6 +376,7 @@
         "tags": [
           "Collections"
         ],
+        "operationId": "Collections_Create",
         "requestBody": {
           "content": {
             "application/json": {
@@ -299,6 +429,7 @@
         "tags": [
           "Collections"
         ],
+        "operationId": "Collections_GetItems",
         "parameters": [
           {
             "name": "id",
@@ -322,10 +453,7 @@
             "in": "query",
             "schema": {
               "pattern": "^-?(?:0|[1-9]\\d*)$",
-              "type": [
-                "integer",
-                "string"
-              ],
+              "type": "integer",
               "format": "int32",
               "default": 20
             }
@@ -366,17 +494,53 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Collections_GetItemsErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Collections_GetItemsErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Collections_GetItemsErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -386,26 +550,58 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Collections_GetItemsErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Collections_GetItemsErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Collections_GetItemsErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
           }
-        },
-        "x-error-codes": [
-          "Collection.NotFound",
-          "Collection.Forbidden"
-        ]
+        }
       }
     },
     "/api/Collections/{id}/items/{pubId}": {
@@ -413,6 +609,7 @@
         "tags": [
           "Collections"
         ],
+        "operationId": "Collections_AddItem",
         "parameters": [
           {
             "name": "id",
@@ -442,17 +639,53 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Collections_AddItemErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Collections_AddItemErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Collections_AddItemErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -462,32 +695,64 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Collections_AddItemErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Collections_AddItemErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Collections_AddItemErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
           }
-        },
-        "x-error-codes": [
-          "Collection.NotFound",
-          "Publication.NotFound",
-          "Collection.Forbidden"
-        ]
+        }
       },
       "delete": {
         "tags": [
           "Collections"
         ],
+        "operationId": "Collections_RemoveItem",
         "parameters": [
           {
             "name": "id",
@@ -517,17 +782,53 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Collections_RemoveItemErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Collections_RemoveItemErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Collections_RemoveItemErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -537,27 +838,58 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Collections_RemoveItemErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Collections_RemoveItemErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Collections_RemoveItemErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
           }
-        },
-        "x-error-codes": [
-          "Collection.NotFound",
-          "Publication.NotFound",
-          "Collection.Forbidden"
-        ]
+        }
       }
     },
     "/api/Feed/global": {
@@ -565,6 +897,7 @@
         "tags": [
           "Feed"
         ],
+        "operationId": "Feed_GetGlobal",
         "parameters": [
           {
             "name": "cursor",
@@ -579,10 +912,7 @@
             "in": "query",
             "schema": {
               "pattern": "^-?(?:0|[1-9]\\d*)$",
-              "type": [
-                "integer",
-                "string"
-              ],
+              "type": "integer",
               "format": "int32",
               "default": 20
             }
@@ -626,6 +956,7 @@
         "tags": [
           "Feed"
         ],
+        "operationId": "Feed_GetSubscriptions",
         "parameters": [
           {
             "name": "cursor",
@@ -640,10 +971,7 @@
             "in": "query",
             "schema": {
               "pattern": "^-?(?:0|[1-9]\\d*)$",
-              "type": [
-                "integer",
-                "string"
-              ],
+              "type": "integer",
               "format": "int32",
               "default": 20
             }
@@ -687,6 +1015,7 @@
         "tags": [
           "Feed"
         ],
+        "operationId": "Feed_GetUserFeed",
         "parameters": [
           {
             "name": "username",
@@ -709,10 +1038,7 @@
             "in": "query",
             "schema": {
               "pattern": "^-?(?:0|[1-9]\\d*)$",
-              "type": [
-                "integer",
-                "string"
-              ],
+              "type": "integer",
               "format": "int32",
               "default": 20
             }
@@ -756,6 +1082,7 @@
         "tags": [
           "Meta"
         ],
+        "operationId": "Meta_GetTags",
         "responses": {
           "200": {
             "description": "OK",
@@ -794,9 +1121,10 @@
         "tags": [
           "Publications"
         ],
+        "operationId": "Publications_Create",
         "requestBody": {
           "content": {
-            "application/x-www-form-urlencoded": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
@@ -805,6 +1133,12 @@
                   },
                   "Image": {
                     "$ref": "#/components/schemas/IFormFile"
+                  },
+                  "Images": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/IFormFile"
+                    }
                   },
                   "TagIds": {
                     "type": "array",
@@ -878,6 +1212,7 @@
         "tags": [
           "Publications"
         ],
+        "operationId": "Publications_Get",
         "parameters": [
           {
             "name": "id",
@@ -915,30 +1250,64 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_GetErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_GetErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_GetErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
           }
-        },
-        "x-error-codes": [
-          "Publication.NotFound"
-        ]
+        }
       },
       "delete": {
         "tags": [
           "Publications"
         ],
+        "operationId": "Publications_Delete",
         "parameters": [
           {
             "name": "id",
@@ -959,17 +1328,53 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_DeleteErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_DeleteErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_DeleteErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -979,26 +1384,58 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_DeleteErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_DeleteErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_DeleteErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
           }
-        },
-        "x-error-codes": [
-          "Publication.Forbidden",
-          "Publication.NotFound"
-        ]
+        }
       }
     },
     "/api/Publications/{id}/like": {
@@ -1006,6 +1443,7 @@
         "tags": [
           "Publications"
         ],
+        "operationId": "Publications_ToggleLike",
         "parameters": [
           {
             "name": "id",
@@ -1066,6 +1504,7 @@
         "tags": [
           "Publications"
         ],
+        "operationId": "Publications_AddComment",
         "parameters": [
           {
             "name": "id",
@@ -1147,6 +1586,7 @@
         "tags": [
           "Publications"
         ],
+        "operationId": "Publications_GetComments",
         "parameters": [
           {
             "name": "id",
@@ -1170,10 +1610,7 @@
             "in": "query",
             "schema": {
               "pattern": "^-?(?:0|[1-9]\\d*)$",
-              "type": [
-                "integer",
-                "string"
-              ],
+              "type": "integer",
               "format": "int32",
               "default": 30
             }
@@ -1217,6 +1654,7 @@
         "tags": [
           "Publications"
         ],
+        "operationId": "Publications_ToggleCommentLike",
         "parameters": [
           {
             "name": "id",
@@ -1286,6 +1724,7 @@
         "tags": [
           "Publications"
         ],
+        "operationId": "Publications_CreateAssessment",
         "parameters": [
           {
             "name": "id",
@@ -1347,6 +1786,7 @@
         "tags": [
           "Publications"
         ],
+        "operationId": "Publications_GetAssessments",
         "parameters": [
           {
             "name": "id",
@@ -1387,6 +1827,7 @@
         "tags": [
           "Search"
         ],
+        "operationId": "Search_SearchPublications",
         "parameters": [
           {
             "name": "query",
@@ -1419,10 +1860,7 @@
             "in": "query",
             "schema": {
               "pattern": "^-?(?:0|[1-9]\\d*)$",
-              "type": [
-                "integer",
-                "string"
-              ],
+              "type": "integer",
               "format": "int32",
               "default": 20
             }
@@ -1466,6 +1904,7 @@
         "tags": [
           "Search"
         ],
+        "operationId": "Search_SearchUsers",
         "parameters": [
           {
             "name": "query",
@@ -1479,10 +1918,7 @@
             "in": "query",
             "schema": {
               "pattern": "^-?(?:0|[1-9]\\d*)$",
-              "type": [
-                "integer",
-                "string"
-              ],
+              "type": "integer",
               "format": "int32",
               "default": 20
             }
@@ -1526,6 +1962,7 @@
         "tags": [
           "Search"
         ],
+        "operationId": "Search_SearchCollections",
         "parameters": [
           {
             "name": "query",
@@ -1539,10 +1976,7 @@
             "in": "query",
             "schema": {
               "pattern": "^-?(?:0|[1-9]\\d*)$",
-              "type": [
-                "integer",
-                "string"
-              ],
+              "type": "integer",
               "format": "int32",
               "default": 20
             }
@@ -1586,6 +2020,7 @@
         "tags": [
           "Users"
         ],
+        "operationId": "Users_GetMe",
         "responses": {
           "200": {
             "description": "OK",
@@ -1613,6 +2048,7 @@
         "tags": [
           "Users"
         ],
+        "operationId": "Users_UpdateProfile",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1645,40 +2081,15 @@
         "tags": [
           "Users"
         ],
+        "operationId": "Users_UpdateAvatar",
         "requestBody": {
           "content": {
-            "application/x-www-form-urlencoded": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "ContentType": {
-                    "type": "string"
-                  },
-                  "ContentDisposition": {
-                    "type": "string"
-                  },
-                  "Headers": {
-                    "type": "object",
-                    "additionalProperties": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    }
-                  },
-                  "Length": {
-                    "pattern": "^-?(?:0|[1-9]\\d*)$",
-                    "type": [
-                      "integer",
-                      "string"
-                    ],
-                    "format": "int64"
-                  },
-                  "Name": {
-                    "type": "string"
-                  },
-                  "FileName": {
-                    "type": "string"
+                  "File": {
+                    "$ref": "#/components/schemas/IFormFile"
                   }
                 }
               }
@@ -1698,6 +2109,7 @@
         "tags": [
           "Users"
         ],
+        "operationId": "Users_Search",
         "parameters": [
           {
             "name": "query",
@@ -1711,10 +2123,7 @@
             "in": "query",
             "schema": {
               "pattern": "^-?(?:0|[1-9]\\d*)$",
-              "type": [
-                "integer",
-                "string"
-              ],
+              "type": "integer",
               "format": "int32",
               "default": 20
             }
@@ -1758,6 +2167,7 @@
         "tags": [
           "Users"
         ],
+        "operationId": "Users_GetByUsername",
         "parameters": [
           {
             "name": "username",
@@ -1794,25 +2204,58 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Users_GetByUsernameErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Users_GetByUsernameErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Users_GetByUsernameErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
           }
-        },
-        "x-error-codes": [
-          "User.NotFound"
-        ]
+        }
       }
     },
     "/api/Users/{id}/follow": {
@@ -1820,6 +2263,7 @@
         "tags": [
           "Users"
         ],
+        "operationId": "Users_Follow",
         "parameters": [
           {
             "name": "id",
@@ -1841,6 +2285,7 @@
         "tags": [
           "Users"
         ],
+        "operationId": "Users_Unfollow",
         "parameters": [
           {
             "name": "id",
@@ -1864,6 +2309,7 @@
         "tags": [
           "Users"
         ],
+        "operationId": "Users_GetFollowers",
         "parameters": [
           {
             "name": "id",
@@ -1879,10 +2325,7 @@
             "in": "query",
             "schema": {
               "pattern": "^-?(?:0|[1-9]\\d*)$",
-              "type": [
-                "integer",
-                "string"
-              ],
+              "type": "integer",
               "format": "int32",
               "default": 0
             }
@@ -1892,10 +2335,7 @@
             "in": "query",
             "schema": {
               "pattern": "^-?(?:0|[1-9]\\d*)$",
-              "type": [
-                "integer",
-                "string"
-              ],
+              "type": "integer",
               "format": "int32",
               "default": 50
             }
@@ -1939,6 +2379,7 @@
         "tags": [
           "Users"
         ],
+        "operationId": "Users_GetFollowing",
         "parameters": [
           {
             "name": "id",
@@ -1954,10 +2395,7 @@
             "in": "query",
             "schema": {
               "pattern": "^-?(?:0|[1-9]\\d*)$",
-              "type": [
-                "integer",
-                "string"
-              ],
+              "type": "integer",
               "format": "int32",
               "default": 0
             }
@@ -1967,10 +2405,7 @@
             "in": "query",
             "schema": {
               "pattern": "^-?(?:0|[1-9]\\d*)$",
-              "type": [
-                "integer",
-                "string"
-              ],
+              "type": "integer",
               "format": "int32",
               "default": 50
             }
@@ -2014,6 +2449,7 @@
         "tags": [
           "Users"
         ],
+        "operationId": "Users_GetMyPreferences",
         "responses": {
           "200": {
             "description": "OK",
@@ -2050,6 +2486,7 @@
         "tags": [
           "Users"
         ],
+        "operationId": "Users_SetMyPreferences",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2094,9 +2531,10 @@
         "tags": [
           "Wardrobe"
         ],
+        "operationId": "Wardrobe_Add",
         "requestBody": {
           "content": {
-            "application/x-www-form-urlencoded": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
@@ -2111,10 +2549,7 @@
                   },
                   "EstimatedPrice": {
                     "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?$",
-                    "type": [
-                      "number",
-                      "string"
-                    ],
+                    "type": "number",
                     "format": "double"
                   },
                   "Photo": {
@@ -2176,6 +2611,7 @@
         "tags": [
           "Wardrobe"
         ],
+        "operationId": "Wardrobe_Get",
         "parameters": [
           {
             "name": "query",
@@ -2189,10 +2625,7 @@
             "in": "query",
             "schema": {
               "pattern": "^-?(?:0|[1-9]\\d*)$",
-              "type": [
-                "integer",
-                "string"
-              ],
+              "type": "integer",
               "format": "int32",
               "default": 0
             }
@@ -2202,10 +2635,7 @@
             "in": "query",
             "schema": {
               "pattern": "^-?(?:0|[1-9]\\d*)$",
-              "type": [
-                "integer",
-                "string"
-              ],
+              "type": "integer",
               "format": "int32",
               "default": 20
             }
@@ -2249,6 +2679,7 @@
         "tags": [
           "Wardrobe"
         ],
+        "operationId": "Wardrobe_Delete",
         "parameters": [
           {
             "name": "id",
@@ -2269,17 +2700,53 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Wardrobe_DeleteErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Wardrobe_DeleteErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Wardrobe_DeleteErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -2289,26 +2756,58 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Wardrobe_DeleteErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Wardrobe_DeleteErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Wardrobe_DeleteErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
           }
-        },
-        "x-error-codes": [
-          "Cloth.NotFound",
-          "Cloth.Forbidden"
-        ]
+        }
       }
     }
   },
@@ -2327,51 +2826,60 @@
         "properties": {
           "averageColorCoordination": {
             "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?$",
-            "type": [
-              "number",
-              "string"
-            ],
+            "type": "number",
             "format": "double"
           },
           "averageFitAndProportions": {
             "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?$",
-            "type": [
-              "number",
-              "string"
-            ],
+            "type": "number",
             "format": "double"
           },
           "averageOriginality": {
             "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?$",
-            "type": [
-              "number",
-              "string"
-            ],
+            "type": "number",
             "format": "double"
           },
           "averageOverallStyle": {
             "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?$",
-            "type": [
-              "number",
-              "string"
-            ],
+            "type": "number",
             "format": "double"
           },
           "totalAverage": {
             "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?$",
-            "type": [
-              "number",
-              "string"
-            ],
+            "type": "number",
             "format": "double"
           },
           "totalAssessments": {
             "pattern": "^-?(?:0|[1-9]\\d*)$",
-            "type": [
-              "integer",
-              "string"
-            ],
+            "type": "integer",
             "format": "int32"
+          }
+        }
+      },
+      "Auth_LoginErrorCode": {
+        "enum": [
+          "Auth.InvalidCredentials"
+        ],
+        "type": "string"
+      },
+      "Auth_RegisterErrorCode": {
+        "enum": [
+          "DuplicateEmail"
+        ],
+        "type": "string"
+      },
+      "ChangePasswordRequest": {
+        "required": [
+          "oldPassword",
+          "newPassword"
+        ],
+        "type": "object",
+        "properties": {
+          "oldPassword": {
+            "type": "string"
+          },
+          "newPassword": {
+            "type": "string"
           }
         }
       },
@@ -2445,8 +2953,7 @@
             "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?$",
             "type": [
               "null",
-              "number",
-              "string"
+              "number"
             ],
             "format": "double"
           }
@@ -2485,10 +2992,7 @@
           },
           "itemsCount": {
             "pattern": "^-?(?:0|[1-9]\\d*)$",
-            "type": [
-              "integer",
-              "string"
-            ],
+            "type": "integer",
             "format": "int32"
           },
           "createdAt": {
@@ -2496,6 +3000,29 @@
             "format": "date-time"
           }
         }
+      },
+      "Collections_AddItemErrorCode": {
+        "enum": [
+          "Collection.NotFound",
+          "Publication.NotFound",
+          "Collection.Forbidden"
+        ],
+        "type": "string"
+      },
+      "Collections_GetItemsErrorCode": {
+        "enum": [
+          "Collection.NotFound",
+          "Collection.Forbidden"
+        ],
+        "type": "string"
+      },
+      "Collections_RemoveItemErrorCode": {
+        "enum": [
+          "Collection.NotFound",
+          "Publication.NotFound",
+          "Collection.Forbidden"
+        ],
+        "type": "string"
       },
       "CommentResponse": {
         "required": [
@@ -2538,10 +3065,7 @@
           },
           "likesCount": {
             "pattern": "^-?(?:0|[1-9]\\d*)$",
-            "type": [
-              "integer",
-              "string"
-            ],
+            "type": "integer",
             "format": "int32"
           },
           "isLikedByMe": {
@@ -2556,10 +3080,7 @@
           },
           "repliesCount": {
             "pattern": "^-?(?:0|[1-9]\\d*)$",
-            "type": [
-              "integer",
-              "string"
-            ],
+            "type": "integer",
             "format": "int32"
           }
         }
@@ -2575,34 +3096,22 @@
         "properties": {
           "colorCoordination": {
             "pattern": "^-?(?:0|[1-9]\\d*)$",
-            "type": [
-              "integer",
-              "string"
-            ],
+            "type": "integer",
             "format": "int32"
           },
           "fitAndProportions": {
             "pattern": "^-?(?:0|[1-9]\\d*)$",
-            "type": [
-              "integer",
-              "string"
-            ],
+            "type": "integer",
             "format": "int32"
           },
           "originality": {
             "pattern": "^-?(?:0|[1-9]\\d*)$",
-            "type": [
-              "integer",
-              "string"
-            ],
+            "type": "integer",
             "format": "int32"
           },
           "overallStyle": {
             "pattern": "^-?(?:0|[1-9]\\d*)$",
-            "type": [
-              "integer",
-              "string"
-            ],
+            "type": "integer",
             "format": "int32"
           }
         }
@@ -2654,12 +3163,12 @@
       },
       "LoginRequest": {
         "required": [
-          "username",
+          "email",
           "password"
         ],
         "type": "object",
         "properties": {
-          "username": {
+          "email": {
             "type": "string"
           },
           "password": {
@@ -2686,8 +3195,7 @@
             "pattern": "^-?(?:0|[1-9]\\d*)$",
             "type": [
               "null",
-              "integer",
-              "string"
+              "integer"
             ],
             "format": "int32"
           },
@@ -2710,6 +3218,7 @@
           "id",
           "description",
           "imageUrl",
+          "imageUrls",
           "createdAt",
           "userId",
           "username",
@@ -2727,6 +3236,12 @@
           },
           "imageUrl": {
             "type": "string"
+          },
+          "imageUrls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "createdAt": {
             "type": "string",
@@ -2753,15 +3268,28 @@
           }
         }
       },
+      "Publications_DeleteErrorCode": {
+        "enum": [
+          "Publication.Forbidden",
+          "Publication.NotFound"
+        ],
+        "type": "string"
+      },
+      "Publications_GetErrorCode": {
+        "enum": [
+          "Publication.NotFound"
+        ],
+        "type": "string"
+      },
       "RegisterRequest": {
         "required": [
-          "username",
+          "displayName",
           "email",
           "password"
         ],
         "type": "object",
         "properties": {
-          "username": {
+          "displayName": {
             "type": [
               "null",
               "string"
@@ -2797,10 +3325,17 @@
       },
       "UpdateProfileRequest": {
         "required": [
+          "displayName",
           "bio"
         ],
         "type": "object",
         "properties": {
+          "displayName": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
           "bio": {
             "type": [
               "null",
@@ -2812,7 +3347,7 @@
       "UserProfileResponse": {
         "required": [
           "id",
-          "username",
+          "displayName",
           "bio",
           "avatarUrl",
           "followersCount",
@@ -2826,7 +3361,7 @@
             "type": "string",
             "format": "uuid"
           },
-          "username": {
+          "displayName": {
             "type": "string"
           },
           "bio": {
@@ -2843,39 +3378,40 @@
           },
           "followersCount": {
             "pattern": "^-?(?:0|[1-9]\\d*)$",
-            "type": [
-              "integer",
-              "string"
-            ],
+            "type": "integer",
             "format": "int32"
           },
           "followingCount": {
             "pattern": "^-?(?:0|[1-9]\\d*)$",
-            "type": [
-              "integer",
-              "string"
-            ],
+            "type": "integer",
             "format": "int32"
           },
           "publicationsCount": {
             "pattern": "^-?(?:0|[1-9]\\d*)$",
-            "type": [
-              "integer",
-              "string"
-            ],
+            "type": "integer",
             "format": "int32"
           },
           "isFollowing": {
             "type": "boolean"
           }
         }
+      },
+      "Users_GetByUsernameErrorCode": {
+        "enum": [
+          "User.NotFound"
+        ],
+        "type": "string"
+      },
+      "Wardrobe_DeleteErrorCode": {
+        "enum": [
+          "Cloth.NotFound",
+          "Cloth.Forbidden"
+        ],
+        "type": "string"
       }
     }
   },
   "tags": [
-    {
-      "name": "Api"
-    },
     {
       "name": "Auth"
     },

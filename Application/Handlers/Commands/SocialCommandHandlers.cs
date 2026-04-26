@@ -24,6 +24,12 @@ public sealed class FollowUserCommandHandler : IRequestHandler<FollowUserCommand
             return SocialErrors.CannotFollowSelf;
         }
 
+        var followeeExists = await _context.Users.AnyAsync(u => u.Id == request.FolloweeId, cancellationToken);
+        if (!followeeExists)
+        {
+            return UserErrors.NotFound;
+        }
+
         var followExists = await _context.Follows
             .AnyAsync(f => f.FollowerId == request.FollowerId && f.FolloweeId == request.FolloweeId, cancellationToken);
 
@@ -49,6 +55,12 @@ public sealed class UnfollowUserCommandHandler : IRequestHandler<UnfollowUserCom
 
     public async Task<ErrorOr<Success>> Handle(UnfollowUserCommand request, CancellationToken cancellationToken)
     {
+        var followeeExists = await _context.Users.AnyAsync(u => u.Id == request.FolloweeId, cancellationToken);
+        if (!followeeExists)
+        {
+            return UserErrors.NotFound;
+        }
+
         var follow = await _context.Follows
             .FirstOrDefaultAsync(f => f.FollowerId == request.FollowerId && f.FolloweeId == request.FolloweeId, cancellationToken);
 

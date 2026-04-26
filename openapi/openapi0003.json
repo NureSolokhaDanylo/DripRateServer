@@ -11,25 +11,12 @@
     }
   ],
   "paths": {
-    "/openapi/openapi.yaml": {
-      "get": {
-        "tags": [
-          "Api"
-        ],
-        "operationId": "OpenAPI YAML",
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/api/Auth/register": {
       "post": {
         "tags": [
           "Auth"
         ],
-        "operationId": "Register",
+        "operationId": "Auth_Register",
         "requestBody": {
           "content": {
             "application/json": {
@@ -87,11 +74,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "DuplicateEmail",
-                            "DuplicateUserName"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Auth_RegisterErrorCode"
                         }
                       }
                     }
@@ -108,11 +91,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "DuplicateEmail",
-                            "DuplicateUserName"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Auth_RegisterErrorCode"
                         }
                       }
                     }
@@ -129,11 +108,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "DuplicateEmail",
-                            "DuplicateUserName"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Auth_RegisterErrorCode"
                         }
                       }
                     }
@@ -142,11 +117,7 @@
               }
             }
           }
-        },
-        "x-error-codes": [
-          "DuplicateEmail",
-          "DuplicateUserName"
-        ]
+        }
       }
     },
     "/api/Auth/login": {
@@ -154,7 +125,7 @@
         "tags": [
           "Auth"
         ],
-        "operationId": "Login",
+        "operationId": "Auth_Login",
         "requestBody": {
           "content": {
             "application/json": {
@@ -209,10 +180,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Auth.InvalidCredentials"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Auth_LoginErrorCode"
                         }
                       }
                     }
@@ -229,10 +197,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Auth.InvalidCredentials"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Auth_LoginErrorCode"
                         }
                       }
                     }
@@ -249,10 +214,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Auth.InvalidCredentials"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Auth_LoginErrorCode"
                         }
                       }
                     }
@@ -261,10 +223,80 @@
               }
             }
           }
+        }
+      }
+    },
+    "/api/Auth/password": {
+      "put": {
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "Auth_ChangePassword",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordRequest"
+              }
+            }
+          },
+          "required": true
         },
-        "x-error-codes": [
-          "Auth.InvalidCredentials"
-        ]
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/Auth/account": {
@@ -272,7 +304,7 @@
         "tags": [
           "Auth"
         ],
-        "operationId": "DeleteAccount",
+        "operationId": "Auth_DeleteAccount",
         "responses": {
           "204": {
             "description": "No Content"
@@ -305,7 +337,7 @@
         "tags": [
           "Collections"
         ],
-        "operationId": "GetMyCollections",
+        "operationId": "Collections_GetMyCollections",
         "responses": {
           "200": {
             "description": "OK",
@@ -344,7 +376,7 @@
         "tags": [
           "Collections"
         ],
-        "operationId": "Create",
+        "operationId": "Collections_Create",
         "requestBody": {
           "content": {
             "application/json": {
@@ -397,7 +429,7 @@
         "tags": [
           "Collections"
         ],
-        "operationId": "GetItems",
+        "operationId": "Collections_GetItems",
         "parameters": [
           {
             "name": "id",
@@ -470,11 +502,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Collection.NotFound",
-                            "Collection.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Collections_GetItemsErrorCode"
                         }
                       }
                     }
@@ -491,11 +519,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Collection.NotFound",
-                            "Collection.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Collections_GetItemsErrorCode"
                         }
                       }
                     }
@@ -512,11 +536,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Collection.NotFound",
-                            "Collection.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Collections_GetItemsErrorCode"
                         }
                       }
                     }
@@ -538,11 +558,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Collection.NotFound",
-                            "Collection.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Collections_GetItemsErrorCode"
                         }
                       }
                     }
@@ -559,11 +575,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Collection.NotFound",
-                            "Collection.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Collections_GetItemsErrorCode"
                         }
                       }
                     }
@@ -580,11 +592,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Collection.NotFound",
-                            "Collection.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Collections_GetItemsErrorCode"
                         }
                       }
                     }
@@ -593,11 +601,7 @@
               }
             }
           }
-        },
-        "x-error-codes": [
-          "Collection.NotFound",
-          "Collection.Forbidden"
-        ]
+        }
       }
     },
     "/api/Collections/{id}/items/{pubId}": {
@@ -605,7 +609,7 @@
         "tags": [
           "Collections"
         ],
-        "operationId": "AddItem",
+        "operationId": "Collections_AddItem",
         "parameters": [
           {
             "name": "id",
@@ -643,12 +647,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Collection.NotFound",
-                            "Publication.NotFound",
-                            "Collection.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Collections_AddItemErrorCode"
                         }
                       }
                     }
@@ -665,12 +664,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Collection.NotFound",
-                            "Publication.NotFound",
-                            "Collection.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Collections_AddItemErrorCode"
                         }
                       }
                     }
@@ -687,12 +681,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Collection.NotFound",
-                            "Publication.NotFound",
-                            "Collection.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Collections_AddItemErrorCode"
                         }
                       }
                     }
@@ -714,12 +703,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Collection.NotFound",
-                            "Publication.NotFound",
-                            "Collection.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Collections_AddItemErrorCode"
                         }
                       }
                     }
@@ -736,12 +720,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Collection.NotFound",
-                            "Publication.NotFound",
-                            "Collection.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Collections_AddItemErrorCode"
                         }
                       }
                     }
@@ -758,12 +737,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Collection.NotFound",
-                            "Publication.NotFound",
-                            "Collection.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Collections_AddItemErrorCode"
                         }
                       }
                     }
@@ -772,18 +746,13 @@
               }
             }
           }
-        },
-        "x-error-codes": [
-          "Collection.NotFound",
-          "Publication.NotFound",
-          "Collection.Forbidden"
-        ]
+        }
       },
       "delete": {
         "tags": [
           "Collections"
         ],
-        "operationId": "RemoveItem",
+        "operationId": "Collections_RemoveItem",
         "parameters": [
           {
             "name": "id",
@@ -821,12 +790,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Collection.NotFound",
-                            "Publication.NotFound",
-                            "Collection.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Collections_RemoveItemErrorCode"
                         }
                       }
                     }
@@ -843,12 +807,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Collection.NotFound",
-                            "Publication.NotFound",
-                            "Collection.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Collections_RemoveItemErrorCode"
                         }
                       }
                     }
@@ -865,12 +824,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Collection.NotFound",
-                            "Publication.NotFound",
-                            "Collection.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Collections_RemoveItemErrorCode"
                         }
                       }
                     }
@@ -892,12 +846,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Collection.NotFound",
-                            "Publication.NotFound",
-                            "Collection.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Collections_RemoveItemErrorCode"
                         }
                       }
                     }
@@ -914,12 +863,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Collection.NotFound",
-                            "Publication.NotFound",
-                            "Collection.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Collections_RemoveItemErrorCode"
                         }
                       }
                     }
@@ -936,12 +880,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Collection.NotFound",
-                            "Publication.NotFound",
-                            "Collection.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Collections_RemoveItemErrorCode"
                         }
                       }
                     }
@@ -950,12 +889,7 @@
               }
             }
           }
-        },
-        "x-error-codes": [
-          "Collection.NotFound",
-          "Publication.NotFound",
-          "Collection.Forbidden"
-        ]
+        }
       }
     },
     "/api/Feed/global": {
@@ -963,7 +897,7 @@
         "tags": [
           "Feed"
         ],
-        "operationId": "GetGlobal",
+        "operationId": "Feed_GetGlobal",
         "parameters": [
           {
             "name": "cursor",
@@ -1022,7 +956,7 @@
         "tags": [
           "Feed"
         ],
-        "operationId": "GetSubscriptions",
+        "operationId": "Feed_GetSubscriptions",
         "parameters": [
           {
             "name": "cursor",
@@ -1081,7 +1015,7 @@
         "tags": [
           "Feed"
         ],
-        "operationId": "GetUserFeed",
+        "operationId": "Feed_GetUserFeed",
         "parameters": [
           {
             "name": "username",
@@ -1148,7 +1082,7 @@
         "tags": [
           "Meta"
         ],
-        "operationId": "GetTags",
+        "operationId": "Meta_GetTags",
         "responses": {
           "200": {
             "description": "OK",
@@ -1187,10 +1121,10 @@
         "tags": [
           "Publications"
         ],
-        "operationId": "Create",
+        "operationId": "Publications_Create",
         "requestBody": {
           "content": {
-            "application/x-www-form-urlencoded": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
@@ -1199,6 +1133,12 @@
                   },
                   "Image": {
                     "$ref": "#/components/schemas/IFormFile"
+                  },
+                  "Images": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/IFormFile"
+                    }
                   },
                   "TagIds": {
                     "type": "array",
@@ -1272,7 +1212,7 @@
         "tags": [
           "Publications"
         ],
-        "operationId": "Get",
+        "operationId": "Publications_Get",
         "parameters": [
           {
             "name": "id",
@@ -1318,10 +1258,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Publication.NotFound"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Publications_GetErrorCode"
                         }
                       }
                     }
@@ -1338,10 +1275,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Publication.NotFound"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Publications_GetErrorCode"
                         }
                       }
                     }
@@ -1358,10 +1292,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Publication.NotFound"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Publications_GetErrorCode"
                         }
                       }
                     }
@@ -1370,16 +1301,13 @@
               }
             }
           }
-        },
-        "x-error-codes": [
-          "Publication.NotFound"
-        ]
+        }
       },
       "delete": {
         "tags": [
           "Publications"
         ],
-        "operationId": "Delete",
+        "operationId": "Publications_Delete",
         "parameters": [
           {
             "name": "id",
@@ -1408,11 +1336,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Publication.Forbidden",
-                            "Publication.NotFound"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Publications_DeleteErrorCode"
                         }
                       }
                     }
@@ -1429,11 +1353,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Publication.Forbidden",
-                            "Publication.NotFound"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Publications_DeleteErrorCode"
                         }
                       }
                     }
@@ -1450,11 +1370,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Publication.Forbidden",
-                            "Publication.NotFound"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Publications_DeleteErrorCode"
                         }
                       }
                     }
@@ -1476,11 +1392,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Publication.Forbidden",
-                            "Publication.NotFound"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Publications_DeleteErrorCode"
                         }
                       }
                     }
@@ -1497,11 +1409,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Publication.Forbidden",
-                            "Publication.NotFound"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Publications_DeleteErrorCode"
                         }
                       }
                     }
@@ -1518,11 +1426,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Publication.Forbidden",
-                            "Publication.NotFound"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Publications_DeleteErrorCode"
                         }
                       }
                     }
@@ -1531,11 +1435,7 @@
               }
             }
           }
-        },
-        "x-error-codes": [
-          "Publication.Forbidden",
-          "Publication.NotFound"
-        ]
+        }
       }
     },
     "/api/Publications/{id}/like": {
@@ -1543,7 +1443,7 @@
         "tags": [
           "Publications"
         ],
-        "operationId": "ToggleLike",
+        "operationId": "Publications_ToggleLike",
         "parameters": [
           {
             "name": "id",
@@ -1604,7 +1504,7 @@
         "tags": [
           "Publications"
         ],
-        "operationId": "AddComment",
+        "operationId": "Publications_AddComment",
         "parameters": [
           {
             "name": "id",
@@ -1665,17 +1565,53 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_AddCommentErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_AddCommentErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_AddCommentErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1686,7 +1622,7 @@
         "tags": [
           "Publications"
         ],
-        "operationId": "GetComments",
+        "operationId": "Publications_GetComments",
         "parameters": [
           {
             "name": "id",
@@ -1749,12 +1685,157 @@
         }
       }
     },
+    "/api/Publications/{id}/comments/{commentId}": {
+      "delete": {
+        "tags": [
+          "Publications"
+        ],
+        "operationId": "Publications_DeleteComment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "commentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_DeleteCommentErrorCode"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_DeleteCommentErrorCode"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_DeleteCommentErrorCode"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_DeleteCommentErrorCode"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_DeleteCommentErrorCode"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_DeleteCommentErrorCode"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Publications/{id}/comments/{commentId}/like": {
       "post": {
         "tags": [
           "Publications"
         ],
-        "operationId": "ToggleCommentLike",
+        "operationId": "Publications_ToggleCommentLike",
         "parameters": [
           {
             "name": "id",
@@ -1801,17 +1882,53 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_ToggleCommentLikeErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_ToggleCommentLikeErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Publications_ToggleCommentLikeErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1824,7 +1941,7 @@
         "tags": [
           "Publications"
         ],
-        "operationId": "CreateAssessment",
+        "operationId": "Publications_CreateAssessment",
         "parameters": [
           {
             "name": "id",
@@ -1886,7 +2003,7 @@
         "tags": [
           "Publications"
         ],
-        "operationId": "GetAssessments",
+        "operationId": "Publications_GetAssessments",
         "parameters": [
           {
             "name": "id",
@@ -1927,7 +2044,7 @@
         "tags": [
           "Search"
         ],
-        "operationId": "SearchPublications",
+        "operationId": "Search_SearchPublications",
         "parameters": [
           {
             "name": "query",
@@ -2004,7 +2121,7 @@
         "tags": [
           "Search"
         ],
-        "operationId": "SearchUsers",
+        "operationId": "Search_SearchUsers",
         "parameters": [
           {
             "name": "query",
@@ -2062,7 +2179,7 @@
         "tags": [
           "Search"
         ],
-        "operationId": "SearchCollections",
+        "operationId": "Search_SearchCollections",
         "parameters": [
           {
             "name": "query",
@@ -2120,7 +2237,7 @@
         "tags": [
           "Users"
         ],
-        "operationId": "GetMe",
+        "operationId": "Users_GetMe",
         "responses": {
           "200": {
             "description": "OK",
@@ -2148,7 +2265,7 @@
         "tags": [
           "Users"
         ],
-        "operationId": "UpdateProfile",
+        "operationId": "Users_UpdateProfile",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2181,10 +2298,10 @@
         "tags": [
           "Users"
         ],
-        "operationId": "UpdateAvatar",
+        "operationId": "Users_UpdateAvatar",
         "requestBody": {
           "content": {
-            "application/x-www-form-urlencoded": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
@@ -2209,7 +2326,7 @@
         "tags": [
           "Users"
         ],
-        "operationId": "Search",
+        "operationId": "Users_Search",
         "parameters": [
           {
             "name": "query",
@@ -2267,7 +2384,7 @@
         "tags": [
           "Users"
         ],
-        "operationId": "GetByUsername",
+        "operationId": "Users_GetByUsername",
         "parameters": [
           {
             "name": "username",
@@ -2312,10 +2429,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "User.NotFound"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Users_GetByUsernameErrorCode"
                         }
                       }
                     }
@@ -2332,10 +2446,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "User.NotFound"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Users_GetByUsernameErrorCode"
                         }
                       }
                     }
@@ -2352,10 +2463,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "User.NotFound"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Users_GetByUsernameErrorCode"
                         }
                       }
                     }
@@ -2364,10 +2472,7 @@
               }
             }
           }
-        },
-        "x-error-codes": [
-          "User.NotFound"
-        ]
+        }
       }
     },
     "/api/Users/{id}/follow": {
@@ -2375,7 +2480,7 @@
         "tags": [
           "Users"
         ],
-        "operationId": "Follow",
+        "operationId": "Users_Follow",
         "parameters": [
           {
             "name": "id",
@@ -2397,7 +2502,7 @@
         "tags": [
           "Users"
         ],
-        "operationId": "Unfollow",
+        "operationId": "Users_Unfollow",
         "parameters": [
           {
             "name": "id",
@@ -2421,7 +2526,7 @@
         "tags": [
           "Users"
         ],
-        "operationId": "GetFollowers",
+        "operationId": "Users_GetFollowers",
         "parameters": [
           {
             "name": "id",
@@ -2491,7 +2596,7 @@
         "tags": [
           "Users"
         ],
-        "operationId": "GetFollowing",
+        "operationId": "Users_GetFollowing",
         "parameters": [
           {
             "name": "id",
@@ -2561,7 +2666,7 @@
         "tags": [
           "Users"
         ],
-        "operationId": "GetMyPreferences",
+        "operationId": "Users_GetMyPreferences",
         "responses": {
           "200": {
             "description": "OK",
@@ -2598,7 +2703,7 @@
         "tags": [
           "Users"
         ],
-        "operationId": "SetMyPreferences",
+        "operationId": "Users_SetMyPreferences",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2643,10 +2748,10 @@
         "tags": [
           "Wardrobe"
         ],
-        "operationId": "Add",
+        "operationId": "Wardrobe_Add",
         "requestBody": {
           "content": {
-            "application/x-www-form-urlencoded": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
@@ -2702,17 +2807,53 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Wardrobe_AddErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Wardrobe_AddErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ProblemDetails"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/Wardrobe_AddErrorCode"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -2723,7 +2864,7 @@
         "tags": [
           "Wardrobe"
         ],
-        "operationId": "Get",
+        "operationId": "Wardrobe_Get",
         "parameters": [
           {
             "name": "query",
@@ -2791,7 +2932,7 @@
         "tags": [
           "Wardrobe"
         ],
-        "operationId": "Delete",
+        "operationId": "Wardrobe_Delete",
         "parameters": [
           {
             "name": "id",
@@ -2820,11 +2961,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Cloth.NotFound",
-                            "Cloth.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Wardrobe_DeleteErrorCode"
                         }
                       }
                     }
@@ -2841,11 +2978,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Cloth.NotFound",
-                            "Cloth.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Wardrobe_DeleteErrorCode"
                         }
                       }
                     }
@@ -2862,11 +2995,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Cloth.NotFound",
-                            "Cloth.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Wardrobe_DeleteErrorCode"
                         }
                       }
                     }
@@ -2888,11 +3017,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Cloth.NotFound",
-                            "Cloth.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Wardrobe_DeleteErrorCode"
                         }
                       }
                     }
@@ -2909,11 +3034,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Cloth.NotFound",
-                            "Cloth.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Wardrobe_DeleteErrorCode"
                         }
                       }
                     }
@@ -2930,11 +3051,7 @@
                       "type": "object",
                       "properties": {
                         "code": {
-                          "enum": [
-                            "Cloth.NotFound",
-                            "Cloth.Forbidden"
-                          ],
-                          "type": "string"
+                          "$ref": "#/components/schemas/Wardrobe_DeleteErrorCode"
                         }
                       }
                     }
@@ -2943,11 +3060,7 @@
               }
             }
           }
-        },
-        "x-error-codes": [
-          "Cloth.NotFound",
-          "Cloth.Forbidden"
-        ]
+        }
       }
     }
   },
@@ -2993,6 +3106,33 @@
             "pattern": "^-?(?:0|[1-9]\\d*)$",
             "type": "integer",
             "format": "int32"
+          }
+        }
+      },
+      "Auth_LoginErrorCode": {
+        "enum": [
+          "Auth.InvalidCredentials"
+        ],
+        "type": "string"
+      },
+      "Auth_RegisterErrorCode": {
+        "enum": [
+          "DuplicateEmail"
+        ],
+        "type": "string"
+      },
+      "ChangePasswordRequest": {
+        "required": [
+          "oldPassword",
+          "newPassword"
+        ],
+        "type": "object",
+        "properties": {
+          "oldPassword": {
+            "type": "string"
+          },
+          "newPassword": {
+            "type": "string"
           }
         }
       },
@@ -3113,6 +3253,29 @@
             "format": "date-time"
           }
         }
+      },
+      "Collections_AddItemErrorCode": {
+        "enum": [
+          "Collection.NotFound",
+          "Publication.NotFound",
+          "Collection.Forbidden"
+        ],
+        "type": "string"
+      },
+      "Collections_GetItemsErrorCode": {
+        "enum": [
+          "Collection.NotFound",
+          "Collection.Forbidden"
+        ],
+        "type": "string"
+      },
+      "Collections_RemoveItemErrorCode": {
+        "enum": [
+          "Collection.NotFound",
+          "Publication.NotFound",
+          "Collection.Forbidden"
+        ],
+        "type": "string"
       },
       "CommentResponse": {
         "required": [
@@ -3253,12 +3416,12 @@
       },
       "LoginRequest": {
         "required": [
-          "username",
+          "email",
           "password"
         ],
         "type": "object",
         "properties": {
-          "username": {
+          "email": {
             "type": "string"
           },
           "password": {
@@ -3308,6 +3471,7 @@
           "id",
           "description",
           "imageUrl",
+          "imageUrls",
           "createdAt",
           "userId",
           "username",
@@ -3325,6 +3489,12 @@
           },
           "imageUrl": {
             "type": "string"
+          },
+          "imageUrls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "createdAt": {
             "type": "string",
@@ -3351,15 +3521,48 @@
           }
         }
       },
+      "Publications_AddCommentErrorCode": {
+        "enum": [
+          "Publication.NotFound",
+          "Comment.ParentNotFound"
+        ],
+        "type": "string"
+      },
+      "Publications_DeleteCommentErrorCode": {
+        "enum": [
+          "Comment.NotFound",
+          "Comment.Forbidden"
+        ],
+        "type": "string"
+      },
+      "Publications_DeleteErrorCode": {
+        "enum": [
+          "Publication.Forbidden",
+          "Publication.NotFound"
+        ],
+        "type": "string"
+      },
+      "Publications_GetErrorCode": {
+        "enum": [
+          "Publication.NotFound"
+        ],
+        "type": "string"
+      },
+      "Publications_ToggleCommentLikeErrorCode": {
+        "enum": [
+          "Comment.NotFound"
+        ],
+        "type": "string"
+      },
       "RegisterRequest": {
         "required": [
-          "username",
+          "displayName",
           "email",
           "password"
         ],
         "type": "object",
         "properties": {
-          "username": {
+          "displayName": {
             "type": [
               "null",
               "string"
@@ -3395,10 +3598,17 @@
       },
       "UpdateProfileRequest": {
         "required": [
+          "displayName",
           "bio"
         ],
         "type": "object",
         "properties": {
+          "displayName": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
           "bio": {
             "type": [
               "null",
@@ -3410,7 +3620,7 @@
       "UserProfileResponse": {
         "required": [
           "id",
-          "username",
+          "displayName",
           "bio",
           "avatarUrl",
           "followersCount",
@@ -3424,7 +3634,7 @@
             "type": "string",
             "format": "uuid"
           },
-          "username": {
+          "displayName": {
             "type": "string"
           },
           "bio": {
@@ -3458,13 +3668,29 @@
             "type": "boolean"
           }
         }
+      },
+      "Users_GetByUsernameErrorCode": {
+        "enum": [
+          "User.NotFound"
+        ],
+        "type": "string"
+      },
+      "Wardrobe_AddErrorCode": {
+        "enum": [
+          "File.ProcessingFailed"
+        ],
+        "type": "string"
+      },
+      "Wardrobe_DeleteErrorCode": {
+        "enum": [
+          "Cloth.NotFound",
+          "Cloth.Forbidden"
+        ],
+        "type": "string"
       }
     }
   },
   "tags": [
-    {
-      "name": "Api"
-    },
     {
       "name": "Auth"
     },

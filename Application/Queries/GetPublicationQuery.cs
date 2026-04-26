@@ -4,4 +4,4 @@ using MediatR;
 
 namespace Application.Queries;
 
-public record GetPublicationQuery(Guid Id) : IRequest<ErrorOr<PublicationResponse>>;
+public record GetPublicationQuery(Guid Id, Guid? UserId = null) : IRequest<ErrorOr<PublicationResponse>>;

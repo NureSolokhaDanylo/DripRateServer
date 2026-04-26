@@ -16,6 +16,10 @@ public sealed class ClothConfiguration : IEntityTypeConfiguration<Cloth>
         builder.Property(c => c.StoreLink).HasMaxLength(2048).HasField("_storeLink");
         builder.Property(c => c.EstimatedPrice).HasPrecision(18, 2).HasField("_estimatedPrice");
         builder.Property(c => c.UserId).HasField("_userId");
+        builder.Property(c => c.CreatedAt).HasField("_createdAt");
+
+        builder.HasIndex(c => c.UserId);
+        builder.HasIndex(c => c.CreatedAt);
 
         builder.HasOne(c => c.User)
             .WithMany(u => u.Wardrobe)
@@ -50,6 +54,10 @@ public sealed class CommentConfiguration : IEntityTypeConfiguration<Comment>
         builder.Property(c => c.UserId).HasField("_userId");
         builder.Property(c => c.PublicationId).HasField("_publicationId");
         builder.Property(c => c.ParentCommentId).HasField("_parentCommentId");
+        builder.Property(c => c.LikesCount).HasField("_likesCount");
+        builder.Property(c => c.RepliesCount).HasField("_repliesCount");
+
+        builder.HasIndex(c => new { c.PublicationId, c.CreatedAt });
         
         // Убираем каскад от пользователя, оставляем только от публикации
         builder.HasOne(c => c.User)
@@ -90,10 +98,12 @@ public sealed class AssessmentConfiguration : IEntityTypeConfiguration<Assessmen
         builder.Property(a => a.FitAndProportions).HasField("_fitAndProportions");
         builder.Property(a => a.Originality).HasField("_originality");
         builder.Property(a => a.OverallStyle).HasField("_overallStyle");
+        builder.Property(a => a.CreatedAt).HasField("_createdAt");
         builder.Property(a => a.UserId).HasField("_userId");
         builder.Property(a => a.PublicationId).HasField("_publicationId");
         
         builder.HasIndex(a => new { a.UserId, a.PublicationId }).IsUnique();
+        builder.HasIndex(a => new { a.PublicationId, a.CreatedAt });
 
         // Убираем каскад от пользователя, оставляем только от публикации
         builder.HasOne(a => a.User)
@@ -118,6 +128,7 @@ public sealed class FollowConfiguration : IEntityTypeConfiguration<Follow>
         builder.HasKey(f => new { f.FollowerId, f.FolloweeId });
         builder.Property(f => f.FollowerId).HasField("_followerId");
         builder.Property(f => f.FolloweeId).HasField("_followeeId");
+        builder.Property(f => f.CreatedAt).HasField("_createdAt");
 
         builder.HasOne(f => f.Follower)
             .WithMany(u => u.Following)

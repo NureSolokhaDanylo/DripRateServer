@@ -22,6 +22,35 @@ public sealed class GetMyCollectionsQueryHandler : IRequestHandler<GetMyCollecti
         var collections = await _context.Collections
             .AsNoTracking()
             .Where(c => c.UserId == request.UserId)
+            .OrderByDescending(c => c.CreatedAt)
+            .ThenBy(c => c.Id)
+            .Skip(request.Skip)
+            .Take(request.Take)
+            .Select(c => new CollectionResponse(c.Id, c.Name, c.Description, c.IsPublic, c.IsSystem, c.Publications.Count, c.CreatedAt))
+            .ToListAsync(cancellationToken);
+
+        return collections;
+    }
+}
+
+public sealed class GetUserCollectionsQueryHandler : IRequestHandler<GetUserCollectionsQuery, ErrorOr<List<CollectionResponse>>>
+{
+    private readonly IApplicationDbContext _context;
+
+    public GetUserCollectionsQueryHandler(IApplicationDbContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<ErrorOr<List<CollectionResponse>>> Handle(GetUserCollectionsQuery request, CancellationToken cancellationToken)
+    {
+        var collections = await _context.Collections
+            .AsNoTracking()
+            .Where(c => c.UserId == request.UserId && c.IsPublic && !c.IsSystem)
+            .OrderByDescending(c => c.CreatedAt)
+            .ThenBy(c => c.Id)
+            .Skip(request.Skip)
+            .Take(request.Take)
             .Select(c => new CollectionResponse(c.Id, c.Name, c.Description, c.IsPublic, c.IsSystem, c.Publications.Count, c.CreatedAt))
             .ToListAsync(cancellationToken);
 
@@ -64,7 +93,7 @@ public sealed class GetCollectionItemsQueryHandler : IRequestHandler<GetCollecti
         var result = await query
             .OrderByDescending(p => p.CreatedAt)
             .Take(request.Take)
-            .Select(PublicationResponse.Projection)
+            .Select(PublicationResponse.GetProjection(request.UserId))
             .ToListAsync(cancellationToken);
 
         return result;

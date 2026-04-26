@@ -19,6 +19,8 @@ public sealed class CollectionConfiguration : IEntityTypeConfiguration<Collectio
         builder.Property(c => c.CreatedAt).HasField("_createdAt");
         builder.Property(c => c.UserId).HasField("_userId");
 
+        builder.HasIndex(c => c.UserId);
+
         builder.HasOne(c => c.User)
             .WithMany(u => u.Collections)
             .HasForeignKey(c => c.UserId)
@@ -28,9 +30,14 @@ public sealed class CollectionConfiguration : IEntityTypeConfiguration<Collectio
         builder.HasMany(c => c.Publications)
             .WithMany(p => p.Collections)
             .UsingEntity<Dictionary<string, object>>(
-                "CollectionPublications",
+                "CollectionPublication",
                 j => j.HasOne<Publication>().WithMany().HasForeignKey("PublicationId").OnDelete(DeleteBehavior.Restrict),
-                j => j.HasOne<Collection>().WithMany().HasForeignKey("CollectionId").OnDelete(DeleteBehavior.Restrict));
+                j => j.HasOne<Collection>().WithMany().HasForeignKey("CollectionId").OnDelete(DeleteBehavior.Restrict),
+                j =>
+                {
+                    j.ToTable("CollectionPublications");
+                    j.HasIndex("PublicationId");
+                });
 
         builder.Navigation(c => c.User).Metadata.SetField("_user");
         builder.Navigation(c => c.Publications).Metadata.SetField("_publications");

@@ -30,8 +30,16 @@ public sealed class GetWardrobeQueryHandler : IRequestHandler<GetWardrobeQuery, 
                 (c.Brand != null && c.Brand.ToLower().Contains(search)));
         }
 
+        query = request.SortBy?.ToLower() switch
+        {
+            "price_asc" => query.OrderBy(c => c.EstimatedPrice).ThenBy(c => c.Name),
+            "price_desc" => query.OrderByDescending(c => c.EstimatedPrice).ThenBy(c => c.Name),
+            "newest" => query.OrderByDescending(c => c.CreatedAt).ThenBy(c => c.Id),
+            "oldest" => query.OrderBy(c => c.CreatedAt).ThenBy(c => c.Id),
+            _ => query.OrderBy(c => c.Name).ThenBy(c => c.Id)
+        };
+
         var result = await query
-            .OrderByDescending(c => c.Name) // Default sort
             .Skip(request.Skip)
             .Take(request.Take)
             .Select(c => new ClothResponseDto(

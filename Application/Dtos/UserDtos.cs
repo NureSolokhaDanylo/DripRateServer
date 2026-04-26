@@ -7,7 +7,7 @@ public record UserProfileResponse(
     Guid Id,
     string DisplayName,
     string? Bio,
-    string? AvatarUrl,
+    string AvatarUrl,
     int FollowersCount,
     int FollowingCount,
     int PublicationsCount,

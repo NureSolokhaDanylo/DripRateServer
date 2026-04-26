@@ -53,6 +53,9 @@ public sealed class Collection
     public static Collection CreateLikes(Guid userId)
         => new(userId, "Likes", "My liked publications", isPublic: false, isSystem: true, CollectionType.SystemLikes);
 
+    public static Collection CreateSaved(Guid userId)
+        => new(userId, "Saved", "My saved publications", isPublic: false, isSystem: true, CollectionType.SystemSaved);
+
     public void AddPublication(Publication publication)
     {
         if (!_publications.Contains(publication))
@@ -64,5 +67,14 @@ public sealed class Collection
     public void RemovePublication(Publication publication)
     {
         _publications.Remove(publication);
+    }
+
+    public void Update(string name, string? description, bool isPublic)
+    {
+        if (IsSystem) return;
+
+        _name = name;
+        _description = description;
+        _isPublic = isPublic;
     }
 }
