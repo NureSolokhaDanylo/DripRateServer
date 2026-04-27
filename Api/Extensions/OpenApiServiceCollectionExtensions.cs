@@ -40,24 +40,8 @@ public static class OpenApiServiceCollectionExtensions
                     Description = "JWT Authorization header using the Bearer scheme."
                 });
 
-                if (document.Components?.Schemas?.TryGetValue("ProblemDetails", out var schema) == true)
-                {
-                    schema.Properties.Add("code", new OpenApiSchema { Type = JsonSchemaType.String });
-                    schema.Properties.Add("validationErrors", new OpenApiSchema
-                    {
-                        Type = JsonSchemaType.Array,
-                        Items = new OpenApiSchema
-                        {
-                            Type = JsonSchemaType.Object,
-                            Properties = new Dictionary<string, IOpenApiSchema>
-                            {
-                                ["code"] = new OpenApiSchema { Type = JsonSchemaType.String },
-                                ["message"] = new OpenApiSchema { Type = JsonSchemaType.String },
-                                ["field"] = new OpenApiSchema { Type = JsonSchemaType.String }
-                            }
-                        }
-                    });
-                }
+                // ProblemDetails schema is ensured by SecurityAndErrorCodesTransformer
+                // We can add more common schemas or modify them here if needed
 
                 return Task.CompletedTask;
             });

@@ -11,7 +11,6 @@ public sealed class ChangePasswordCommandValidator : AbstractValidator<ChangePas
             .NotEmpty();
 
         RuleFor(x => x.NewPassword)
-            .NotEmpty()
-            .MinimumLength(8);
+            .NotEmpty();
     }
 }

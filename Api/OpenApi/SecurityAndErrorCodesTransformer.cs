@@ -22,6 +22,38 @@ public sealed class SecurityAndErrorCodesTransformer : IOpenApiOperationTransfor
         context.Document.Components ??= new OpenApiComponents();
         context.Document.Components.Schemas ??= new Dictionary<string, IOpenApiSchema>();
 
+        // Ensure ProblemDetails schema is defined
+        if (!context.Document.Components.Schemas.ContainsKey("ProblemDetails"))
+        {
+            context.Document.Components.Schemas.Add("ProblemDetails", new OpenApiSchema
+            {
+                Type = JsonSchemaType.Object,
+                Properties = new Dictionary<string, IOpenApiSchema>
+                {
+                    ["type"] = new OpenApiSchema { Type = JsonSchemaType.String | JsonSchemaType.Null },
+                    ["title"] = new OpenApiSchema { Type = JsonSchemaType.String | JsonSchemaType.Null },
+                    ["status"] = new OpenApiSchema { Type = JsonSchemaType.Integer | JsonSchemaType.Null, Format = "int32" },
+                    ["detail"] = new OpenApiSchema { Type = JsonSchemaType.String | JsonSchemaType.Null },
+                    ["instance"] = new OpenApiSchema { Type = JsonSchemaType.String | JsonSchemaType.Null },
+                    ["code"] = new OpenApiSchema { Type = JsonSchemaType.String | JsonSchemaType.Null },
+                    ["validationErrors"] = new OpenApiSchema
+                    {
+                        Type = JsonSchemaType.Array | JsonSchemaType.Null,
+                        Items = new OpenApiSchema
+                        {
+                            Type = JsonSchemaType.Object,
+                            Properties = new Dictionary<string, IOpenApiSchema>
+                            {
+                                ["code"] = new OpenApiSchema { Type = JsonSchemaType.String | JsonSchemaType.Null },
+                                ["message"] = new OpenApiSchema { Type = JsonSchemaType.String | JsonSchemaType.Null },
+                                ["field"] = new OpenApiSchema { Type = JsonSchemaType.String | JsonSchemaType.Null }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
         var statusCodesByBusinessCode = new Dictionary<int, HashSet<string>>();
         
         // 1. Map business errors from [ApiErrors]
