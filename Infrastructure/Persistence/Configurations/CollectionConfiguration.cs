@@ -21,6 +21,9 @@ public sealed class CollectionConfiguration : IEntityTypeConfiguration<Collectio
 
         builder.HasIndex(c => c.UserId);
 
+        // Composites for performance
+        builder.HasIndex(c => new { c.IsPublic, c.CreatedAt, c.Id }).IsDescending(false, true, false);
+
         builder.HasOne(c => c.User)
             .WithMany(u => u.Collections)
             .HasForeignKey(c => c.UserId)

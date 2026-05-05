@@ -27,6 +27,10 @@ public sealed class PublicationConfiguration : IEntityTypeConfiguration<Publicat
         builder.HasIndex(p => p.CreatedAt);
         builder.HasIndex(p => p.UserId);
 
+        // Composites for performance
+        builder.HasIndex(p => new { p.CreatedAt, p.Id }).IsDescending(true, true);
+        builder.HasIndex("_averageRating", "_assessmentsCount", "Id").IsDescending(true, true, true);
+
         builder.HasOne(p => p.User)
             .WithMany(u => u.Publications)
             .HasForeignKey(p => p.UserId)
