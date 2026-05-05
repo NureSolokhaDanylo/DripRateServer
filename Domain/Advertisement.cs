@@ -37,13 +37,32 @@ public sealed class Advertisement
         _isActive = true;
     }
 
-    public void Update(string text, int maxImpressions, IEnumerable<string> finalImages)
+    public void Update(string text, int maxImpressions, IEnumerable<string> finalImages, bool? isActive = null)
     {
         _text = text;
         _maxImpressions = maxImpressions;
         _images.Clear();
         _images.AddRange(finalImages);
-        _isActive = _shownCount < _maxImpressions;
+        
+        if (isActive.HasValue)
+        {
+            _isActive = isActive.Value && _shownCount < _maxImpressions;
+        }
+        else if (_shownCount >= _maxImpressions)
+        {
+            _isActive = false;
+        }
+    }
+
+    public bool SetStatus(bool isActive)
+    {
+        if (isActive && _shownCount >= _maxImpressions)
+        {
+            return false;
+        }
+
+        _isActive = isActive;
+        return true;
     }
 
     public void AddTag(Tag tag)

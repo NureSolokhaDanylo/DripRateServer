@@ -17,7 +17,10 @@ public record UpdateAdvertisementCommand(
     int MaxImpressions,
     List<string> ExistingImages,
     List<IFormFile>? NewImages,
-    List<Guid> TagIds) : IRequest<ErrorOr<AdvertisementResponse>>;
+    List<Guid> TagIds,
+    bool? IsActive) : IRequest<ErrorOr<AdvertisementResponse>>;
+
+public record ToggleAdvertisementActiveCommand(Guid Id, bool IsActive) : IRequest<ErrorOr<Success>>;
 
 public record DeleteAdvertisementCommand(Guid Id) : IRequest<ErrorOr<Deleted>>;
 

@@ -20,15 +20,52 @@ internal sealed class CreateReportCommandHandler : IRequestHandler<CreateReportC
 
     public async Task<ErrorOr<Success>> Handle(CreateReportCommand request, CancellationToken cancellationToken)
     {
-        bool targetExists = request.TargetType switch
+        // 1. Check for duplicate report
+        var existingReport = await _context.Reports
+            .AnyAsync(r => r.AuthorId == request.AuthorId && 
+                           r.TargetType == request.TargetType && 
+                           r.TargetId == request.TargetId && 
+                           (r.Status == ReportStatus.Pending || r.Status == ReportStatus.InReview), 
+                cancellationToken);
+
+        if (existingReport) return ReportErrors.DuplicateReport;
+
+        // 2. Check target existence and self-reporting
+        Guid ownerId = Guid.Empty;
+        bool targetExists = false;
+
+        switch (request.TargetType)
         {
-            ReportTargetType.Publication => await _context.Publications.AnyAsync(p => p.Id == request.TargetId, cancellationToken),
-            ReportTargetType.Comment => await _context.Comments.AnyAsync(c => c.Id == request.TargetId, cancellationToken),
-            ReportTargetType.User => await _context.Users.AnyAsync(u => u.Id == request.TargetId, cancellationToken),
-            _ => false
-        };
+            case ReportTargetType.Publication:
+                var pub = await _context.Publications
+                    .Where(p => p.Id == request.TargetId)
+                    .Select(p => new { p.UserId })
+                    .FirstOrDefaultAsync(cancellationToken);
+                if (pub != null)
+                {
+                    targetExists = true;
+                    ownerId = pub.UserId;
+                }
+                break;
+            case ReportTargetType.Comment:
+                var comment = await _context.Comments
+                    .Where(c => c.Id == request.TargetId)
+                    .Select(c => new { c.UserId })
+                    .FirstOrDefaultAsync(cancellationToken);
+                if (comment != null)
+                {
+                    targetExists = true;
+                    ownerId = comment.UserId;
+                }
+                break;
+            case ReportTargetType.User:
+                targetExists = await _context.Users.AnyAsync(u => u.Id == request.TargetId, cancellationToken);
+                ownerId = request.TargetId;
+                break;
+        }
 
         if (!targetExists) return ReportErrors.InvalidTarget;
+        if (ownerId == request.AuthorId) return ReportErrors.SelfReport;
 
         var report = new Report(request.AuthorId, request.TargetType, request.TargetId, request.Category, request.Text);
         _context.Reports.Add(report);
@@ -89,27 +126,35 @@ internal sealed class ResolveReportedEntityCommandHandler : IRequestHandler<Reso
 
         if (!reports.Any()) return ReportErrors.NotFound;
 
+        // Check if reports are assigned to someone else
+        if (reports.Any(r => r.AssignedToUserId.HasValue && r.AssignedToUserId != request.ModeratorId))
+        {
+            return ReportErrors.Unauthorized;
+        }
+
         // Perform action
         if (request.Action == ModerationAction.DeleteEntity)
         {
             switch (request.TargetType)
             {
                 case ReportTargetType.Publication:
-                    await _deletionService.DeletePublicationContentAsync(request.TargetId, cancellationToken);
                     var pub = await _context.Publications.FindAsync(new object[] { request.TargetId }, cancellationToken);
-                    if (pub != null) _context.Publications.Remove(pub);
+                    if (pub != null)
+                    {
+                        await _deletionService.DeletePublicationContentAsync(request.TargetId, cancellationToken);
+                        _context.Publications.Remove(pub);
+                    }
                     break;
                 case ReportTargetType.Comment:
-                    // Comment deletion is complex in Handlers, maybe I should use DeletionService more or just call the DB execution
-                    // For simplicity, let's assume we use DeletionService logic or direct SQL if needed.
-                    // Actually, DeletionService doesn't have a standalone DeleteComment.
-                    // Let's use the logic from DeleteCommentCommandHandler.
                     await DeleteCommentAsync(request.TargetId, cancellationToken);
                     break;
                 case ReportTargetType.User:
-                    await _deletionService.DeleteUserContentAsync(request.TargetId, cancellationToken);
                     var user = await _context.Users.FindAsync(new object[] { request.TargetId }, cancellationToken);
-                    if (user != null) _context.Users.Remove(user);
+                    if (user != null)
+                    {
+                        await _deletionService.DeleteUserContentAsync(request.TargetId, cancellationToken);
+                        _context.Users.Remove(user);
+                    }
                     break;
             }
         }

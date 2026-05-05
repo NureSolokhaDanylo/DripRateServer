@@ -32,6 +32,7 @@ public sealed class GetAdvertisementQueryHandler : IRequestHandler<GetAdvertisem
             ad.Text,
             ad.MaxImpressions,
             ad.ShownCount,
+            ad.IsActive,
             ad.Tags.Select(t => new TagResponse(t.Id, t.Name, t.Category)).ToList(),
             ad.CreatedAt);
     }
@@ -50,7 +51,6 @@ public sealed class GetAdvertisementsQueryHandler : IRequestHandler<GetAdvertise
     {
         var ads = await _context.Advertisements
             .AsNoTracking()
-            .Where(a => a.IsActive)
             .Include(a => a.Tags)
             .OrderByDescending(a => a.CreatedAt)
             .Skip(request.Skip)
@@ -61,6 +61,7 @@ public sealed class GetAdvertisementsQueryHandler : IRequestHandler<GetAdvertise
                 a.Text,
                 a.MaxImpressions,
                 a.ShownCount,
+                a.IsActive,
                 a.Tags.Select(t => new TagResponse(t.Id, t.Name, t.Category)).ToList(),
                 a.CreatedAt))
             .ToListAsync(cancellationToken);

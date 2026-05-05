@@ -76,6 +76,7 @@ public sealed class GetGlobalFeedQueryHandler : IRequestHandler<GetGlobalFeedQue
                     x.Ad.Text,
                     x.Ad.MaxImpressions,
                     x.Ad.ShownCount,
+                    x.Ad.IsActive,
                     x.Ad.Tags.Select(t => new TagResponse(t.Id, t.Name, t.Category)).ToList(),
                     x.Ad.CreatedAt))
                 .ToListAsync(cancellationToken);
@@ -106,9 +107,9 @@ public sealed class GetGlobalFeedQueryHandler : IRequestHandler<GetGlobalFeedQue
                         x.Ad.Text,
                         x.Ad.MaxImpressions,
                         x.Ad.ShownCount,
+                        x.Ad.IsActive,
                         x.Ad.Tags.Select(t => new TagResponse(t.Id, t.Name, t.Category)).ToList(),
-                        x.Ad.CreatedAt))
-                    .ToListAsync(cancellationToken);
+                        x.Ad.CreatedAt))                    .ToListAsync(cancellationToken);
 
                 advertisements.AddRange(randomAds);
             }

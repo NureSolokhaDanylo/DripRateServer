@@ -42,7 +42,7 @@ public sealed class AdvertisementsController : ApiController
 
     [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(AdvertisementResponse), StatusCodes.Status200OK)]
-    [ApiErrors("Advertisement.NotFound")]
+    [ApiErrors(AdvertisementErrors.NotFoundCode)]
     public async Task<IActionResult> Get(Guid id)
     {
         // For simplicity, we just return the ad. Usually you'd have a GetAdvertisementQuery.
@@ -59,7 +59,7 @@ public sealed class AdvertisementsController : ApiController
     [HttpPut("{id:guid}")]
     [AuthorizeWithError(Roles = "Moderator")]
     [ProducesResponseType(typeof(AdvertisementResponse), StatusCodes.Status200OK)]
-    [ApiErrors("Advertisement.NotFound")]
+    [ApiErrors(AdvertisementErrors.NotFoundCode)]
     public async Task<IActionResult> Update(Guid id, [FromForm] UpdateAdvertisementRequest request)
     {
         var command = new UpdateAdvertisementCommand(
@@ -68,7 +68,8 @@ public sealed class AdvertisementsController : ApiController
             request.MaxImpressions,
             request.ExistingImages,
             request.NewImages,
-            request.TagIds);
+            request.TagIds,
+            request.IsActive);
 
         var result = await _mediator.Send(command);
 
@@ -77,10 +78,24 @@ public sealed class AdvertisementsController : ApiController
             errors => Problem(errors));
     }
 
+    [HttpPatch("{id:guid}/active")]
+    [AuthorizeWithError(Roles = "Moderator")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ApiErrors(AdvertisementErrors.NotFoundCode, AdvertisementErrors.LimitReachedCode)]
+    public async Task<IActionResult> ToggleActive(Guid id, [FromBody] bool isActive)
+    {
+        var command = new ToggleAdvertisementActiveCommand(id, isActive);
+        var result = await _mediator.Send(command);
+
+        return result.Match(
+            _ => NoContent(),
+            errors => Problem(errors));
+    }
+
     [HttpDelete("{id:guid}")]
     [AuthorizeWithError(Roles = "Moderator")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ApiErrors("Advertisement.NotFound")]
+    [ApiErrors(AdvertisementErrors.NotFoundCode)]
     public async Task<IActionResult> Delete(Guid id)
     {
         var command = new DeleteAdvertisementCommand(id);
@@ -93,7 +108,7 @@ public sealed class AdvertisementsController : ApiController
 
     [HttpPost("{id:guid}/view")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ApiErrors("Advertisement.NotFound")]
+    [ApiErrors(AdvertisementErrors.NotFoundCode)]
     public async Task<IActionResult> RegisterView(Guid id)
     {
         var command = new ViewAdvertisementCommand(id, _currentUser.UserId.Value);

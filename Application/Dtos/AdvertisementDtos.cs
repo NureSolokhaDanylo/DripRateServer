@@ -13,7 +13,8 @@ public record UpdateAdvertisementRequest(
     int MaxImpressions,
     List<string> ExistingImages,
     List<IFormFile>? NewImages,
-    List<Guid> TagIds);
+    List<Guid> TagIds,
+    bool? IsActive);
 
 public record AdvertisementResponse(
     Guid Id,
@@ -21,5 +22,6 @@ public record AdvertisementResponse(
     string Text,
     int MaxImpressions,
     int ShownCount,
+    bool IsActive,
     List<TagResponse> Tags,
     DateTimeOffset CreatedAt);

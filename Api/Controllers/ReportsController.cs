@@ -2,6 +2,7 @@ using Api.Attributes;
 using Application.Commands;
 using Application.Dtos;
 using Application.Interfaces;
+using Domain.Errors;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,6 +23,7 @@ public sealed class ReportsController : ApiController
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ApiErrors(ReportErrors.InvalidTargetCode, ReportErrors.SelfReportCode, ReportErrors.DuplicateReportCode)]
     public async Task<IActionResult> Create([FromBody] CreateReportRequest request)
     {
         var command = new CreateReportCommand(

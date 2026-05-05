@@ -4,6 +4,7 @@ using Application.Dtos;
 using Application.Interfaces;
 using Application.Queries;
 using Domain;
+using Domain.Errors;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -36,6 +37,7 @@ public sealed class ModerationController : ApiController
 
     [HttpGet("reports/{targetType}/{targetId:guid}")]
     [ProducesResponseType(typeof(List<ReportDto>), StatusCodes.Status200OK)]
+    [ApiErrors(ReportErrors.NotFoundCode)]
     public async Task<IActionResult> GetEntityReports(ReportTargetType targetType, Guid targetId)
     {
         var query = new GetEntityReportsQuery(targetType, targetId);
@@ -48,6 +50,7 @@ public sealed class ModerationController : ApiController
 
     [HttpPost("reports/assign/{targetType}/{targetId:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ApiErrors(ReportErrors.NotFoundCode, ReportErrors.AlreadyAssignedCode)]
     public async Task<IActionResult> AssignReports(ReportTargetType targetType, Guid targetId)
     {
         var command = new AssignReportedEntityCommand(_currentUser.UserId!.Value, targetType, targetId);
@@ -60,6 +63,7 @@ public sealed class ModerationController : ApiController
 
     [HttpPost("reports/resolve")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ApiErrors(ReportErrors.NotFoundCode, ReportErrors.UnauthorizedCode)]
     public async Task<IActionResult> ResolveReports([FromBody] ResolveReportedEntityRequest request)
     {
         var command = new ResolveReportedEntityCommand(

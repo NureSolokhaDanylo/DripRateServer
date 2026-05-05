@@ -58,6 +58,7 @@ internal sealed class CreateAdvertisementCommandHandler : IRequestHandler<Create
             ad.Text,
             ad.MaxImpressions,
             ad.ShownCount,
+            ad.IsActive,
             ad.Tags.Select(t => new TagResponse(t.Id, t.Name, t.Category)).ToList(),
             ad.CreatedAt);
     }
@@ -109,7 +110,7 @@ internal sealed class UpdateAdvertisementCommandHandler : IRequestHandler<Update
             }
         }
 
-        ad.Update(request.Text, request.MaxImpressions, finalImages);
+        ad.Update(request.Text, request.MaxImpressions, finalImages, request.IsActive);
 
         // Update tags
         ad.ClearTags();
@@ -130,8 +131,35 @@ internal sealed class UpdateAdvertisementCommandHandler : IRequestHandler<Update
             ad.Text,
             ad.MaxImpressions,
             ad.ShownCount,
+            ad.IsActive,
             ad.Tags.Select(t => new TagResponse(t.Id, t.Name, t.Category)).ToList(),
             ad.CreatedAt);
+    }
+}
+
+internal sealed class ToggleAdvertisementActiveCommandHandler : IRequestHandler<ToggleAdvertisementActiveCommand, ErrorOr<Success>>
+{
+    private readonly IApplicationDbContext _context;
+
+    public ToggleAdvertisementActiveCommandHandler(IApplicationDbContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<ErrorOr<Success>> Handle(ToggleAdvertisementActiveCommand request, CancellationToken cancellationToken)
+    {
+        var ad = await _context.Advertisements
+            .FirstOrDefaultAsync(a => a.Id == request.Id, cancellationToken);
+
+        if (ad is null) return AdvertisementErrors.NotFound;
+
+        if (!ad.SetStatus(request.IsActive))
+        {
+            return AdvertisementErrors.LimitReached;
+        }
+
+        await _context.SaveChangesAsync(cancellationToken);
+        return Result.Success;
     }
 }
 
@@ -200,7 +228,13 @@ internal sealed class ViewAdvertisementCommandHandler : IRequestHandler<ViewAdve
             _context.AdvertisementViews.Add(view);
         }
 
-        ad.IncrementShownCount();
+        // Atomic update of ShownCount and IsActive
+        await _context.Advertisements
+            .Where(a => a.Id == request.AdId)
+            .ExecuteUpdateAsync(s => s
+                .SetProperty(a => a.ShownCount, a => a.ShownCount + 1)
+                .SetProperty(a => a.IsActive, a => (a.ShownCount + 1) < a.MaxImpressions),
+            cancellationToken);
 
         try 
         {
