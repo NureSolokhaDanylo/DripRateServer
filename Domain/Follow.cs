@@ -1,5 +1,7 @@
 namespace Domain;
 
+using Domain.Errors;
+
 public sealed class Follow
 {
     private Guid _followerId;
@@ -20,6 +22,11 @@ public sealed class Follow
 
     public Follow(Guid followerId, Guid followeeId)
     {
+        if (followerId == followeeId)
+        {
+            throw new InvalidOperationException(SocialErrors.CannotFollowSelf.Description);
+        }
+
         _followerId = followerId;
         _followeeId = followeeId;
         _createdAt = DateTimeOffset.UtcNow;
