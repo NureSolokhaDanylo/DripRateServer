@@ -42,7 +42,11 @@ internal sealed class DeletionService : IDeletionService
             .Select(c => c.PhotoUrl)
             .ToListAsync(cancellationToken);
 
-        // 1. Group simple related entities (Likes, Assessments, Follows)
+        // 1. Group simple related entities (Likes, Assessments, Follows, Reports)
+        await _context.Reports
+            .Where(r => r.AuthorId == userId || (r.TargetType == ReportTargetType.User && r.TargetId == userId))
+            .ExecuteDeleteAsync(cancellationToken);
+
         await _context.CommentLikes
             .Where(l => l.UserId == userId || 
                         l.Comment.UserId == userId || 

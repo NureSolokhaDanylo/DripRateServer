@@ -31,6 +31,11 @@ internal sealed class DeleteUserCommandHandler : IRequestHandler<DeleteUserComma
             return UserErrors.NotFound;
         }
 
+        if (await _userManager.IsInRoleAsync(user, "Moderator"))
+        {
+            return UserErrors.CannotDeleteModerator;
+        }
+
         await _deletionService.DeleteUserContentAsync(user.Id, cancellationToken);
         
         var result = await _userManager.DeleteAsync(user);

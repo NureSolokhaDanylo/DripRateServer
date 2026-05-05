@@ -44,6 +44,7 @@ public static class ApiErrorRegistry
 
             [UserErrors.NotFoundCode] = Business(ErrorType.NotFound),
             [UserErrors.DeleteFailedCode] = Business(ErrorType.Unexpected),
+            [UserErrors.CannotDeleteModeratorCode] = Business(ErrorType.Conflict),
 
             [FileErrors.ProcessingFailedCode] = Business(ErrorType.Unexpected),
 
