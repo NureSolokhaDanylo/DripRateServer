@@ -81,6 +81,9 @@ public sealed class SecurityAndErrorCodesTransformer : IOpenApiOperationTransfor
         var hasAllowAnonymous = endpointMetadata.OfType<AllowAnonymousAttribute>().Any();
         var authorizeWithError = endpointMetadata.OfType<AuthorizeWithErrorAttribute>().FirstOrDefault();
 
+        // Middleware checks ban for ANY authenticated request, so UserBanned can happen everywhere
+        AddCode(statusCodesByBusinessCode, 401, AuthErrors.UserBannedCode);
+
         if ((hasAuthorize || authorizeWithError is not null) && !hasAllowAnonymous)
         {
             // Add Security Requirement (the "lock" in UI)
