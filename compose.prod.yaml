@@ -18,3 +18,4 @@ services:
       - BlobStorage__DefaultAvatarUrl=${BlobStorage__DefaultAvatarUrl}
       - FEED__ADFREQUENCY=${FEED_ADFREQUENCY}
       - FEED__VIEWCOOLDOWNHOURS=${FEED_VIEWCOOLDOWNHOURS}
+      - MODERATOR_EMAILS=${MODERATOR_EMAILS}

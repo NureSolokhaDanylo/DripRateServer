@@ -9,9 +9,6 @@ x86/
 [Bb]in/
 [Oo]bj/
 
-AI_GUIDE.md
-*.note.md
-
 # Visual Studio 2015/2017/2019/2022 cache/options directory
 .vs/
 
@@ -47,3 +44,12 @@ AI_GUIDE.md
 .dockerignore
 **/obj/Docker/
 **/bin/Docker/
+
+# Other
+
+AI_GUIDE.md
+*.note.md
+*.doc
+*.docx
+*.pdf
+Scripts/path_to_env

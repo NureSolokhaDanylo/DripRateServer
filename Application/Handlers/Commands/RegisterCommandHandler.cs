@@ -39,6 +39,8 @@ public sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand, Er
             return errors;
         }
 
+        await _userManager.AddToRoleAsync(user, "User");
+
         user.InitializeCollections();
         await _userManager.UpdateAsync(user);
 
