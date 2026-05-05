@@ -36,6 +36,7 @@ public static partial class ServiceCollectionExtensions
 
         services.AddScoped<Application.Interfaces.IApplicationDbContext>(sp => sp.GetRequiredService<MyDbContext>());
         services.AddScoped<DatabaseInitializer>();
+        services.AddScoped<Application.Interfaces.IStartupScript, Infrastructure.Persistence.Scripts.SeedRolesStartupScript>();
         services.AddScoped<Application.Interfaces.IStartupScript, Infrastructure.Persistence.Scripts.SeedTagsStartupScript>();
 
         var passwordPolicy = SharedConfiguration.GetIOptions2<PasswordPolicyOptions>();

@@ -7,6 +7,7 @@ public sealed class User : IdentityUser<Guid>
     private string _avatarUrl = null!;
     private string? _bio;
     private DateTimeOffset _createdAt;
+    private bool _isBanned;
 
     private readonly List<Publication> _publications = new();
     private readonly List<Cloth> _wardrobe = new();
@@ -19,6 +20,7 @@ public sealed class User : IdentityUser<Guid>
     public string AvatarUrl => _avatarUrl;
     public string? Bio => _bio;
     public DateTimeOffset CreatedAt => _createdAt;
+    public bool IsBanned => _isBanned;
 
     public IReadOnlyCollection<Publication> Publications => _publications.AsReadOnly();
     public IReadOnlyCollection<Cloth> Wardrobe => _wardrobe.AsReadOnly();
@@ -71,4 +73,7 @@ public sealed class User : IdentityUser<Guid>
         _preferredTags.Clear();
         _preferredTags.AddRange(tags);
     }
+
+    public void Ban() => _isBanned = true;
+    public void Unban() => _isBanned = false;
 }

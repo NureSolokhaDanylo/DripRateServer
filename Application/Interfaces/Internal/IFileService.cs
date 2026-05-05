@@ -22,4 +22,10 @@ internal interface IFileService
         string fileName,
         string contentType,
         CancellationToken cancellationToken);
+
+    Task<ErrorOr<string>> UploadAdvertisementImageAsync(
+        Stream stream,
+        string fileName,
+        string contentType,
+        CancellationToken cancellationToken);
 }

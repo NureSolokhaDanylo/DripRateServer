@@ -62,6 +62,22 @@ internal sealed class FileService : IFileService
             cancellationToken);
     }
 
+    public async Task<ErrorOr<string>> UploadAdvertisementImageAsync(
+        Stream stream,
+        string fileName,
+        string contentType,
+        CancellationToken cancellationToken)
+    {
+        var extension = GetExtensionFromContentType(contentType);
+        var uniqueFileName = $"advertisements/{Guid.NewGuid()}{extension}";
+        
+        return await _storageService.UploadFileAsync(
+            stream, 
+            contentType, 
+            uniqueFileName, 
+            cancellationToken);
+    }
+
     private static string GetExtensionFromContentType(string contentType)
     {
         return contentType.ToLowerInvariant() switch

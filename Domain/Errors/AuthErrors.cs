@@ -7,6 +7,7 @@ public static class AuthErrors
     public const string InvalidCredentialsCode = "Auth.InvalidCredentials";
     public const string EmailAlreadyTakenCode = "DuplicateEmail";
     public const string UnauthorizedCode = "Auth.Unauthorized";
+    public const string UserBannedCode = "Auth.UserBanned";
 
     public static Error InvalidCredentials => Error.Unauthorized(
         code: InvalidCredentialsCode,
@@ -19,4 +20,8 @@ public static class AuthErrors
     public static Error Unauthorized => Error.Unauthorized(
         code: UnauthorizedCode,
         description: "You must be authenticated to access this resource.");
+
+    public static Error UserBanned => Error.Unauthorized(
+        code: UserBannedCode,
+        description: "Your account has been banned.");
 }

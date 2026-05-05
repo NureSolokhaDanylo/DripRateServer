@@ -35,6 +35,11 @@ public sealed class LoginQueryHandler : IRequestHandler<LoginQuery, ErrorOr<stri
             return AuthErrors.InvalidCredentials;
         }
 
+        if (user.IsBanned)
+        {
+            return AuthErrors.UserBanned;
+        }
+
         return _jwtTokenService.GenerateToken(user);
     }
 }

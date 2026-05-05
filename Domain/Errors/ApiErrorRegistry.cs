@@ -28,6 +28,7 @@ public static class ApiErrorRegistry
             [AuthErrors.InvalidCredentialsCode] = Business(ErrorType.Unauthorized),
             [AuthErrors.EmailAlreadyTakenCode] = Business(ErrorType.Conflict),
             [AuthErrors.UnauthorizedCode] = Business(ErrorType.Unauthorized),
+            [AuthErrors.UserBannedCode] = Business(ErrorType.Unauthorized),
 
             [PublicationErrors.NotFoundCode] = Business(ErrorType.NotFound),
             [PublicationErrors.ForbiddenCode] = Business(ErrorType.Forbidden),
@@ -51,6 +52,10 @@ public static class ApiErrorRegistry
 
             [AssessmentErrors.CannotRateOwnPublicationCode] = Business(ErrorType.Conflict),
             [SocialErrors.CannotFollowSelfCode] = Business(ErrorType.Conflict),
+
+            [ReportErrors.NotFoundCode] = Business(ErrorType.NotFound),
+            [ReportErrors.AlreadyAssignedCode] = Business(ErrorType.Conflict),
+            [ReportErrors.InvalidTargetCode] = Business(ErrorType.Validation),
         };
 
     public static bool TryGet(string code, out ApiErrorMetadata metadata)

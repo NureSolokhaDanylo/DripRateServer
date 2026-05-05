@@ -13,5 +13,9 @@
     "Audience": "DripRateServerApi",
     "ExpirationMinutes": 60,
     "RefreshTokenExpirationDays": 7
+  },
+  "Feed": {
+    "AdFrequency": 5,
+    "ViewCooldownHours": 24
   }
 }

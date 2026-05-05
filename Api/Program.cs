@@ -23,6 +23,10 @@ services.AddCors(options =>
 services.AddInfrastructure();
 services.AddApplication();
 services.AddControllers()
+    .AddJsonOptions(options => 
+    {
+        options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+    })
     .ConfigureApiBehaviorOptions(options =>
     {
         options.InvalidModelStateResponseFactory = context =>
@@ -71,6 +75,7 @@ if (host.Environment.IsDevelopment())
 
 host.UseCors();
 host.UseAuthentication();
+host.UseMiddleware<UserStatusMiddleware>();
 host.UseAuthorization();
 
 host.MapControllers();

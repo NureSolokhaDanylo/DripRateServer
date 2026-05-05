@@ -22,7 +22,7 @@ public sealed class FeedController : ApiController
     }
 
     [HttpGet("global")]
-    [ProducesResponseType(typeof(List<PublicationResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(GlobalFeedResponse), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetGlobal([FromQuery] DateTimeOffset? cursor, [FromQuery] int take = 20)
     {
         var query = new GetGlobalFeedQuery(_currentUser.UserId.Value, cursor, take);

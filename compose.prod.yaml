@@ -16,3 +16,5 @@ services:
       - BlobStorage__ConnectionString=${BlobStorage__ConnectionString}
       - BlobStorage__ContainerName=${BlobStorage__ContainerName}
       - BlobStorage__DefaultAvatarUrl=${BlobStorage__DefaultAvatarUrl}
+      - FEED__ADFREQUENCY=${FEED_ADFREQUENCY}
+      - FEED__VIEWCOOLDOWNHOURS=${FEED_VIEWCOOLDOWNHOURS}

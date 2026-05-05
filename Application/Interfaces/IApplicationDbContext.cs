@@ -16,6 +16,9 @@ public interface IApplicationDbContext
     DbSet<Follow> Follows { get; }
     DbSet<CommentLike> CommentLikes { get; }
     DbSet<Collection> Collections { get; }
+    DbSet<Report> Reports { get; }
+    DbSet<Advertisement> Advertisements { get; }
+    DbSet<AdvertisementView> AdvertisementViews { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Application.Queries;
 
-public record GetGlobalFeedQuery(Guid UserId, DateTimeOffset? Cursor, int Take = 20) : IRequest<ErrorOr<List<PublicationResponse>>>;
+public record GetGlobalFeedQuery(Guid UserId, DateTimeOffset? Cursor, int Take = 20) : IRequest<ErrorOr<GlobalFeedResponse>>;
 
 public record GetSubscriptionFeedQuery(Guid UserId, DateTimeOffset? Cursor, int Take = 20) : IRequest<ErrorOr<List<PublicationResponse>>>;
 

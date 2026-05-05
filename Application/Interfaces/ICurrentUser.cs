@@ -8,4 +8,5 @@ public interface ICurrentUser
     bool IsAuthenticated { get; }
 
     bool IsInRole(string role);
+    Task<bool> IsBannedAsync(CancellationToken cancellationToken = default);
 }
