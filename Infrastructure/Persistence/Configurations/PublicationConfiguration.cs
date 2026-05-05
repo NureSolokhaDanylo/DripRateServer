@@ -71,6 +71,18 @@ public sealed class PublicationConfiguration : IEntityTypeConfiguration<Publicat
             .HasForeignKey(a => a.PublicationId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        builder.OwnsOne(p => p.GameSettings, gs =>
+        {
+            gs.Property(g => g.IsGuessPriceEnabled).HasColumnName("IsGuessPriceEnabled").HasDefaultValue(false);
+            gs.Property(g => g.IsFirstImpressionEnabled).HasColumnName("IsFirstImpressionEnabled").HasDefaultValue(true);
+            gs.Property(g => g.IsTagMatchEnabled).HasColumnName("IsTagMatchEnabled").HasDefaultValue(false);
+        });
+
+        builder.HasOne(p => p.GameStats)
+            .WithOne(s => s.Publication)
+            .HasForeignKey<PublicationGameStats>(s => s.PublicationId)
+            .OnDelete(DeleteBehavior.Cascade);
+
         builder.Navigation(p => p.User).Metadata.SetField("_user");
         builder.Navigation(p => p.Tags).Metadata.SetField("_tags");
         builder.Navigation(p => p.Clothes).Metadata.SetField("_clothes");

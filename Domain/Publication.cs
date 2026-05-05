@@ -47,6 +47,9 @@ public sealed class Publication
     public double AverageOriginality => _assessmentsCount > 0 ? (double)_ratingOriginalitySum / _assessmentsCount : 0;
     public double AverageOverallStyle => _assessmentsCount > 0 ? (double)_ratingStyleSum / _assessmentsCount : 0;
 
+    public MiniGameSettings GameSettings { get; private set; } = null!;
+    public PublicationGameStats GameStats { get; private set; } = null!;
+
     private Publication() { }
 
     public Publication(Guid userId, string description, IEnumerable<string> images)
@@ -60,6 +63,13 @@ public sealed class Publication
         _commentsCount = 0;
         _assessmentsCount = 0;
         _averageRating = 0;
+        
+        GameSettings = new MiniGameSettings(false, true, false);
+    }
+
+    public void ConfigureMiniGames(bool guessPriceEnabled, bool tagMatchEnabled)
+    {
+        GameSettings = new MiniGameSettings(guessPriceEnabled, true, tagMatchEnabled);
     }
 
     internal void AddTag(Tag tag)
@@ -120,3 +130,9 @@ public sealed class Publication
         }
     }
 }
+
+public record MiniGameSettings(
+    bool IsGuessPriceEnabled,
+    bool IsFirstImpressionEnabled,
+    bool IsTagMatchEnabled
+);
