@@ -1,4 +1,4 @@
-using Application.Commands;
+using Application.Commands.Games;
 using Application.Dtos;
 using FluentValidation;
 

@@ -1,0 +1,13 @@
+using Application.Dtos;
+using Domain;
+using ErrorOr;
+using MediatR;
+
+namespace Application.Commands.Reports;
+
+public record CreateReportCommand(
+    Guid AuthorId,
+    ReportTargetType TargetType,
+    Guid TargetId,
+    ReportCategory Category,
+    string? Text) : IRequest<ErrorOr<Success>>;
