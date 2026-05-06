@@ -29,6 +29,7 @@ public sealed class AdvertisementsController : ApiController
     {
         var command = new CreateAdvertisementCommand(
             request.Text,
+            request.Url,
             request.MaxImpressions,
             request.Images,
             request.TagIds);
@@ -65,6 +66,7 @@ public sealed class AdvertisementsController : ApiController
         var command = new UpdateAdvertisementCommand(
             id,
             request.Text,
+            request.Url,
             request.MaxImpressions,
             request.ExistingImages,
             request.NewImages,

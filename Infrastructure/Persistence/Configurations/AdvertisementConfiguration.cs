@@ -12,6 +12,7 @@ public sealed class AdvertisementConfiguration : IEntityTypeConfiguration<Advert
         builder.Property(a => a.Id).HasField("_id");
 
         builder.Property(a => a.Text).HasMaxLength(4000).HasField("_text");
+        builder.Property(a => a.Url).HasMaxLength(2000).HasField("_url");
         builder.Property(a => a.MaxImpressions).HasField("_maxImpressions");
         builder.Property(a => a.ShownCount).HasField("_shownCount");
         builder.Property(a => a.IsActive).HasField("_isActive");

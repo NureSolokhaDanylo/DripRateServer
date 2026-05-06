@@ -7,6 +7,7 @@ namespace Application.Commands;
 
 public record CreateAdvertisementCommand(
     string Text,
+    string Url,
     int MaxImpressions,
     List<IFormFile> Images,
     List<Guid> TagIds) : IRequest<ErrorOr<AdvertisementResponse>>;
@@ -14,6 +15,7 @@ public record CreateAdvertisementCommand(
 public record UpdateAdvertisementCommand(
     Guid Id,
     string Text,
+    string Url,
     int MaxImpressions,
     List<string> ExistingImages,
     List<IFormFile>? NewImages,

@@ -25,7 +25,7 @@ public sealed class MyDbContext : IdentityDbContext<User, IdentityRole<Guid>, Gu
     public DbSet<Advertisement> Advertisements => Set<Advertisement>();
     public DbSet<AdvertisementView> AdvertisementViews => Set<AdvertisementView>();
     public DbSet<PublicationGameStats> GameStats => Set<PublicationGameStats>();
-    public DbSet<UserGameCursor> UserGameCursors => Set<UserGameCursor>();
+    public DbSet<UserGameHistory> UserGameHistories => Set<UserGameHistory>();
 
     // Регистрация IApplicationDbContext.Users для соответствия интерфейсу, 
     // хотя он уже есть в базовом IdentityDbContext.

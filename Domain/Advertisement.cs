@@ -4,6 +4,7 @@ public sealed class Advertisement
 {
     private Guid _id;
     private string _text = string.Empty;
+    private string _url = string.Empty;
     private int _maxImpressions;
     private int _shownCount;
     private bool _isActive;
@@ -15,6 +16,7 @@ public sealed class Advertisement
 
     public Guid Id => _id;
     public string Text => _text;
+    public string Url => _url;
     public int MaxImpressions => _maxImpressions;
     public int ShownCount => _shownCount;
     public bool IsActive => _isActive;
@@ -26,10 +28,11 @@ public sealed class Advertisement
 
     private Advertisement() { }
 
-    public Advertisement(string text, int maxImpressions, IEnumerable<string> images)
+    public Advertisement(string text, string url, int maxImpressions, IEnumerable<string> images)
     {
         _id = Guid.NewGuid();
         _text = text;
+        _url = url;
         _maxImpressions = maxImpressions;
         _images.AddRange(images);
         _createdAt = DateTimeOffset.UtcNow;
@@ -37,9 +40,10 @@ public sealed class Advertisement
         _isActive = true;
     }
 
-    public void Update(string text, int maxImpressions, IEnumerable<string> finalImages, bool? isActive = null)
+    public void Update(string text, string url, int maxImpressions, IEnumerable<string> finalImages, bool? isActive = null)
     {
         _text = text;
+        _url = url;
         _maxImpressions = maxImpressions;
         _images.Clear();
         _images.AddRange(finalImages);

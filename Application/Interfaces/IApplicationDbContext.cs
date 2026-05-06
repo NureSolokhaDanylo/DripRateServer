@@ -20,7 +20,7 @@ public interface IApplicationDbContext
     DbSet<Advertisement> Advertisements { get; }
     DbSet<AdvertisementView> AdvertisementViews { get; }
     DbSet<PublicationGameStats> GameStats { get; }
-    DbSet<UserGameCursor> UserGameCursors { get; }
+    DbSet<UserGameHistory> UserGameHistories { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

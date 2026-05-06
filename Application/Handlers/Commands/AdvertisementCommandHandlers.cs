@@ -38,7 +38,7 @@ internal sealed class CreateAdvertisementCommandHandler : IRequestHandler<Create
             imageUrls.Add(uploadResult.Value);
         }
 
-        var ad = new Advertisement(request.Text, request.MaxImpressions, imageUrls);
+        var ad = new Advertisement(request.Text, request.Url, request.MaxImpressions, imageUrls);
 
         if (request.TagIds.Any())
         {
@@ -56,6 +56,7 @@ internal sealed class CreateAdvertisementCommandHandler : IRequestHandler<Create
             ad.Id,
             ad.Images.ToList(),
             ad.Text,
+            ad.Url,
             ad.MaxImpressions,
             ad.ShownCount,
             ad.IsActive,
@@ -110,7 +111,7 @@ internal sealed class UpdateAdvertisementCommandHandler : IRequestHandler<Update
             }
         }
 
-        ad.Update(request.Text, request.MaxImpressions, finalImages, request.IsActive);
+        ad.Update(request.Text, request.Url, request.MaxImpressions, finalImages, request.IsActive);
 
         // Update tags
         ad.ClearTags();
@@ -129,6 +130,7 @@ internal sealed class UpdateAdvertisementCommandHandler : IRequestHandler<Update
             ad.Id,
             ad.Images.ToList(),
             ad.Text,
+            ad.Url,
             ad.MaxImpressions,
             ad.ShownCount,
             ad.IsActive,
