@@ -34,8 +34,8 @@ public sealed class CollectionConfiguration : IEntityTypeConfiguration<Collectio
             .WithMany(p => p.Collections)
             .UsingEntity<Dictionary<string, object>>(
                 "CollectionPublication",
-                j => j.HasOne<Publication>().WithMany().HasForeignKey("PublicationId").OnDelete(DeleteBehavior.Restrict),
-                j => j.HasOne<Collection>().WithMany().HasForeignKey("CollectionId").OnDelete(DeleteBehavior.Restrict),
+                j => j.HasOne<Publication>().WithMany().HasForeignKey("PublicationId").OnDelete(DeleteBehavior.Cascade),
+                j => j.HasOne<Collection>().WithMany().HasForeignKey("CollectionId").OnDelete(DeleteBehavior.Cascade),
                 j =>
                 {
                     j.ToTable("CollectionPublications");

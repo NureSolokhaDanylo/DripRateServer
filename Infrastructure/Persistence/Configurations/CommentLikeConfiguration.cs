@@ -18,7 +18,7 @@ public sealed class CommentLikeConfiguration : IEntityTypeConfiguration<CommentL
         builder.HasOne(cl => cl.Comment)
             .WithMany(c => c.Likes)
             .HasForeignKey(cl => cl.CommentId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(cl => cl.User)
             .WithMany()

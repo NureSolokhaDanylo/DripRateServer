@@ -16,7 +16,7 @@ public sealed class UserGameHistoryConfiguration : IEntityTypeConfiguration<User
         builder.HasOne(h => h.User)
             .WithMany()
             .HasForeignKey(h => h.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(h => h.Publication)
             .WithMany()

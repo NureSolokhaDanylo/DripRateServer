@@ -36,5 +36,11 @@ public sealed class MyDbContext : IdentityDbContext<User, IdentityRole<Guid>, Gu
         base.OnModelCreating(builder);
 
         builder.ApplyConfigurationsFromAssembly(typeof(MyDbContext).Assembly);
+
+        // Override ASP.NET Core Identity defaults to use Restrict instead of Cascade for User
+        builder.Entity<IdentityUserRole<Guid>>().HasOne<User>().WithMany().HasForeignKey(ur => ur.UserId).OnDelete(DeleteBehavior.Restrict);
+        builder.Entity<IdentityUserClaim<Guid>>().HasOne<User>().WithMany().HasForeignKey(uc => uc.UserId).OnDelete(DeleteBehavior.Restrict);
+        builder.Entity<IdentityUserLogin<Guid>>().HasOne<User>().WithMany().HasForeignKey(ul => ul.UserId).OnDelete(DeleteBehavior.Restrict);
+        builder.Entity<IdentityUserToken<Guid>>().HasOne<User>().WithMany().HasForeignKey(ut => ut.UserId).OnDelete(DeleteBehavior.Restrict);
     }
 }

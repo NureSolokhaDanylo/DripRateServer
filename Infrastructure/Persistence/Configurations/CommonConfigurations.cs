@@ -114,7 +114,7 @@ public sealed class AssessmentConfiguration : IEntityTypeConfiguration<Assessmen
         builder.HasOne(a => a.Publication)
             .WithMany(p => p.Assessments)
             .HasForeignKey(a => a.PublicationId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.Navigation(a => a.User).Metadata.SetField("_user");
         builder.Navigation(a => a.Publication).Metadata.SetField("_publication");
