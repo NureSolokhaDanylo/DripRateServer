@@ -1,5 +1,6 @@
 using Application.Commands;
 using Application.Interfaces;
+using Application.Interfaces.Internal;
 using Domain;
 using Domain.Errors;
 using ErrorOr;
@@ -44,13 +45,15 @@ public sealed class CreateCommentCommandHandler : IRequestHandler<CreateCommentC
     }
 }
 
-public sealed class DeleteCommentCommandHandler : IRequestHandler<DeleteCommentCommand, ErrorOr<Deleted>>
+internal sealed class DeleteCommentCommandHandler : IRequestHandler<DeleteCommentCommand, ErrorOr<Deleted>>
 {
     private readonly IApplicationDbContext _context;
+    private readonly IDeletionService _deletionService;
 
-    public DeleteCommentCommandHandler(IApplicationDbContext context)
+    public DeleteCommentCommandHandler(IApplicationDbContext context, IDeletionService deletionService)
     {
         _context = context;
+        _deletionService = deletionService;
     }
 
     public async Task<ErrorOr<Deleted>> Handle(DeleteCommentCommand request, CancellationToken cancellationToken)
@@ -61,9 +64,7 @@ public sealed class DeleteCommentCommandHandler : IRequestHandler<DeleteCommentC
             .Select(c => new
             {
                 c.Id,
-                c.UserId,
-                c.PublicationId,
-                c.ParentCommentId
+                c.UserId
             })
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -74,80 +75,7 @@ public sealed class DeleteCommentCommandHandler : IRequestHandler<DeleteCommentC
             return CommentErrors.Forbidden;
         }
 
-        var deletedCommentsCount = await _context.Database
-            .SqlQuery<int>($@"
-                WITH CommentTree AS (
-                    SELECT Id
-                    FROM Comments
-                    WHERE Id = {request.CommentId}
-
-                    UNION ALL
-
-                    SELECT c.Id
-                    FROM Comments c
-                    INNER JOIN CommentTree ct ON c.ParentCommentId = ct.Id
-                )
-                SELECT COUNT(1) AS [Value]
-                FROM CommentTree
-                OPTION (MAXRECURSION 0)")
-            .SingleAsync(cancellationToken);
-
-        await using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
-
-        if (comment.ParentCommentId.HasValue)
-        {
-            await _context.Database.ExecuteSqlInterpolatedAsync($@"
-                UPDATE Comments
-                SET RepliesCount = CASE
-                    WHEN RepliesCount > 0 THEN RepliesCount - 1
-                    ELSE 0
-                END
-                WHERE Id = {comment.ParentCommentId.Value};",
-                cancellationToken);
-        }
-
-        await _context.Database.ExecuteSqlInterpolatedAsync($@"
-            ;WITH CommentTree AS (
-                SELECT Id
-                FROM Comments
-                WHERE Id = {request.CommentId}
-
-                UNION ALL
-
-                SELECT c.Id
-                FROM Comments c
-                INNER JOIN CommentTree ct ON c.ParentCommentId = ct.Id
-            )
-            DELETE FROM CommentLikes
-            WHERE CommentId IN (SELECT Id FROM CommentTree)
-            OPTION (MAXRECURSION 0);
-
-            ;WITH CommentTree AS (
-                SELECT Id
-                FROM Comments
-                WHERE Id = {request.CommentId}
-
-                UNION ALL
-
-                SELECT c.Id
-                FROM Comments c
-                INNER JOIN CommentTree ct ON c.ParentCommentId = ct.Id
-            )
-            DELETE FROM Comments
-            WHERE Id IN (SELECT Id FROM CommentTree)
-            OPTION (MAXRECURSION 0);",
-            cancellationToken);
-
-        await _context.Database.ExecuteSqlInterpolatedAsync($@"
-            UPDATE Publications
-            SET CommentsCount = CASE
-                WHEN CommentsCount >= {deletedCommentsCount} THEN CommentsCount - {deletedCommentsCount}
-                ELSE 0
-            END
-            WHERE Id = {comment.PublicationId};",
-            cancellationToken);
-
-        await transaction.CommitAsync(cancellationToken);
+        await _deletionService.DeleteCommentAsync(request.CommentId, cancellationToken);
 
         return Result.Deleted;
     }

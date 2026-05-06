@@ -120,7 +120,7 @@ internal sealed class ResolveReportedEntityCommandHandler : IRequestHandler<Reso
                     }
                     break;
                 case ReportTargetType.Comment:
-                    await DeleteCommentAsync(request.TargetId, cancellationToken);
+                    await _deletionService.DeleteCommentAsync(request.TargetId, cancellationToken);
                     break;
             }
         }
@@ -156,57 +156,5 @@ internal sealed class ResolveReportedEntityCommandHandler : IRequestHandler<Reso
 
         await _context.SaveChangesAsync(cancellationToken);
         return Result.Success;
-    }
-
-    private async Task DeleteCommentAsync(Guid commentId, CancellationToken cancellationToken)
-    {
-        var comment = await _context.Comments
-            .AsNoTracking()
-            .Where(c => c.Id == commentId)
-            .Select(c => new { c.Id, c.PublicationId, c.ParentCommentId })
-            .FirstOrDefaultAsync(cancellationToken);
-
-        if (comment == null) return;
-
-        var deletedCommentsCount = await _context.Database
-            .SqlQuery<int>($@"
-                WITH CommentTree AS (
-                    SELECT Id
-                    FROM Comments
-                    WHERE Id = {commentId}
-                    UNION ALL
-                    SELECT c.Id
-                    FROM Comments c
-                    INNER JOIN CommentTree ct ON c.ParentCommentId = ct.Id
-                )
-                SELECT COUNT(1) AS [Value]
-                FROM CommentTree")
-            .SingleAsync(cancellationToken);
-
-        if (comment.ParentCommentId.HasValue)
-        {
-            await _context.Database.ExecuteSqlInterpolatedAsync($@"
-                UPDATE Comments SET RepliesCount = CASE WHEN RepliesCount > 0 THEN RepliesCount - 1 ELSE 0 END
-                WHERE Id = {comment.ParentCommentId.Value};", cancellationToken);
-        }
-
-        await _context.Database.ExecuteSqlInterpolatedAsync($@"
-            ;WITH CommentTree AS (
-                SELECT Id FROM Comments WHERE Id = {commentId}
-                UNION ALL
-                SELECT c.Id FROM Comments c INNER JOIN CommentTree ct ON c.ParentCommentId = ct.Id
-            )
-            DELETE FROM CommentLikes WHERE CommentId IN (SELECT Id FROM CommentTree);
-
-            ;WITH CommentTree AS (
-                SELECT Id FROM Comments WHERE Id = {commentId}
-                UNION ALL
-                SELECT c.Id FROM Comments c INNER JOIN CommentTree ct ON c.ParentCommentId = ct.Id
-            )
-            DELETE FROM Comments WHERE Id IN (SELECT Id FROM CommentTree);", cancellationToken);
-
-        await _context.Database.ExecuteSqlInterpolatedAsync($@"
-            UPDATE Publications SET CommentsCount = CASE WHEN CommentsCount >= {deletedCommentsCount} THEN CommentsCount - {deletedCommentsCount} ELSE 0 END
-            WHERE Id = {comment.PublicationId};", cancellationToken);
     }
 }
