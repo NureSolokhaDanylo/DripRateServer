@@ -10,6 +10,8 @@ public sealed class UserGameHistoryConfiguration : IEntityTypeConfiguration<User
     {
         builder.HasKey(h => new { h.UserId, h.PublicationId, h.GameType });
 
+        builder.HasQueryFilter(h => !h.User.IsBanned && !h.Publication.User.IsBanned);
+
         builder.Property(h => h.CreatedAt)
             .IsRequired();
 

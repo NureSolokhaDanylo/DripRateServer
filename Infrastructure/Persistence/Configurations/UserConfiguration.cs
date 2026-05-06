@@ -21,6 +21,7 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.AvatarUrl).IsRequired().HasMaxLength(2048).HasField("_avatarUrl");
         builder.Property(u => u.Bio).HasMaxLength(500).HasField("_bio");
         builder.Property(u => u.CreatedAt).HasField("_createdAt");
+        builder.Property(u => u.IsBanned).HasField("_isBanned");
 
         builder.HasQueryFilter(u => !u.IsBanned);
 

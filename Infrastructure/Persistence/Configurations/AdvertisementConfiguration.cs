@@ -55,6 +55,8 @@ public sealed class AdvertisementViewConfiguration : IEntityTypeConfiguration<Ad
         builder.Property(v => v.UserId).HasField("_userId");
         builder.Property(v => v.ViewedAt).HasField("_viewedAt");
 
+        builder.HasQueryFilter(v => !v.User.IsBanned);
+
         builder.HasOne(v => v.Advertisement)
             .WithMany(a => a.Views)
             .HasForeignKey(v => v.AdvertisementId)

@@ -37,5 +37,7 @@ public sealed class ReportConfiguration : IEntityTypeConfiguration<Report>
 
         builder.HasIndex(r => r.TargetId);
         builder.HasIndex(r => r.Status);
+
+        builder.HasQueryFilter(r => !r.Author.IsBanned);
     }
 }

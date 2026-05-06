@@ -10,6 +10,8 @@ public sealed class PublicationGameStatsConfiguration : IEntityTypeConfiguration
     {
         builder.HasKey(s => s.PublicationId);
         
+        builder.HasQueryFilter(s => !s.Publication.User.IsBanned);
+
         builder.Property(s => s.GuessPriceTotalCount).HasDefaultValue(0);
         builder.Property(s => s.GuessPriceRealSum).HasPrecision(18, 2).HasDefaultValue(0);
         builder.Property(s => s.GuessPriceGuessedSum).HasPrecision(18, 2).HasDefaultValue(0);

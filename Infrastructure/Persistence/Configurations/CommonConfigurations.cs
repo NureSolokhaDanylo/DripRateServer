@@ -21,6 +21,8 @@ public sealed class ClothConfiguration : IEntityTypeConfiguration<Cloth>
         builder.HasIndex(c => c.UserId);
         builder.HasIndex(c => c.CreatedAt);
 
+        builder.HasQueryFilter(c => !c.User.IsBanned);
+
         builder.HasOne(c => c.User)
             .WithMany(u => u.Wardrobe)
             .HasForeignKey(c => c.UserId)
