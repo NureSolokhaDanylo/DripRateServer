@@ -81,6 +81,8 @@ public sealed class PublicationConfiguration : IEntityTypeConfiguration<Publicat
             gs.Property(g => g.IsFirstImpressionEnabled).HasColumnName("IsFirstImpressionEnabled").HasDefaultValue(true);
             gs.Property(g => g.IsTagMatchEnabled).HasColumnName("IsTagMatchEnabled").HasDefaultValue(false);
         });
+        
+        builder.Property(p => p.GameSnapshotPrice).HasColumnName("GameSnapshotPrice").HasPrecision(18, 2).HasDefaultValue(0);
 
         builder.HasOne(p => p.GameStats)
             .WithOne(s => s.Publication)

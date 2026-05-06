@@ -50,14 +50,12 @@ internal sealed class SubmitGuessPriceBatchCommandHandler : IRequestHandler<Subm
 
         if (publicationIdsToUpdate.Any())
         {
-            // We need to calculate real price for these publications
             var publicationsWithPrices = await _context.Publications
-                .Include(p => p.Clothes)
                 .Where(p => publicationIdsToUpdate.Contains(p.Id))
                 .Select(p => new
                 {
                     p.Id,
-                    RealPrice = p.Clothes.Sum(c => c.EstimatedPrice ?? 0)
+                    RealPrice = p.GameSnapshotPrice
                 })
                 .ToDictionaryAsync(p => p.Id, p => p.RealPrice, cancellationToken);
 

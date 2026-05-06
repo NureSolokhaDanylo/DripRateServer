@@ -66,7 +66,7 @@ internal sealed class DeletionService : IDeletionService
             DELETE FROM CollectionPublications WHERE PublicationId IN (SELECT Id FROM Publications WHERE UserId = {userId}); 
             DELETE FROM CollectionPublications WHERE CollectionId IN (SELECT Id FROM Collections WHERE UserId = {userId}); 
             DELETE FROM PublicationClothes WHERE PublicationId IN (SELECT Id FROM Publications WHERE UserId = {userId}); 
-            DELETE FROM PublicationClothes WHERE ClothesId IN (SELECT Id FROM Clothes WHERE UserId = {userId});
+            DELETE FROM PublicationClothes WHERE ClothId IN (SELECT Id FROM Clothes WHERE UserId = {userId});
             DELETE FROM PublicationTags WHERE PublicationId IN (SELECT Id FROM Publications WHERE UserId = {userId});
             DELETE FROM UserPreferredTags WHERE UserId = {userId};",
             cancellationToken);
@@ -262,7 +262,7 @@ internal sealed class DeletionService : IDeletionService
 
         // Rule 8: Manual cleanup of junction table "PublicationClothes"
         await _context.Database.ExecuteSqlRawAsync(
-            "DELETE FROM PublicationClothes WHERE ClothesId = {0}",
+            "DELETE FROM PublicationClothes WHERE ClothId = {0}",
             clothId,
             cancellationToken);
 

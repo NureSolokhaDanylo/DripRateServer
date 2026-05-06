@@ -26,27 +26,19 @@ internal sealed class GetGuessPriceBatchQueryHandler : IRequestHandler<GetGuessP
 
         var nextPublicationsQuery = _context.Publications
             .Include(p => p.User)
-            .Include(p => p.Clothes)
             .Where(p => p.GameSettings.IsGuessPriceEnabled && !playedPublicationIds.Contains(p.Id));
 
         var nextPublications = await nextPublicationsQuery
             .OrderBy(p => Guid.NewGuid())
-            .Take(request.BatchSize * 2) // Take more to filter out 0 price items in memory if needed, though DB can also do it.
+            .Take(request.BatchSize)
             .ToListAsync(cancellationToken);
 
         var result = nextPublications
-            .Select(p => new
-            {
-                Publication = p,
-                RealPrice = p.Clothes.Sum(c => c.EstimatedPrice ?? 0)
-            })
-            .Where(x => x.RealPrice > 0)
-            .Take(request.BatchSize)
-            .Select(x => new GuessPriceGameItemDto(
-                x.Publication.Id,
-                new UserSimpleDto(x.Publication.User.Id, x.Publication.User.DisplayName, x.Publication.User.AvatarUrl),
-                x.Publication.Images,
-                x.RealPrice
+            .Select(p => new GuessPriceGameItemDto(
+                p.Id,
+                new UserSimpleDto(p.User.Id, p.User.DisplayName, p.User.AvatarUrl),
+                p.Images,
+                p.GameSnapshotPrice
             ))
             .ToList();
 

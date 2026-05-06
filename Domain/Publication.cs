@@ -49,6 +49,8 @@ public sealed class Publication
 
     public MiniGameSettings GameSettings { get; private set; } = null!;
     public PublicationGameStats GameStats { get; private set; } = null!;
+    
+    public decimal GameSnapshotPrice { get; private set; }
 
     private Publication() { }
 
@@ -67,8 +69,13 @@ public sealed class Publication
         GameSettings = new MiniGameSettings(false, true, false);
     }
 
-    public void ConfigureMiniGames(bool guessPriceEnabled, bool tagMatchEnabled)
+    public void ConfigureMiniGames(decimal snapshotPrice, int tagsCount)
     {
+        GameSnapshotPrice = snapshotPrice;
+        
+        bool guessPriceEnabled = snapshotPrice > 0;
+        bool tagMatchEnabled = tagsCount >= 3;
+        
         GameSettings = new MiniGameSettings(guessPriceEnabled, true, tagMatchEnabled);
     }
 

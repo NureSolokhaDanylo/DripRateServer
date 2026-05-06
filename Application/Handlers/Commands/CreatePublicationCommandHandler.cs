@@ -86,6 +86,10 @@ internal sealed class CreatePublicationCommandHandler : IRequestHandler<CreatePu
                     publication.AttachCloth(cloth);
                 }
             }
+            
+            // 5. Configure Mini-Games
+            decimal totalPrice = publication.Clothes.Sum(c => c.EstimatedPrice ?? 0);
+            publication.ConfigureMiniGames(totalPrice, publication.Tags.Count);
 
             _context.Publications.Add(publication);
             await _context.SaveChangesAsync(cancellationToken);
