@@ -7,7 +7,7 @@ public sealed class Comment
     private DateTimeOffset _createdAt;
     private Guid _userId;
     private User _user = null!;
-    private Guid _publicationId;
+    private Guid? _publicationId;
     private Publication _publication = null!;
     private Guid? _parentCommentId;
     private Comment? _parentComment;
@@ -28,7 +28,7 @@ public sealed class Comment
     public Guid UserId => _userId;
     public User User => _user;
 
-    public Guid PublicationId => _publicationId;
+    public Guid? PublicationId => _publicationId;
     public Publication Publication => _publication;
 
     public Guid? ParentCommentId => _parentCommentId;

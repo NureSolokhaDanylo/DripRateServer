@@ -68,7 +68,7 @@ public sealed class PublicationConfiguration : IEntityTypeConfiguration<Publicat
         builder.HasMany(p => p.Comments)
             .WithOne(c => c.Publication)
             .HasForeignKey(c => c.PublicationId)
-            .OnDelete(DeleteBehavior.Cascade); // Except parent comment which remains Restrict, publication to comment can be cascade
+            .OnDelete(DeleteBehavior.Restrict); // Handled manually in DeletionService by setting PublicationId to null
 
         builder.HasMany(p => p.Assessments)
             .WithOne(a => a.Publication)

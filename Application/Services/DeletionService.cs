@@ -26,10 +26,12 @@ internal sealed class DeletionService : IDeletionService
             .Select(p => new { p.Images })
             .FirstOrDefaultAsync(cancellationToken);
 
-        // Soft delete all comments for the publication
+        // Soft delete all comments for the publication by disconnecting them
         await _context.Comments
             .Where(c => c.PublicationId == publicationId)
-            .ExecuteUpdateAsync(s => s.SetProperty(c => c.IsDeleted, true), cancellationToken);
+            .ExecuteUpdateAsync(s => s
+                .SetProperty(c => c.PublicationId, (Guid?)null)
+                .SetProperty(c => c.IsDeleted, true), cancellationToken);
 
         // Cleanup files
         if (publication != null)

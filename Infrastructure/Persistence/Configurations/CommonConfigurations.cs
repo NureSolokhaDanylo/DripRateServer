@@ -52,7 +52,7 @@ public sealed class CommentConfiguration : IEntityTypeConfiguration<Comment>
         builder.Property(c => c.Text).HasMaxLength(1000).IsRequired().HasField("_text");
         builder.Property(c => c.CreatedAt).HasField("_createdAt");
         builder.Property(c => c.UserId).HasField("_userId");
-        builder.Property(c => c.PublicationId).HasField("_publicationId");
+        builder.Property(c => c.PublicationId).IsRequired(false).HasField("_publicationId");
         builder.Property(c => c.ParentCommentId).HasField("_parentCommentId");
         builder.Property(c => c.LikesCount).HasField("_likesCount");
         builder.Property(c => c.RepliesCount).HasField("_repliesCount");
