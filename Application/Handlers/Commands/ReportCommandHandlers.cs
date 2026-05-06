@@ -5,6 +5,7 @@ using Domain;
 using Domain.Errors;
 using ErrorOr;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Handlers.Commands;
@@ -79,11 +80,16 @@ internal sealed class ResolveReportedEntityCommandHandler : IRequestHandler<Reso
 {
     private readonly IApplicationDbContext _context;
     private readonly IDeletionService _deletionService;
+    private readonly UserManager<User> _userManager;
 
-    public ResolveReportedEntityCommandHandler(IApplicationDbContext context, IDeletionService deletionService)
+    public ResolveReportedEntityCommandHandler(
+        IApplicationDbContext context, 
+        IDeletionService deletionService,
+        UserManager<User> userManager)
     {
         _context = context;
         _deletionService = deletionService;
+        _userManager = userManager;
     }
 
     public async Task<ErrorOr<Success>> Handle(ResolveReportedEntityCommand request, CancellationToken cancellationToken)
@@ -116,14 +122,6 @@ internal sealed class ResolveReportedEntityCommandHandler : IRequestHandler<Reso
                 case ReportTargetType.Comment:
                     await DeleteCommentAsync(request.TargetId, cancellationToken);
                     break;
-                case ReportTargetType.User:
-                    var user = await _context.Users.FindAsync(new object[] { request.TargetId }, cancellationToken);
-                    if (user != null)
-                    {
-                        await _deletionService.DeleteUserContentAsync(request.TargetId, cancellationToken);
-                        _context.Users.Remove(user);
-                    }
-                    break;
             }
         }
         else if (request.Action == ModerationAction.BanUser)
@@ -139,7 +137,14 @@ internal sealed class ResolveReportedEntityCommandHandler : IRequestHandler<Reso
             if (userId != Guid.Empty)
             {
                 var user = await _context.Users.FindAsync(new object[] { userId }, cancellationToken);
-                user?.Ban();
+                if (user != null)
+                {
+                    if (await _userManager.IsInRoleAsync(user, "Moderator"))
+                    {
+                        return UserErrors.CannotBanModerator;
+                    }
+                    user.Ban();
+                }
             }
         }
 

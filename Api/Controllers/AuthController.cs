@@ -65,18 +65,4 @@ public class AuthController : ApiController
             _ => NoContent(),
             errors => Problem(errors));
     }
-
-    [AuthorizeWithError]
-    [HttpDelete("account")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ApiErrors(UserErrors.NotFoundCode, UserErrors.DeleteFailedCode)]
-    public async Task<IActionResult> DeleteAccount([FromServices] ICurrentUser currentUser)
-    {
-        var command = new DeleteUserCommand(currentUser.UserId.Value);
-        var result = await _mediator.Send(command);
-
-        return result.Match(
-            _ => NoContent(),
-            errors => Problem(errors));
-    }
 }

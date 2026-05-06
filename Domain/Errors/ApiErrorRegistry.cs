@@ -43,8 +43,7 @@ public static class ApiErrorRegistry
             [CommentErrors.ForbiddenCode] = Business(ErrorType.Forbidden),
 
             [UserErrors.NotFoundCode] = Business(ErrorType.NotFound),
-            [UserErrors.DeleteFailedCode] = Business(ErrorType.Unexpected),
-            [UserErrors.CannotDeleteModeratorCode] = Business(ErrorType.Conflict),
+            [UserErrors.CannotBanModeratorCode] = Business(ErrorType.Conflict),
 
             [FileErrors.ProcessingFailedCode] = Business(ErrorType.Unexpected),
 
@@ -57,6 +56,13 @@ public static class ApiErrorRegistry
             [ReportErrors.NotFoundCode] = Business(ErrorType.NotFound),
             [ReportErrors.AlreadyAssignedCode] = Business(ErrorType.Conflict),
             [ReportErrors.InvalidTargetCode] = Business(ErrorType.Validation),
+            [ReportErrors.SelfReportCode] = Business(ErrorType.Conflict),
+            [ReportErrors.DuplicateReportCode] = Business(ErrorType.Conflict),
+            [ReportErrors.UnauthorizedCode] = Business(ErrorType.Forbidden),
+
+            [AdvertisementErrors.NotFoundCode] = Business(ErrorType.NotFound),
+            [AdvertisementErrors.UnauthorizedCode] = Business(ErrorType.Forbidden),
+            [AdvertisementErrors.LimitReachedCode] = Business(ErrorType.Conflict),
         };
 
     public static bool TryGet(string code, out ApiErrorMetadata metadata)

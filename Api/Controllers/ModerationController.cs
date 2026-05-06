@@ -50,7 +50,7 @@ public sealed class ModerationController : ApiController
 
     [HttpPost("reports/resolve")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ApiErrors(ReportErrors.NotFoundCode, ReportErrors.UnauthorizedCode)]
+    [ApiErrors(ReportErrors.NotFoundCode, ReportErrors.UnauthorizedCode, UserErrors.CannotBanModeratorCode)]
     public async Task<IActionResult> ResolveReports([FromBody] ResolveReportedEntityRequest request)
     {
         var command = new ResolveReportedEntityCommand(
