@@ -69,6 +69,11 @@ public sealed class Collection
         _publications.Remove(publication);
     }
 
+    public void ClearPublications()
+    {
+        _publications.Clear();
+    }
+
     public void Update(string name, string? description, bool isPublic)
     {
         if (IsSystem) return;

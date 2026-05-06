@@ -33,3 +33,7 @@ public record ToggleLikeCommand(
 public record ToggleSaveCommand(
     Guid UserId,
     Guid PublicationId) : IRequest<ErrorOr<bool>>; // Returns true if saved, false if unsaved
+
+public record DeleteCollectionCommand(
+    Guid UserId,
+    Guid CollectionId) : IRequest<ErrorOr<Deleted>>;

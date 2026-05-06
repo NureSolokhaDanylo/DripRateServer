@@ -121,4 +121,17 @@ public sealed class CollectionsController : ApiController
             _ => NoContent(),
             errors => Problem(errors));
     }
+
+    [HttpDelete("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ApiErrors(CollectionErrors.ForbiddenCode, CollectionErrors.NotFoundCode)]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        var command = new DeleteCollectionCommand(_currentUser.UserId.Value, id);
+        var result = await _mediator.Send(command);
+
+        return result.Match(
+            _ => NoContent(),
+            errors => Problem(errors));
+    }
 }
