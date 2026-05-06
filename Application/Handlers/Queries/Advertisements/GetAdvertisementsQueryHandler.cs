@@ -18,9 +18,23 @@ public sealed class GetAdvertisementsQueryHandler : IRequestHandler<GetAdvertise
 
     public async Task<ErrorOr<List<AdvertisementResponse>>> Handle(GetAdvertisementsQuery request, CancellationToken cancellationToken)
     {
-        var ads = await _context.Advertisements
+        var query = _context.Advertisements
             .AsNoTracking()
             .Include(a => a.Tags)
+            .AsQueryable();
+
+        if (request.IsActive.HasValue)
+        {
+            query = query.Where(a => a.IsActive == request.IsActive.Value);
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.Search))
+        {
+            var search = request.Search.ToLower();
+            query = query.Where(a => a.Text.ToLower().Contains(search) || a.Url.ToLower().Contains(search));
+        }
+
+        var ads = await query
             .OrderByDescending(a => a.CreatedAt)
             .Skip(request.Skip)
             .Take(request.Take)

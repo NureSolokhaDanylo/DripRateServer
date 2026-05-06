@@ -1,33 +1,8 @@
 using Api.Attributes;
-using Application.Commands;
 using Application.Commands.Advertisements;
 using Application.Queries.Advertisements;
-using Application.Commands.Auth;
-using Application.Queries.Auth;
-using Application.Commands.Collections;
-using Application.Queries.Collections;
-using Application.Queries.Feed;
-using Application.Commands.Games;
-using Application.Queries.Games;
-using Application.Queries.Moderation;
-using Application.Commands.Publications;
-using Application.Queries.Publications;
-using Application.Commands.Assessments;
-using Application.Queries.Assessments;
-using Application.Commands.Reports;
-using Application.Queries.Search;
-using Application.Commands.Social;
-using Application.Queries.Social;
-using Application.Queries.Tags;
-using Application.Commands.Users;
-using Application.Queries.Users;
-using Application.Commands.Wardrobe;
-using Application.Queries.Wardrobe;
-using Application.Commands.Comments;
-using Application.Queries.Comments;
 using Application.Dtos;
 using Application.Interfaces;
-using Application.Queries;
 using Domain.Errors;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -45,6 +20,23 @@ public sealed class AdvertisementsController : ApiController
     {
         _mediator = mediator;
         _currentUser = currentUser;
+    }
+
+    [HttpGet]
+    [AuthorizeWithError(Roles = "Moderator")]
+    [ProducesResponseType(typeof(List<AdvertisementResponse>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAll(
+        [FromQuery] bool? isActive,
+        [FromQuery] string? search,
+        [FromQuery] int skip = 0,
+        [FromQuery] int take = 20)
+    {
+        var query = new GetAdvertisementsQuery(isActive, search, skip, take);
+        var result = await _mediator.Send(query);
+
+        return result.Match(
+            response => Ok(response),
+            errors => Problem(errors));
     }
 
     [HttpPost]
@@ -71,9 +63,6 @@ public sealed class AdvertisementsController : ApiController
     [ApiErrors(AdvertisementErrors.NotFoundCode)]
     public async Task<IActionResult> Get(Guid id)
     {
-        // For simplicity, we just return the ad. Usually you'd have a GetAdvertisementQuery.
-        // But here I'll just use a placeholder or implement the query.
-        // Let's implement GetAdvertisementQuery for completeness.
         var query = new GetAdvertisementQuery(id);
         var result = await _mediator.Send(query);
 
@@ -112,20 +101,6 @@ public sealed class AdvertisementsController : ApiController
     public async Task<IActionResult> ToggleActive(Guid id, [FromBody] bool isActive)
     {
         var command = new ToggleAdvertisementActiveCommand(id, isActive);
-        var result = await _mediator.Send(command);
-
-        return result.Match(
-            _ => NoContent(),
-            errors => Problem(errors));
-    }
-
-    [HttpDelete("{id:guid}")]
-    [AuthorizeWithError(Roles = "Moderator")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ApiErrors(AdvertisementErrors.NotFoundCode)]
-    public async Task<IActionResult> Delete(Guid id)
-    {
-        var command = new DeleteAdvertisementCommand(id);
         var result = await _mediator.Send(command);
 
         return result.Match(
