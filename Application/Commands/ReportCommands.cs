@@ -12,11 +12,6 @@ public record CreateReportCommand(
     ReportCategory Category,
     string? Text) : IRequest<ErrorOr<Success>>;
 
-public record AssignReportedEntityCommand(
-    Guid ModeratorId,
-    ReportTargetType TargetType,
-    Guid TargetId) : IRequest<ErrorOr<Success>>;
-
 public record ResolveReportedEntityCommand(
     Guid ModeratorId,
     ReportTargetType TargetType,

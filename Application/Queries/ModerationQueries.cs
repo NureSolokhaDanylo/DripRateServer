@@ -6,7 +6,6 @@ using MediatR;
 namespace Application.Queries;
 
 public record GetReportedEntitiesQuery(
-    int Skip = 0,
     int Take = 10) : IRequest<ErrorOr<List<ReportedEntityDto>>>;
 
 public record GetEntityReportsQuery(

@@ -25,9 +25,9 @@ public sealed class ModerationController : ApiController
 
     [HttpGet("reports")]
     [ProducesResponseType(typeof(List<ReportedEntityDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetReportedEntities([FromQuery] int skip = 0, [FromQuery] int take = 10)
+    public async Task<IActionResult> GetReportedEntities([FromQuery] int take = 10)
     {
-        var query = new GetReportedEntitiesQuery(skip, take);
+        var query = new GetReportedEntitiesQuery(take);
         var result = await _mediator.Send(query);
 
         return result.Match(
@@ -45,19 +45,6 @@ public sealed class ModerationController : ApiController
 
         return result.Match(
             response => Ok(response),
-            errors => Problem(errors));
-    }
-
-    [HttpPost("reports/assign/{targetType}/{targetId:guid}")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ApiErrors(ReportErrors.NotFoundCode, ReportErrors.AlreadyAssignedCode)]
-    public async Task<IActionResult> AssignReports(ReportTargetType targetType, Guid targetId)
-    {
-        var command = new AssignReportedEntityCommand(_currentUser.UserId!.Value, targetType, targetId);
-        var result = await _mediator.Send(command);
-
-        return result.Match(
-            _ => NoContent(),
             errors => Problem(errors));
     }
 

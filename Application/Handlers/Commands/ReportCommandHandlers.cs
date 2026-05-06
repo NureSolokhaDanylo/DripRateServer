@@ -75,38 +75,6 @@ internal sealed class CreateReportCommandHandler : IRequestHandler<CreateReportC
     }
 }
 
-internal sealed class AssignReportedEntityCommandHandler : IRequestHandler<AssignReportedEntityCommand, ErrorOr<Success>>
-{
-    private readonly IApplicationDbContext _context;
-
-    public AssignReportedEntityCommandHandler(IApplicationDbContext context)
-    {
-        _context = context;
-    }
-
-    public async Task<ErrorOr<Success>> Handle(AssignReportedEntityCommand request, CancellationToken cancellationToken)
-    {
-        var reports = await _context.Reports
-            .Where(r => r.TargetType == request.TargetType && r.TargetId == request.TargetId && r.Status != ReportStatus.Resolved && r.Status != ReportStatus.Dismissed)
-            .ToListAsync(cancellationToken);
-
-        if (!reports.Any()) return ReportErrors.NotFound;
-
-        if (reports.Any(r => r.AssignedToUserId.HasValue && r.AssignedToUserId != request.ModeratorId))
-        {
-            return ReportErrors.AlreadyAssigned;
-        }
-
-        foreach (var report in reports)
-        {
-            report.AssignTo(request.ModeratorId);
-        }
-
-        await _context.SaveChangesAsync(cancellationToken);
-        return Result.Success;
-    }
-}
-
 internal sealed class ResolveReportedEntityCommandHandler : IRequestHandler<ResolveReportedEntityCommand, ErrorOr<Success>>
 {
     private readonly IApplicationDbContext _context;
