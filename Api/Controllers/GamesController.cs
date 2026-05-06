@@ -47,4 +47,32 @@ public sealed class GamesController : ApiController
             Problem
         );
     }
+
+    [HttpGet("guess-price")]
+    public async Task<IActionResult> GetGuessPriceBatch([FromQuery] int batchSize = 10, CancellationToken cancellationToken = default)
+    {
+        if (!_currentUser.UserId.HasValue) return Unauthorized();
+
+        var query = new GetGuessPriceBatchQuery(_currentUser.UserId.Value, batchSize);
+        var result = await _sender.Send(query, cancellationToken);
+
+        return result.Match(
+            games => Ok(games),
+            Problem
+        );
+    }
+
+    [HttpPost("guess-price")]
+    public async Task<IActionResult> SubmitGuessPriceBatch([FromBody] SubmitGuessPriceBatchCommand command, CancellationToken cancellationToken = default)
+    {
+        if (!_currentUser.UserId.HasValue) return Unauthorized();
+
+        var userCommand = command with { UserId = _currentUser.UserId.Value };
+        var result = await _sender.Send(userCommand, cancellationToken);
+
+        return result.Match(
+            _ => Ok(),
+            Problem
+        );
+    }
 }

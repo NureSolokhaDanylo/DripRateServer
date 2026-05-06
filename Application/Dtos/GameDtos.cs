@@ -13,3 +13,15 @@ public record FirstImpressionResultDto(
     bool IsPositive,
     long ReactionTimeMs
 );
+
+public record GuessPriceGameItemDto(
+    Guid PublicationId,
+    UserSimpleDto Author,
+    IReadOnlyCollection<string> Images,
+    decimal RealPrice
+);
+
+public record GuessPriceResultDto(
+    Guid PublicationId,
+    decimal GuessedPrice
+);
