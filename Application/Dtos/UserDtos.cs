@@ -31,3 +31,9 @@ public record UpdateProfileRequest(
 
 public record UploadAvatarRequest(
     Microsoft.AspNetCore.Http.IFormFile File);
+
+public record UserSimpleDto(
+    Guid Id,
+    string DisplayName,
+    string AvatarUrl
+);
