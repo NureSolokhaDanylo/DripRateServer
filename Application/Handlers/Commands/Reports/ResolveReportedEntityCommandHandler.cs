@@ -47,7 +47,9 @@ internal sealed class ResolveReportedEntityCommandHandler : IRequestHandler<Reso
             switch (request.TargetType)
             {
                 case ReportTargetType.Publication:
-                    var pub = await _context.Publications.FindAsync(new object[] { request.TargetId }, cancellationToken);
+                    var pub = await _context.Publications
+                        .IgnoreQueryFilters()
+                        .FirstOrDefaultAsync(p => p.Id == request.TargetId, cancellationToken);
                     if (pub != null)
                     {
                         await _deletionService.DeletePublicationContentAsync(request.TargetId, cancellationToken);
@@ -64,14 +66,16 @@ internal sealed class ResolveReportedEntityCommandHandler : IRequestHandler<Reso
             var userId = request.TargetType switch
             {
                 ReportTargetType.User => request.TargetId,
-                ReportTargetType.Publication => (await _context.Publications.Where(p => p.Id == request.TargetId).Select(p => p.UserId).FirstOrDefaultAsync(cancellationToken)),
-                ReportTargetType.Comment => (await _context.Comments.Where(c => c.Id == request.TargetId).Select(c => c.UserId).FirstOrDefaultAsync(cancellationToken)),
+                ReportTargetType.Publication => (await _context.Publications.IgnoreQueryFilters().Where(p => p.Id == request.TargetId).Select(p => p.UserId).FirstOrDefaultAsync(cancellationToken)),
+                ReportTargetType.Comment => (await _context.Comments.IgnoreQueryFilters().Where(c => c.Id == request.TargetId).Select(c => c.UserId).FirstOrDefaultAsync(cancellationToken)),
                 _ => Guid.Empty
             };
 
             if (userId != Guid.Empty)
             {
-                var user = await _context.Users.FindAsync(new object[] { userId }, cancellationToken);
+                var user = await _context.Users
+                    .IgnoreQueryFilters()
+                    .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
                 if (user != null)
                 {
                     if (await _userManager.IsInRoleAsync(user, "Moderator"))

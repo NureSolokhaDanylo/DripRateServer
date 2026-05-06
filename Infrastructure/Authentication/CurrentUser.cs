@@ -53,6 +53,7 @@ public sealed class HttpContextCurrentUser : ICurrentUser
         }
 
         _isBannedCache = await _context.Users
+            .IgnoreQueryFilters()
             .Where(u => u.Id == UserId.Value)
             .Select(u => u.IsBanned)
             .FirstOrDefaultAsync(cancellationToken);

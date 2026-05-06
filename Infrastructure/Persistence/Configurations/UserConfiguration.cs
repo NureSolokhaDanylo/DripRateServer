@@ -22,6 +22,8 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.Bio).HasMaxLength(500).HasField("_bio");
         builder.Property(u => u.CreatedAt).HasField("_createdAt");
 
+        builder.HasQueryFilter(u => !u.IsBanned);
+
         // Навигация через приватные поля
         builder.Navigation(u => u.Publications).Metadata.SetField("_publications");
         builder.Navigation(u => u.Wardrobe).Metadata.SetField("_wardrobe");

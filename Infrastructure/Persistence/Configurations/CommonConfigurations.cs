@@ -61,8 +61,8 @@ public sealed class CommentConfiguration : IEntityTypeConfiguration<Comment>
         builder.HasIndex(c => new { c.PublicationId, c.CreatedAt });
         builder.HasIndex(c => c.IsDeleted);
 
-        builder.HasQueryFilter(c => !c.IsDeleted);
-        
+        builder.HasQueryFilter(c => !c.IsDeleted && !c.User.IsBanned);
+
         // Убираем каскад от пользователя, оставляем только от публикации
         builder.HasOne(c => c.User)
             .WithMany()
@@ -109,6 +109,8 @@ public sealed class AssessmentConfiguration : IEntityTypeConfiguration<Assessmen
         builder.HasIndex(a => new { a.UserId, a.PublicationId }).IsUnique();
         builder.HasIndex(a => new { a.PublicationId, a.CreatedAt });
 
+        builder.HasQueryFilter(a => !a.User.IsBanned);
+
         // Убираем каскад от пользователя, оставляем только от публикации
         builder.HasOne(a => a.User)
             .WithMany()
@@ -133,6 +135,8 @@ public sealed class FollowConfiguration : IEntityTypeConfiguration<Follow>
         builder.Property(f => f.FollowerId).HasField("_followerId");
         builder.Property(f => f.FolloweeId).HasField("_followeeId");
         builder.Property(f => f.CreatedAt).HasField("_createdAt");
+
+        builder.HasQueryFilter(f => !f.Follower.IsBanned && !f.Followee.IsBanned);
 
         builder.HasOne(f => f.Follower)
             .WithMany(u => u.Following)

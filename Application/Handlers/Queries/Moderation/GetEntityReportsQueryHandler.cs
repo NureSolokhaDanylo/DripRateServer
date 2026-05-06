@@ -21,6 +21,7 @@ public sealed class GetEntityReportsQueryHandler : IRequestHandler<GetEntityRepo
     public async Task<ErrorOr<List<ReportDto>>> Handle(GetEntityReportsQuery request, CancellationToken cancellationToken)
     {
         var reports = await _context.Reports
+            .IgnoreQueryFilters()
             .Where(r => r.TargetType == request.TargetType && r.TargetId == request.TargetId)
             .OrderByDescending(r => r.CreatedAt)
             .Select(r => new ReportDto(

@@ -15,6 +15,8 @@ public sealed class CommentLikeConfiguration : IEntityTypeConfiguration<CommentL
 
         builder.HasIndex(cl => cl.CommentId);
 
+        builder.HasQueryFilter(cl => !cl.User.IsBanned);
+
         builder.HasOne(cl => cl.Comment)
             .WithMany(c => c.Likes)
             .HasForeignKey(cl => cl.CommentId)

@@ -5,6 +5,7 @@ using Domain.Errors;
 using ErrorOr;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Handlers.Queries.Auth;
 
@@ -21,7 +22,9 @@ public sealed class LoginQueryHandler : IRequestHandler<LoginQuery, ErrorOr<stri
 
     public async Task<ErrorOr<string>> Handle(LoginQuery request, CancellationToken cancellationToken)
     {
-        var user = await _userManager.FindByEmailAsync(request.Email);
+        var user = await _userManager.Users
+            .IgnoreQueryFilters()
+            .FirstOrDefaultAsync(u => u.NormalizedEmail == _userManager.NormalizeEmail(request.Email), cancellationToken);
 
         if (user == null)
         {

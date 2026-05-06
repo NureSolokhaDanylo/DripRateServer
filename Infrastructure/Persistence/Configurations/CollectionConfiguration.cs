@@ -24,6 +24,8 @@ public sealed class CollectionConfiguration : IEntityTypeConfiguration<Collectio
         // Composites for performance
         builder.HasIndex(c => new { c.IsPublic, c.CreatedAt, c.Id }).IsDescending(false, true, false);
 
+        builder.HasQueryFilter(c => !c.User.IsBanned);
+
         builder.HasOne(c => c.User)
             .WithMany(u => u.Collections)
             .HasForeignKey(c => c.UserId)
