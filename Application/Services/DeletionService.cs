@@ -26,37 +26,10 @@ internal sealed class DeletionService : IDeletionService
             .Select(p => new { p.Images })
             .FirstOrDefaultAsync(cancellationToken);
 
-        // Fetch all comments for the publication to determine the deletion order
-        var comments = await _context.Comments
-            .AsNoTracking()
+        // Soft delete all comments for the publication
+        await _context.Comments
             .Where(c => c.PublicationId == publicationId)
-            .Select(c => new { c.Id, c.ParentCommentId })
-            .ToListAsync(cancellationToken);
-
-        var commentIds = comments.Select(c => c.Id).ToHashSet();
-
-        while (commentIds.Count > 0)
-        {
-            // Find leaf comments (comments that are not parents to any remaining comments)
-            var parentIds = comments
-                .Where(c => c.ParentCommentId.HasValue && commentIds.Contains(c.Id))
-                .Select(c => c.ParentCommentId!.Value)
-                .ToHashSet();
-
-            var leaves = commentIds.Except(parentIds).ToList();
-
-            if (leaves.Count == 0)
-                break; // Safety break in case of circular references
-
-            await _context.Comments
-                .Where(c => leaves.Contains(c.Id))
-                .ExecuteDeleteAsync(cancellationToken);
-
-            foreach (var leaf in leaves)
-            {
-                commentIds.Remove(leaf);
-            }
-        }
+            .ExecuteUpdateAsync(s => s.SetProperty(c => c.IsDeleted, true), cancellationToken);
 
         // Cleanup files
         if (publication != null)
@@ -79,6 +52,7 @@ internal sealed class DeletionService : IDeletionService
         if (comment == null) return;
 
         // Load all comments for the publication to build the tree in memory
+        // Global query filter handles hiding already deleted comments
         var allCommentsInPublication = await _context.Comments
             .AsNoTracking()
             .Where(c => c.PublicationId == comment.PublicationId)
@@ -111,30 +85,10 @@ internal sealed class DeletionService : IDeletionService
                 .ExecuteUpdateAsync(s => s.SetProperty(c => c.RepliesCount, c => c.RepliesCount > 0 ? c.RepliesCount - 1 : 0), cancellationToken);
         }
 
-        // Delete from bottom to top
-        var remainingIdsToDelete = descendantIds.ToHashSet();
-
-        while (remainingIdsToDelete.Count > 0)
-        {
-            var parentIds = allCommentsInPublication
-                .Where(c => c.ParentCommentId.HasValue && remainingIdsToDelete.Contains(c.Id))
-                .Select(c => c.ParentCommentId!.Value)
-                .ToHashSet();
-
-            var leaves = remainingIdsToDelete.Except(parentIds).ToList();
-
-            if (leaves.Count == 0)
-                break;
-
-            await _context.Comments
-                .Where(c => leaves.Contains(c.Id))
-                .ExecuteDeleteAsync(cancellationToken);
-
-            foreach (var leaf in leaves)
-            {
-                remainingIdsToDelete.Remove(leaf);
-            }
-        }
+        // Soft delete the comment and all its descendants
+        await _context.Comments
+            .Where(c => descendantIds.Contains(c.Id))
+            .ExecuteUpdateAsync(s => s.SetProperty(c => c.IsDeleted, true), cancellationToken);
 
         await _context.Publications
             .Where(p => p.Id == comment.PublicationId)

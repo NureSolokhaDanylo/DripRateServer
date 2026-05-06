@@ -13,6 +13,7 @@ public sealed class Comment
     private Comment? _parentComment;
     private int _likesCount;
     private int _repliesCount;
+    private bool _isDeleted;
 
     private readonly List<Comment> _replies = new();
     private readonly List<CommentLike> _likes = new();
@@ -22,6 +23,7 @@ public sealed class Comment
     public DateTimeOffset CreatedAt => _createdAt;
     public int LikesCount => _likesCount;
     public int RepliesCount => _repliesCount;
+    public bool IsDeleted => _isDeleted;
 
     public Guid UserId => _userId;
     public User User => _user;
@@ -44,6 +46,11 @@ public sealed class Comment
         _text = text;
         _parentCommentId = parentCommentId;
         _createdAt = DateTimeOffset.UtcNow;
+    }
+
+    public void MarkAsDeleted()
+    {
+        _isDeleted = true;
     }
 
     internal void AddReply(Comment reply)

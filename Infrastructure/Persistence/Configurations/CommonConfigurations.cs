@@ -56,8 +56,12 @@ public sealed class CommentConfiguration : IEntityTypeConfiguration<Comment>
         builder.Property(c => c.ParentCommentId).HasField("_parentCommentId");
         builder.Property(c => c.LikesCount).HasField("_likesCount");
         builder.Property(c => c.RepliesCount).HasField("_repliesCount");
+        builder.Property(c => c.IsDeleted).HasField("_isDeleted");
 
         builder.HasIndex(c => new { c.PublicationId, c.CreatedAt });
+        builder.HasIndex(c => c.IsDeleted);
+
+        builder.HasQueryFilter(c => !c.IsDeleted);
         
         // Убираем каскад от пользователя, оставляем только от публикации
         builder.HasOne(c => c.User)
