@@ -100,4 +100,32 @@ public sealed class GamesController : ApiController
             Problem
         );
     }
+
+    [HttpGet("tag-match")]
+    public async Task<IActionResult> GetTagMatchBatch([FromQuery] int batchSize = 10, CancellationToken cancellationToken = default)
+    {
+        if (!_currentUser.UserId.HasValue) return Unauthorized();
+
+        var query = new GetTagMatchBatchQuery(_currentUser.UserId.Value, batchSize);
+        var result = await _sender.Send(query, cancellationToken);
+
+        return result.Match(
+            games => Ok(games),
+            Problem
+        );
+    }
+
+    [HttpPost("tag-match")]
+    public async Task<IActionResult> SubmitTagMatchBatch([FromBody] SubmitTagMatchBatchCommand command, CancellationToken cancellationToken = default)
+    {
+        if (!_currentUser.UserId.HasValue) return Unauthorized();
+
+        var userCommand = command with { UserId = _currentUser.UserId.Value };
+        var result = await _sender.Send(userCommand, cancellationToken);
+
+        return result.Match(
+            _ => Ok(),
+            Problem
+        );
+    }
 }

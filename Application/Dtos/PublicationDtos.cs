@@ -31,7 +31,8 @@ public record PublicationResponse(
     double AverageOriginality,
     double AverageOverallStyle,
     bool IsLikedByMe,
-    bool IsSavedByMe)
+    bool IsSavedByMe,
+    PublicationGameStatsResponse? GameStats)
 {
     public static Expression<Func<Publication, PublicationResponse>> GetProjection(Guid? currentUserId) => p => new PublicationResponse(
         p.Id,
@@ -52,9 +53,30 @@ public record PublicationResponse(
         p.AssessmentsCount > 0 ? (double)EF.Property<int>(p, "_ratingOriginalitySum") / p.AssessmentsCount : 0,
         p.AssessmentsCount > 0 ? (double)EF.Property<int>(p, "_ratingStyleSum") / p.AssessmentsCount : 0,
         currentUserId.HasValue && p.Collections.Any(c => c.Type == CollectionType.SystemLikes && c.UserId == currentUserId.Value),
-        currentUserId.HasValue && p.Collections.Any(c => c.Type == CollectionType.SystemSaved && c.UserId == currentUserId.Value)
+        currentUserId.HasValue && p.Collections.Any(c => c.Type == CollectionType.SystemSaved && c.UserId == currentUserId.Value),
+        p.GameStats != null ? new PublicationGameStatsResponse(
+            new GuessPriceStatsResponse(
+                p.GameStats.GuessPriceTotalCount,
+                p.GameStats.GuessPriceTotalCount > 0 ? p.GameStats.GuessPriceGuessedSum / p.GameStats.GuessPriceTotalCount : 0),
+            new FirstImpressionStatsResponse(
+                p.GameStats.FirstImpressionTotalCount,
+                p.GameStats.FirstImpressionTotalCount > 0 ? (double)p.GameStats.FirstImpressionPositiveCount / p.GameStats.FirstImpressionTotalCount * 100 : 0,
+                p.GameStats.FirstImpressionTotalCount > 0 ? (double)p.GameStats.FirstImpressionReactionTimeSum / p.GameStats.FirstImpressionTotalCount : 0),
+            new TagMatchStatsResponse(
+                p.GameStats.TagMatchTotalCount,
+                p.GameStats.TagMatchTotalCount > 0 ? (double)p.GameStats.TagMatchCorrectCount / p.GameStats.TagMatchTotalCount : 0)
+        ) : null
     );
 }
+
+public record PublicationGameStatsResponse(
+    GuessPriceStatsResponse GuessPrice,
+    FirstImpressionStatsResponse FirstImpression,
+    TagMatchStatsResponse TagMatch);
+
+public record GuessPriceStatsResponse(int TotalAttempts, decimal AverageGuessedPrice);
+public record FirstImpressionStatsResponse(int TotalAttempts, double PositivePercentage, double AverageReactionTimeMs);
+public record TagMatchStatsResponse(int TotalAttempts, double AverageCorrectTags);
 
 public record TagResponse(Guid Id, string Name, string Category)
 {

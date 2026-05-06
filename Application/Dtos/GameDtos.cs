@@ -25,3 +25,15 @@ public record GuessPriceResultDto(
     Guid PublicationId,
     decimal GuessedPrice
 );
+
+public record TagMatchGameItemDto(
+    Guid PublicationId,
+    UserSimpleDto Author,
+    IReadOnlyCollection<string> Images,
+    IReadOnlyCollection<TagResponse> Tags
+);
+
+public record TagMatchResultDto(
+    Guid PublicationId,
+    IReadOnlyCollection<Guid> TagIds
+);
