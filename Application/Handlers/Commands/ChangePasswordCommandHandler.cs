@@ -18,6 +18,7 @@ public sealed class ChangePasswordCommandHandler : IRequestHandler<ChangePasswor
 
     public async Task<ErrorOr<Success>> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
     {
+        // 1. Retrieve the user by ID
         var user = await _userManager.FindByIdAsync(request.UserId.ToString());
 
         if (user == null)
@@ -25,8 +26,10 @@ public sealed class ChangePasswordCommandHandler : IRequestHandler<ChangePasswor
             return UserErrors.NotFound;
         }
 
+        // 2. Attempt to change the password
         var result = await _userManager.ChangePasswordAsync(user, request.OldPassword, request.NewPassword);
 
+        // 3. Handle failure results
         if (!result.Succeeded)
         {
             var errors = result.Errors
@@ -36,6 +39,7 @@ public sealed class ChangePasswordCommandHandler : IRequestHandler<ChangePasswor
             return errors;
         }
 
+        // 4. Return success
         return Result.Success;
     }
 }

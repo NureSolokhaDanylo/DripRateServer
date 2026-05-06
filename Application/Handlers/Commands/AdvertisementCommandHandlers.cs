@@ -25,6 +25,7 @@ internal sealed class CreateAdvertisementCommandHandler : IRequestHandler<Create
 
     public async Task<ErrorOr<AdvertisementResponse>> Handle(CreateAdvertisementCommand request, CancellationToken cancellationToken)
     {
+        // 1. Upload all advertisement images
         var imageUrls = new List<string>();
         foreach (var image in request.Images)
         {
@@ -38,8 +39,10 @@ internal sealed class CreateAdvertisementCommandHandler : IRequestHandler<Create
             imageUrls.Add(uploadResult.Value);
         }
 
+        // 2. Create and configure Advertisement entity
         var ad = new Advertisement(request.Text, request.Url, request.MaxImpressions, imageUrls);
 
+        // 3. Attach tags to advertisement
         if (request.TagIds.Any())
         {
             var tags = await _context.Tags
@@ -49,9 +52,11 @@ internal sealed class CreateAdvertisementCommandHandler : IRequestHandler<Create
             foreach (var tag in tags) ad.AddTag(tag);
         }
 
+        // 4. Save advertisement to database
         _context.Advertisements.Add(ad);
         await _context.SaveChangesAsync(cancellationToken);
 
+        // 5. Return mapped response
         return new AdvertisementResponse(
             ad.Id,
             ad.Images.ToList(),
@@ -80,13 +85,14 @@ internal sealed class UpdateAdvertisementCommandHandler : IRequestHandler<Update
 
     public async Task<ErrorOr<AdvertisementResponse>> Handle(UpdateAdvertisementCommand request, CancellationToken cancellationToken)
     {
+        // 1. Retrieve existing advertisement
         var ad = await _context.Advertisements
             .Include(a => a.Tags)
             .FirstOrDefaultAsync(a => a.Id == request.Id, cancellationToken);
 
         if (ad is null) return AdvertisementErrors.NotFound;
 
-        // Physical deletion of removed images
+        // 2. Physical deletion of removed images
         var imagesToRemove = ad.Images.Except(request.ExistingImages).ToList();
         foreach (var imageUrl in imagesToRemove)
         {
@@ -95,7 +101,7 @@ internal sealed class UpdateAdvertisementCommandHandler : IRequestHandler<Update
 
         var finalImages = new List<string>(request.ExistingImages);
 
-        // Upload new images
+        // 3. Upload new images if provided
         if (request.NewImages != null)
         {
             foreach (var image in request.NewImages)
@@ -111,9 +117,10 @@ internal sealed class UpdateAdvertisementCommandHandler : IRequestHandler<Update
             }
         }
 
+        // 4. Update advertisement properties
         ad.Update(request.Text, request.Url, request.MaxImpressions, finalImages, request.IsActive);
 
-        // Update tags
+        // 5. Sync tags
         ad.ClearTags();
         if (request.TagIds.Any())
         {
@@ -124,8 +131,10 @@ internal sealed class UpdateAdvertisementCommandHandler : IRequestHandler<Update
             foreach (var tag in tags) ad.AddTag(tag);
         }
 
+        // 6. Persist changes
         await _context.SaveChangesAsync(cancellationToken);
 
+        // 7. Return updated response
         return new AdvertisementResponse(
             ad.Id,
             ad.Images.ToList(),
@@ -150,16 +159,19 @@ internal sealed class ToggleAdvertisementActiveCommandHandler : IRequestHandler<
 
     public async Task<ErrorOr<Success>> Handle(ToggleAdvertisementActiveCommand request, CancellationToken cancellationToken)
     {
+        // 1. Retrieve advertisement
         var ad = await _context.Advertisements
             .FirstOrDefaultAsync(a => a.Id == request.Id, cancellationToken);
 
         if (ad is null) return AdvertisementErrors.NotFound;
 
+        // 2. Set active status
         if (!ad.SetStatus(request.IsActive))
         {
             return AdvertisementErrors.LimitReached;
         }
 
+        // 3. Save changes
         await _context.SaveChangesAsync(cancellationToken);
         return Result.Success;
     }
@@ -178,16 +190,19 @@ internal sealed class DeleteAdvertisementCommandHandler : IRequestHandler<Delete
 
     public async Task<ErrorOr<Deleted>> Handle(DeleteAdvertisementCommand request, CancellationToken cancellationToken)
     {
+        // 1. Retrieve advertisement
         var ad = await _context.Advertisements
             .FirstOrDefaultAsync(a => a.Id == request.Id, cancellationToken);
 
         if (ad is null) return AdvertisementErrors.NotFound;
 
+        // 2. Delete associated images from storage
         foreach (var imageUrl in ad.Images)
         {
             await _storageService.DeleteFileAsync(imageUrl, cancellationToken);
         }
 
+        // 3. Remove advertisement from database
         _context.Advertisements.Remove(ad);
         await _context.SaveChangesAsync(cancellationToken);
 
@@ -208,11 +223,13 @@ internal sealed class ViewAdvertisementCommandHandler : IRequestHandler<ViewAdve
 
     public async Task<ErrorOr<Success>> Handle(ViewAdvertisementCommand request, CancellationToken cancellationToken)
     {
+        // 1. Find advertisement
         var ad = await _context.Advertisements
             .FirstOrDefaultAsync(a => a.Id == request.AdId, cancellationToken);
 
         if (ad is null) return AdvertisementErrors.NotFound;
 
+        // 2. Manage view cooldown
         var view = await _context.AdvertisementViews
             .FirstOrDefaultAsync(v => v.AdvertisementId == request.AdId && v.UserId == request.UserId, cancellationToken);
 
@@ -230,7 +247,7 @@ internal sealed class ViewAdvertisementCommandHandler : IRequestHandler<ViewAdve
             _context.AdvertisementViews.Add(view);
         }
 
-        // Atomic update of ShownCount and IsActive
+        // 3. Update view statistics and activity status
         await _context.Advertisements
             .Where(a => a.Id == request.AdId)
             .ExecuteUpdateAsync(s => s
@@ -240,6 +257,7 @@ internal sealed class ViewAdvertisementCommandHandler : IRequestHandler<ViewAdve
 
         try 
         {
+            // 4. Save changes
             await _context.SaveChangesAsync(cancellationToken);
         }
         catch (DbUpdateException)

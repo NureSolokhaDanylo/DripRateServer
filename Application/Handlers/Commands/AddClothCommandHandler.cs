@@ -22,6 +22,7 @@ internal sealed class AddClothCommandHandler : IRequestHandler<AddClothCommand, 
     {
         string? photoUrl = null;
 
+        // 1. Upload photo if provided
         if (request.PhotoStream != null && request.PhotoFileName != null && request.PhotoContentType != null)
         {
             var uploadResult = await _fileService.UploadClothPhotoAsync(
@@ -38,9 +39,11 @@ internal sealed class AddClothCommandHandler : IRequestHandler<AddClothCommand, 
             photoUrl = uploadResult.Value;
         }
 
+        // 2. Create and configure Cloth entity
         var cloth = new Cloth(request.UserId, request.Name, request.Brand);
         cloth.UpdateInfo(request.Name, request.Brand, photoUrl, request.StoreLink, request.EstimatedPrice);
 
+        // 3. Save to database
         _context.Clothes.Add(cloth);
         await _context.SaveChangesAsync(cancellationToken);
 

@@ -20,6 +20,7 @@ public sealed class CreateAssessmentCommandHandler : IRequestHandler<CreateAsses
 
     public async Task<ErrorOr<Success>> Handle(CreateAssessmentCommand request, CancellationToken cancellationToken)
     {
+        // 1. Retrieve and validate publication existence
         var publicationResult = await _context.Publications.GetByIdOrErrorAsync(
             request.PublicationId, 
             PublicationErrors.NotFound, 
@@ -29,16 +30,19 @@ public sealed class CreateAssessmentCommandHandler : IRequestHandler<CreateAsses
 
         var publication = publicationResult.Value;
 
+        // 2. Prevent self-assessment
         if (publication.UserId == request.UserId)
         {
             return AssessmentErrors.CannotRateOwnPublication;
         }
 
+        // 3. Find existing assessment or prepare new one
         var existingAssessment = await _context.Assessments
             .FirstOrDefaultAsync(a => a.PublicationId == request.PublicationId && a.UserId == request.UserId, cancellationToken);
 
         if (existingAssessment != null)
         {
+            // 4a. Update existing assessment
             var oldAssessmentClone = new Assessment(
                 existingAssessment.UserId,
                 existingAssessment.PublicationId,
@@ -57,6 +61,7 @@ public sealed class CreateAssessmentCommandHandler : IRequestHandler<CreateAsses
         }
         else
         {
+            // 4b. Create new assessment
             var assessment = new Assessment(
                 request.UserId,
                 request.PublicationId,
@@ -69,6 +74,7 @@ public sealed class CreateAssessmentCommandHandler : IRequestHandler<CreateAsses
             publication.ApplyAssessment(null, assessment);
         }
 
+        // 5. Save changes to database
         await _context.SaveChangesAsync(cancellationToken);
 
         return Result.Success;
