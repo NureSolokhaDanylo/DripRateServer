@@ -10,7 +10,8 @@ public record CreatePublicationRequest(
     IFormFile? Image,
     List<IFormFile>? Images,
     List<Guid>? TagIds,
-    List<Guid>? ClothIds);
+    List<Guid>? ClothIds,
+    bool IsUrgentRatingRequested = false);
 
 public record PublicationResponse(
     Guid Id,
@@ -30,6 +31,7 @@ public record PublicationResponse(
     double AverageFitAndProportions,
     double AverageOriginality,
     double AverageOverallStyle,
+    bool IsUrgentRatingRequested,
     bool IsLikedByMe,
     bool IsSavedByMe,
     PublicationGameStatsResponse? GameStats)
@@ -52,6 +54,7 @@ public record PublicationResponse(
         p.AssessmentsCount > 0 ? (double)EF.Property<int>(p, "_ratingFitSum") / p.AssessmentsCount : 0,
         p.AssessmentsCount > 0 ? (double)EF.Property<int>(p, "_ratingOriginalitySum") / p.AssessmentsCount : 0,
         p.AssessmentsCount > 0 ? (double)EF.Property<int>(p, "_ratingStyleSum") / p.AssessmentsCount : 0,
+        p.IsUrgentRatingRequested,
         currentUserId.HasValue && p.Collections.Any(c => c.Type == CollectionType.SystemLikes && c.UserId == currentUserId.Value),
         currentUserId.HasValue && p.Collections.Any(c => c.Type == CollectionType.SystemSaved && c.UserId == currentUserId.Value),
         p.GameStats != null ? new PublicationGameStatsResponse(

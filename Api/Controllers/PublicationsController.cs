@@ -72,7 +72,8 @@ public sealed class PublicationsController : ApiController
             request.Description,
             images,
             request.TagIds,
-            request.ClothIds);
+            request.ClothIds,
+            request.IsUrgentRatingRequested);
 
         var result = await _mediator.Send(command);
 

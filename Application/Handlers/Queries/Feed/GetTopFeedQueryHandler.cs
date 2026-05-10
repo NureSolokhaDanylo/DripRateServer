@@ -49,8 +49,8 @@ public sealed class GetTopFeedQueryHandler : IRequestHandler<GetTopFeedQuery, Er
         }
 
         var result = await query
-            .OrderByDescending(p => p.AverageRating)
-            .ThenByDescending(p => p.AssessmentsCount)
+            .OrderByDescending(p => EF.Property<double>(p, "_averageRating"))
+            .ThenByDescending(p => EF.Property<int>(p, "_assessmentsCount"))
             .ThenByDescending(p => p.Id)
             .Skip(request.Skip)
             .Take(request.Take)

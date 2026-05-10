@@ -331,6 +331,12 @@ namespace Infrastructure.Migrations
                         .HasDefaultValue(0m)
                         .HasColumnName("GameSnapshotPrice");
 
+                    b.Property<bool>("IsUrgentRatingRequested")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("IsUrgentRatingRequested");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
@@ -390,6 +396,8 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedAt");
+
+                    b.HasIndex("IsUrgentRatingRequested");
 
                     b.HasIndex("UserId");
 

@@ -70,6 +70,18 @@ public sealed class FeedController : ApiController
             errors => Problem(errors));
     }
 
+    [HttpGet("urgent")]
+    [ProducesResponseType(typeof(List<PublicationResponse>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetUrgent([FromQuery] DateTimeOffset? cursor, [FromQuery] int take = 20)
+    {
+        var query = new GetUrgentFeedQuery(_currentUser.UserId.Value, cursor, take);
+        var result = await _mediator.Send(query);
+
+        return result.Match(
+            response => Ok(response),
+            errors => Problem(errors));
+    }
+
     [HttpGet("user/{userId:guid}")]
     [ProducesResponseType(typeof(List<PublicationResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetUserFeed(Guid userId, [FromQuery] DateTimeOffset? cursor, [FromQuery] int take = 20)

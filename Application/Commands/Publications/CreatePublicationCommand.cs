@@ -10,4 +10,5 @@ public record CreatePublicationCommand(
     string Description,
     List<ImageUploadData> Images,
     List<Guid>? TagIds,
-    List<Guid>? ClothIds) : IRequest<ErrorOr<Guid>>;
+    List<Guid>? ClothIds,
+    bool IsUrgentRatingRequested = false) : IRequest<ErrorOr<Guid>>;

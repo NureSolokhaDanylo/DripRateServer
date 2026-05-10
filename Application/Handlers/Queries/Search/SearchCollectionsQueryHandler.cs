@@ -18,11 +18,18 @@ public sealed class SearchCollectionsQueryHandler : IRequestHandler<SearchCollec
 
     public async Task<ErrorOr<List<CollectionResponse>>> Handle(SearchCollectionsQuery request, CancellationToken cancellationToken)
     {
-        var search = request.SearchQuery.ToLower();
+        var search = request.SearchQuery?.Trim().ToLowerInvariant();
 
-        var result = await _context.Collections
+        var query = _context.Collections
             .AsNoTracking()
-            .Where(c => c.IsPublic && (c.Name.ToLower().Contains(search) || (c.Description != null && c.Description.ToLower().Contains(search))))
+            .Where(c => c.IsPublic);
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            query = query.Where(c => c.Name.ToLower().Contains(search) || (c.Description != null && c.Description.ToLower().Contains(search)));
+        }
+
+        var result = await query
             .OrderByDescending(c => c.CreatedAt)
             .ThenBy(c => c.Id)
             .Skip(request.Skip)

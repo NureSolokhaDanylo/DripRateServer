@@ -75,7 +75,7 @@ public sealed class SearchController : ApiController
 
     [HttpGet("collections")]
     [ProducesResponseType(typeof(List<CollectionResponse>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> SearchCollections([FromQuery] string query, [FromQuery] int skip = 0, [FromQuery] int take = 20)
+    public async Task<IActionResult> SearchCollections([FromQuery] string? query = null, [FromQuery] int skip = 0, [FromQuery] int take = 20)
     {
         var q = new SearchCollectionsQuery(query, skip, take);
         var result = await _mediator.Send(q);

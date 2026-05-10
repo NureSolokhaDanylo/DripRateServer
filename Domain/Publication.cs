@@ -23,8 +23,10 @@ public sealed class Publication
     private int _ratingFitSum;
     private int _ratingOriginalitySum;
     private int _ratingStyleSum;
+    private bool _isUrgentRatingRequested;
 
     public Guid Id => _id;
+    public bool IsUrgentRatingRequested => _isUrgentRatingRequested;
     public string Description => _description;
     public DateTimeOffset CreatedAt => _createdAt;
     public Guid UserId => _userId;
@@ -54,12 +56,13 @@ public sealed class Publication
 
     private Publication() { }
 
-    public Publication(Guid userId, string description, IEnumerable<string> images)
+    public Publication(Guid userId, string description, IEnumerable<string> images, bool isUrgentRatingRequested = false)
     {
         _userId = userId;
         _description = description;
         _createdAt = DateTimeOffset.UtcNow;
         _images.AddRange(images);
+        _isUrgentRatingRequested = isUrgentRatingRequested;
         
         _likesCount = 0;
         _commentsCount = 0;

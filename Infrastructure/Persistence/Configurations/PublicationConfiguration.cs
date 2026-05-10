@@ -23,9 +23,14 @@ public sealed class PublicationConfiguration : IEntityTypeConfiguration<Publicat
         builder.Property<int>("_ratingFitSum").HasColumnName("RatingFitSum").HasDefaultValue(0);
         builder.Property<int>("_ratingOriginalitySum").HasColumnName("RatingOriginalitySum").HasDefaultValue(0);
         builder.Property<int>("_ratingStyleSum").HasColumnName("RatingStyleSum").HasDefaultValue(0);
+        builder.Property(p => p.IsUrgentRatingRequested)
+            .HasField("_isUrgentRatingRequested")
+            .HasColumnName("IsUrgentRatingRequested")
+            .HasDefaultValue(false);
 
         builder.HasIndex(p => p.CreatedAt);
         builder.HasIndex(p => p.UserId);
+        builder.HasIndex(p => p.IsUrgentRatingRequested);
 
         // Composites for performance
         builder.HasIndex(p => new { p.CreatedAt, p.Id }).IsDescending(true, true);

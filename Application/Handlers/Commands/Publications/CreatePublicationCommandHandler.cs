@@ -52,7 +52,7 @@ internal sealed class CreatePublicationCommandHandler : IRequestHandler<CreatePu
             }
 
             // 2. Create Publication Entity with all images
-            var publication = new Publication(command.UserId, command.Description, imageUrls);
+            var publication = new Publication(command.UserId, command.Description, imageUrls, command.IsUrgentRatingRequested);
 
             // 3. Attach Tags
             if (command.TagIds != null && command.TagIds.Any())
