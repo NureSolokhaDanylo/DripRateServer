@@ -16,6 +16,7 @@ public static partial class ServiceCollectionExtensions
         {
             options.ConnectionString = blobOptions.ConnectionString;
             options.ContainerName = blobOptions.ContainerName;
+            options.DefaultAvatarUrl = blobOptions.DefaultAvatarUrl;
         });
 
         services.AddScoped<IFileStorageService, AzureBlobStorageService>();
