@@ -168,6 +168,19 @@ public sealed class PublicationsController : ApiController
             errors => Problem(errors));
     }
 
+    [HttpGet("{id:guid}/comments/{commentId:guid}")]
+    [ProducesResponseType(typeof(CommentResponse), StatusCodes.Status200OK)]
+    [ApiErrors(CommentErrors.NotFoundCode)]
+    public async Task<IActionResult> GetComment(Guid id, Guid commentId)
+    {
+        var query = new GetCommentByIdQuery(commentId, _currentUser.UserId);
+        var result = await _mediator.Send(query);
+
+        return result.Match(
+            response => Ok(response),
+            errors => Problem(errors));
+    }
+
     [HttpDelete("{id:guid}/comments/{commentId:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ApiErrors(CommentErrors.NotFoundCode, CommentErrors.ForbiddenCode)]
