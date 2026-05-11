@@ -30,16 +30,18 @@ public sealed class GetReportedEntitiesQueryHandler : IRequestHandler<GetReporte
         var moderatorId = _currentUser.UserId!.Value;
 
         // 1. Check if moderator already has assigned reports in review
-        var existingAssignments = await GetGroupedReportsQuery()
-            .Where(x => x.AssignedToUserId == moderatorId)
+        var existingReports = await _context.Reports
+            .Include(r => r.AssignedToUser)
+            .Where(r => (r.Status == ReportStatus.Pending || r.Status == ReportStatus.InReview) && r.AssignedToUserId == moderatorId)
             .ToListAsync(cancellationToken);
 
-        if (existingAssignments.Any())
+        if (existingReports.Any())
         {
-            return existingAssignments.Select(MapToDto).ToList();
+            return GroupAndMapReports(existingReports);
         }
 
         // 2. If no existing assignments, find a new batch of pending reports
+        // Basic GroupBy -> Select Key is usually well translated by EF Core.
         var newBatchTargets = await _context.Reports
             .Where(r => r.Status == ReportStatus.Pending && r.AssignedToUserId == null)
             .GroupBy(r => new { r.TargetType, r.TargetId })
@@ -53,69 +55,57 @@ public sealed class GetReportedEntitiesQueryHandler : IRequestHandler<GetReporte
             return new List<ReportedEntityDto>();
         }
 
-        // 3. Assign new batch to the moderator
-        foreach (var target in newBatchTargets)
-        {
-            var reportsToAssign = await _context.Reports
-                .Where(r => r.TargetType == target.TargetType && r.TargetId == target.TargetId && r.Status == ReportStatus.Pending)
-                .ToListAsync(cancellationToken);
+        // 3. Fetch reports for these targets, assign, and save
+        var targetTypes = newBatchTargets.Select(t => t.TargetType).Distinct().ToList();
+        var targetIds = newBatchTargets.Select(t => t.TargetId).Distinct().ToList();
 
-            foreach (var report in reportsToAssign)
-            {
-                report.AssignTo(moderatorId);
-            }
+        var reportsToAssign = await _context.Reports
+            .Include(r => r.AssignedToUser)
+            .Where(r => r.Status == ReportStatus.Pending 
+                     && targetTypes.Contains(r.TargetType) 
+                     && targetIds.Contains(r.TargetId))
+            .ToListAsync(cancellationToken);
+            
+        // Filter in-memory to ensure exact match of composite key (TargetType + TargetId)
+        var exactReportsToAssign = reportsToAssign
+            .Where(r => newBatchTargets.Any(t => t.TargetType == r.TargetType && t.TargetId == r.TargetId))
+            .ToList();
+
+        foreach (var report in exactReportsToAssign)
+        {
+            report.AssignTo(moderatorId);
         }
 
         await _context.SaveChangesAsync(cancellationToken);
-
+        
         // 4. Return the newly assigned batch
-        var newlyAssigned = await GetGroupedReportsQuery()
-            .Where(x => x.AssignedToUserId == moderatorId)
-            .ToListAsync(cancellationToken);
-
-        return newlyAssigned.Select(MapToDto).ToList();
+        return GroupAndMapReports(exactReportsToAssign);
     }
 
-    private IQueryable<ReportGroupInfo> GetGroupedReportsQuery()
+    private List<ReportedEntityDto> GroupAndMapReports(IEnumerable<Report> reports)
     {
-        return _context.Reports
-            .Where(r => r.Status == ReportStatus.Pending || r.Status == ReportStatus.InReview)
+        return reports
             .GroupBy(r => new { r.TargetType, r.TargetId })
-            .Select(g => new ReportGroupInfo
+            .Select(g =>
             {
-                TargetType = g.Key.TargetType,
-                TargetId = g.Key.TargetId,
-                PendingReportsCount = g.Count(r => r.Status == ReportStatus.Pending || r.Status == ReportStatus.InReview),
-                FirstReportedAt = g.Min(r => r.CreatedAt),
-                LastReportedAt = g.Max(r => r.CreatedAt),
-                MostCommonCategory = g.GroupBy(r => r.Category)
+                var mostCommonCategory = g.GroupBy(r => r.Category)
                     .OrderByDescending(cg => cg.Count())
                     .Select(cg => cg.Key)
-                    .FirstOrDefault(),
-                AssignedToUserId = g.Max(r => r.AssignedToUserId),
-                AssignedToUserName = g.Where(r => r.AssignedToUser != null).Select(r => r.AssignedToUser!.DisplayName).FirstOrDefault()
-            });
-    }
+                    .FirstOrDefault();
 
-    private ReportedEntityDto MapToDto(ReportGroupInfo x) => new(
-        x.TargetType,
-        x.TargetId,
-        x.PendingReportsCount,
-        x.MostCommonCategory,
-        x.FirstReportedAt,
-        x.LastReportedAt,
-        x.AssignedToUserId,
-        x.AssignedToUserName);
+                var assignedUser = g.FirstOrDefault(r => r.AssignedToUser != null)?.AssignedToUser;
 
-    private sealed class ReportGroupInfo
-    {
-        public ReportTargetType TargetType { get; init; }
-        public Guid TargetId { get; init; }
-        public int PendingReportsCount { get; init; }
-        public DateTimeOffset FirstReportedAt { get; init; }
-        public DateTimeOffset LastReportedAt { get; init; }
-        public ReportCategory MostCommonCategory { get; init; }
-        public Guid? AssignedToUserId { get; init; }
-        public string? AssignedToUserName { get; init; }
+                return new ReportedEntityDto(
+                    g.Key.TargetType,
+                    g.Key.TargetId,
+                    g.Count(),
+                    mostCommonCategory,
+                    g.Min(r => r.CreatedAt),
+                    g.Max(r => r.CreatedAt),
+                    g.Max(r => r.AssignedToUserId),
+                    assignedUser?.DisplayName
+                );
+            })
+            .ToList();
     }
 }
