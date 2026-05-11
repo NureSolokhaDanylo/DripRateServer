@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Infrastructure.Persistence.Migrations
+namespace Infrastructure.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20260506211431_AddIsBannedMapping")]
-    partial class AddIsBannedMapping
+    [Migration("20260511161945_FixReportMapping")]
+    partial class FixReportMapping
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -334,6 +334,12 @@ namespace Infrastructure.Persistence.Migrations
                         .HasDefaultValue(0m)
                         .HasColumnName("GameSnapshotPrice");
 
+                    b.Property<bool>("IsUrgentRatingRequested")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("IsUrgentRatingRequested");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
@@ -393,6 +399,8 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedAt");
+
+                    b.HasIndex("IsUrgentRatingRequested");
 
                     b.HasIndex("UserId");
 
@@ -462,6 +470,9 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTimeOffset?>("AssignedAt")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<Guid?>("AssignedToUserId")
                         .HasColumnType("uniqueidentifier");
 
@@ -471,6 +482,12 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<string>("Category")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("ResolvedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -492,6 +509,8 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasIndex("AssignedToUserId");
 
                     b.HasIndex("AuthorId");
+
+                    b.HasIndex("CreatedAt");
 
                     b.HasIndex("Status");
 

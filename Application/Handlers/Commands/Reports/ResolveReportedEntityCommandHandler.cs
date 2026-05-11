@@ -44,6 +44,11 @@ internal sealed class ResolveReportedEntityCommandHandler : IRequestHandler<Reso
         // Perform action
         if (request.Action == ModerationAction.DeleteEntity)
         {
+            if (request.TargetType == ReportTargetType.User)
+            {
+                return ReportErrors.CannotDeleteUser;
+            }
+
             switch (request.TargetType)
             {
                 case ReportTargetType.Publication:

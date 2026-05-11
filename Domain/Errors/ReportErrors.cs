@@ -10,6 +10,7 @@ public static class ReportErrors
     public const string SelfReportCode = "Report.SelfReport";
     public const string DuplicateReportCode = "Report.DuplicateReport";
     public const string UnauthorizedCode = "Report.Unauthorized";
+    public const string CannotDeleteUserCode = "Report.CannotDeleteUser";
 
     public static Error NotFound => Error.NotFound(
         code: NotFoundCode,
@@ -34,4 +35,8 @@ public static class ReportErrors
     public static Error Unauthorized => Error.Forbidden(
         code: UnauthorizedCode,
         description: "You are not authorized to resolve these reports.");
+
+    public static Error CannotDeleteUser => Error.Validation(
+        code: CannotDeleteUserCode,
+        description: "You cannot delete a user via moderation action. Use ban instead.");
 }

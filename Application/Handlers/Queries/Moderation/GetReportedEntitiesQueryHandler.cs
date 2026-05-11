@@ -37,14 +37,46 @@ public sealed class GetReportedEntitiesQueryHandler : IRequestHandler<GetReporte
 
         if (existingReports.Any())
         {
+            // Group existing reports to find targets
+            var targetsUnderReview = existingReports
+                .GroupBy(r => new { r.TargetType, r.TargetId })
+                .Select(g => new { g.Key.TargetType, g.Key.TargetId })
+                .ToList();
+
+            var targetTypes = targetsUnderReview.Select(t => t.TargetType).Distinct().ToList();
+            var targetIds = targetsUnderReview.Select(t => t.TargetId).Distinct().ToList();
+
+            // Find any NEW unassigned reports for these same targets and assign them to this moderator
+            var newReportsForExistingTargets = await _context.Reports
+                .Where(r => r.Status == ReportStatus.Pending 
+                         && r.AssignedToUserId == null
+                         && targetTypes.Contains(r.TargetType) 
+                         && targetIds.Contains(r.TargetId))
+                .ToListAsync(cancellationToken);
+
+            var exactNewReports = newReportsForExistingTargets
+                .Where(r => targetsUnderReview.Any(t => t.TargetType == r.TargetType && t.TargetId == r.TargetId))
+                .ToList();
+
+            if (exactNewReports.Any())
+            {
+                foreach (var report in exactNewReports)
+                {
+                    report.AssignTo(moderatorId);
+                }
+                await _context.SaveChangesAsync(cancellationToken);
+                existingReports.AddRange(exactNewReports);
+            }
+
             return GroupAndMapReports(existingReports);
         }
 
         // 2. If no existing assignments, find a new batch of pending reports
-        // Basic GroupBy -> Select Key is usually well translated by EF Core.
+        // We pick entities where ALL pending/in-review reports are unassigned.
         var newBatchTargets = await _context.Reports
-            .Where(r => r.Status == ReportStatus.Pending && r.AssignedToUserId == null)
+            .Where(r => r.Status == ReportStatus.Pending || r.Status == ReportStatus.InReview)
             .GroupBy(r => new { r.TargetType, r.TargetId })
+            .Where(g => g.Count(r => r.AssignedToUserId != null) == 0)
             .OrderByDescending(g => g.Count())
             .Take(request.Take)
             .Select(g => new { g.Key.TargetType, g.Key.TargetId })
@@ -55,18 +87,17 @@ public sealed class GetReportedEntitiesQueryHandler : IRequestHandler<GetReporte
             return new List<ReportedEntityDto>();
         }
 
-        // 3. Fetch reports for these targets, assign, and save
-        var targetTypes = newBatchTargets.Select(t => t.TargetType).Distinct().ToList();
-        var targetIds = newBatchTargets.Select(t => t.TargetId).Distinct().ToList();
+        // 3. Fetch all reports for these targets and assign to the moderator
+        var targetTypesBatch = newBatchTargets.Select(t => t.TargetType).Distinct().ToList();
+        var targetIdsBatch = newBatchTargets.Select(t => t.TargetId).Distinct().ToList();
 
         var reportsToAssign = await _context.Reports
             .Include(r => r.AssignedToUser)
-            .Where(r => r.Status == ReportStatus.Pending 
-                     && targetTypes.Contains(r.TargetType) 
-                     && targetIds.Contains(r.TargetId))
+            .Where(r => (r.Status == ReportStatus.Pending || r.Status == ReportStatus.InReview)
+                     && targetTypesBatch.Contains(r.TargetType) 
+                     && targetIdsBatch.Contains(r.TargetId))
             .ToListAsync(cancellationToken);
             
-        // Filter in-memory to ensure exact match of composite key (TargetType + TargetId)
         var exactReportsToAssign = reportsToAssign
             .Where(r => newBatchTargets.Any(t => t.TargetType == r.TargetType && t.TargetId == r.TargetId))
             .ToList();
@@ -78,7 +109,6 @@ public sealed class GetReportedEntitiesQueryHandler : IRequestHandler<GetReporte
 
         await _context.SaveChangesAsync(cancellationToken);
         
-        // 4. Return the newly assigned batch
         return GroupAndMapReports(exactReportsToAssign);
     }
 
