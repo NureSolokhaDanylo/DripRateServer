@@ -43,6 +43,8 @@ public sealed class LoginQueryHandler : IRequestHandler<LoginQuery, ErrorOr<stri
             return AuthErrors.UserBanned;
         }
 
-        return _jwtTokenService.GenerateToken(user);
+        var roles = await _userManager.GetRolesAsync(user);
+
+        return _jwtTokenService.GenerateToken(user, roles);
     }
 }

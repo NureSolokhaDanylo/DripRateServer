@@ -5,6 +5,6 @@ namespace Application.Interfaces;
 
 public interface IJwtTokenService
 {
-    string GenerateToken(User user);
-    AuthResponse GenerateAuthResponse(User user);
+    string GenerateToken(User user, IList<string> roles);
+    AuthResponse GenerateAuthResponse(User user, IList<string> roles);
 }

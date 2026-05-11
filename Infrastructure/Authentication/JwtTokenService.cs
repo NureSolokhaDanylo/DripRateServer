@@ -19,13 +19,13 @@ public sealed class JwtTokenService : IJwtTokenService
         _jwtOptions = jwtOptions;
     }
 
-    public AuthResponse GenerateAuthResponse(User user)
+    public AuthResponse GenerateAuthResponse(User user, IList<string> roles)
     {
-        var token = GenerateToken(user);
+        var token = GenerateToken(user, roles);
         return new AuthResponse(token, user.Id, user.DisplayName, user.Email!);
     }
 
-    public string GenerateToken(User user)
+    public string GenerateToken(User user, IList<string> roles)
     {
         var key = Encoding.ASCII.GetBytes(_jwtOptions.Value.Key
             ?? throw new InvalidOperationException("JWT Key not configured"));
@@ -36,6 +36,8 @@ public sealed class JwtTokenService : IJwtTokenService
             new(ClaimTypes.Name, user.UserName ?? ""),
             new(ClaimTypes.Email, user.Email ?? "")
         };
+
+        claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
