@@ -35,7 +35,7 @@ public sealed class GetPublicationAssessmentsListQueryHandler : IRequestHandler<
         }
 
         var result = await query
-            .OrderByDescending(a => followingIds.Contains(a.UserId))
+            .OrderByDescending(a => (request.UserId.HasValue && a.UserId == request.UserId.Value) || followingIds.Contains(a.UserId))
             .ThenByDescending(a => a.CreatedAt)
             .ThenByDescending(a => a.Id)
             .Take(request.Take)

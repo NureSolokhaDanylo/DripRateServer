@@ -35,7 +35,7 @@ public sealed class GetCommentsQueryHandler : IRequestHandler<GetCommentsQuery, 
         }
 
         var result = await query
-            .OrderByDescending(c => followingIds.Contains(c.UserId))
+            .OrderByDescending(c => (request.UserId.HasValue && c.UserId == request.UserId.Value) || followingIds.Contains(c.UserId))
             .ThenByDescending(c => c.LikesCount)
             .ThenByDescending(c => c.CreatedAt)
             .ThenByDescending(c => c.Id)

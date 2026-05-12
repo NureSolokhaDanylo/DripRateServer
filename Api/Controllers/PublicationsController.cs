@@ -239,6 +239,19 @@ public sealed class PublicationsController : ApiController
             errors => Problem(errors));
     }
 
+    [HttpGet("{id:guid}/assessments/my")]
+    [ProducesResponseType(typeof(IndividualAssessmentResponse), StatusCodes.Status200OK)]
+    [ApiErrors(AssessmentErrors.NotFoundCode)]
+    public async Task<IActionResult> GetMyAssessment(Guid id)
+    {
+        var query = new GetPublicationMyAssessmentQuery(id, _currentUser.UserId!.Value);
+        var result = await _mediator.Send(query);
+
+        return result.Match(
+            response => Ok(response),
+            errors => Problem(errors));
+    }
+
     [HttpGet("{id:guid}/assessments/list")]
     [ProducesResponseType(typeof(List<IndividualAssessmentResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAssessmentsList(Guid id, [FromQuery] DateTimeOffset? cursor, [FromQuery] int take = 30)
