@@ -52,8 +52,8 @@ public sealed class PublicationConfiguration : IEntityTypeConfiguration<Publicat
             .WithMany()
             .UsingEntity<Dictionary<string, object>>(
                 "PublicationTag",
-                j => j.HasOne<Tag>().WithMany().HasForeignKey("TagId").OnDelete(DeleteBehavior.Restrict),
-                j => j.HasOne<Publication>().WithMany().HasForeignKey("PublicationId").OnDelete(DeleteBehavior.Restrict),
+                j => j.HasOne<Tag>().WithMany().HasForeignKey("TagId").OnDelete(DeleteBehavior.Cascade),
+                j => j.HasOne<Publication>().WithMany().HasForeignKey("PublicationId").OnDelete(DeleteBehavior.Cascade),
                 j =>
                 {
                     j.ToTable("PublicationTags");
@@ -65,8 +65,8 @@ public sealed class PublicationConfiguration : IEntityTypeConfiguration<Publicat
             .WithMany()
             .UsingEntity<Dictionary<string, object>>(
                 "PublicationClothes",
-                j => j.HasOne<Cloth>().WithMany().HasForeignKey("ClothId").OnDelete(DeleteBehavior.Restrict),
-                j => j.HasOne<Publication>().WithMany().HasForeignKey("PublicationId").OnDelete(DeleteBehavior.Restrict),
+                j => j.HasOne<Cloth>().WithMany().HasForeignKey("ClothId").OnDelete(DeleteBehavior.Cascade),
+                j => j.HasOne<Publication>().WithMany().HasForeignKey("PublicationId").OnDelete(DeleteBehavior.Cascade),
                 j =>
                 {
                     j.HasIndex("ClothId");

@@ -27,8 +27,8 @@ public sealed class AdvertisementConfiguration : IEntityTypeConfiguration<Advert
             .WithMany()
             .UsingEntity<Dictionary<string, object>>(
                 "AdvertisementTag",
-                j => j.HasOne<Tag>().WithMany().HasForeignKey("TagId").OnDelete(DeleteBehavior.Restrict),
-                j => j.HasOne<Advertisement>().WithMany().HasForeignKey("AdvertisementId").OnDelete(DeleteBehavior.Restrict),
+                j => j.HasOne<Tag>().WithMany().HasForeignKey("TagId").OnDelete(DeleteBehavior.Cascade),
+                j => j.HasOne<Advertisement>().WithMany().HasForeignKey("AdvertisementId").OnDelete(DeleteBehavior.Cascade),
                 j =>
                 {
                     j.ToTable("AdvertisementTags");

@@ -37,8 +37,8 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
             .WithMany()
             .UsingEntity<Dictionary<string, object>>(
                 "UserPreferredTag",
-                j => j.HasOne<Tag>().WithMany().HasForeignKey("TagId").OnDelete(DeleteBehavior.Restrict),
-                j => j.HasOne<User>().WithMany().HasForeignKey("UserId").OnDelete(DeleteBehavior.Restrict),
+                j => j.HasOne<Tag>().WithMany().HasForeignKey("TagId").OnDelete(DeleteBehavior.Cascade),
+                j => j.HasOne<User>().WithMany().HasForeignKey("UserId").OnDelete(DeleteBehavior.Cascade),
                 j =>
                 {
                     j.ToTable("UserPreferredTags");
