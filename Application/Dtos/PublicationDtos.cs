@@ -55,8 +55,8 @@ public record PublicationResponse(
         p.AssessmentsCount > 0 ? (double)EF.Property<int>(p, "_ratingOriginalitySum") / p.AssessmentsCount : 0,
         p.AssessmentsCount > 0 ? (double)EF.Property<int>(p, "_ratingStyleSum") / p.AssessmentsCount : 0,
         p.IsUrgentRatingRequested,
-        currentUserId.HasValue && p.Collections.Any(c => c.Type == CollectionType.SystemLikes && c.UserId == currentUserId.Value),
-        currentUserId.HasValue && p.Collections.Any(c => c.Type == CollectionType.SystemSaved && c.UserId == currentUserId.Value),
+        currentUserId.HasValue && p.CollectionPublications.Any(cp => cp.Collection.Type == CollectionType.SystemLikes && cp.Collection.UserId == currentUserId.Value),
+        currentUserId.HasValue && p.CollectionPublications.Any(cp => cp.Collection.Type == CollectionType.SystemSaved && cp.Collection.UserId == currentUserId.Value),
         p.GameStats != null ? new PublicationGameStatsResponse(
             new GuessPriceStatsResponse(
                 p.GameStats.GuessPriceTotalCount,

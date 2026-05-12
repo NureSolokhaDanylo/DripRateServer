@@ -8,16 +8,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Handlers.Queries.Collections;
 
-public sealed class GetCollectionItemsQueryHandler : IRequestHandler<GetCollectionItemsQuery, ErrorOr<List<PublicationResponse>>>
+public sealed class GetCollectionItemsV2QueryHandler : IRequestHandler<GetCollectionItemsV2Query, ErrorOr<List<PublicationResponse>>>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetCollectionItemsQueryHandler(IApplicationDbContext context)
+    public GetCollectionItemsV2QueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<ErrorOr<List<PublicationResponse>>> Handle(GetCollectionItemsQuery request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<List<PublicationResponse>>> Handle(GetCollectionItemsV2Query request, CancellationToken cancellationToken)
     {
         var collection = await _context.Collections
             .AsNoTracking()
@@ -30,19 +30,13 @@ public sealed class GetCollectionItemsQueryHandler : IRequestHandler<GetCollecti
             return CollectionErrors.Forbidden;
         }
 
-        var query = _context.CollectionPublications
+        var result = await _context.CollectionPublications
             .AsNoTracking()
             .Where(cp => cp.CollectionId == request.CollectionId)
-            .Select(cp => cp.Publication);
-
-        if (request.Cursor.HasValue)
-        {
-            query = query.Where(p => p.CreatedAt < request.Cursor.Value);
-        }
-
-        var result = await query
-            .OrderByDescending(p => p.CreatedAt)
+            .OrderByDescending(cp => cp.AddedAt)
+            .Skip(request.Skip)
             .Take(request.Take)
+            .Select(cp => cp.Publication)
             .Select(PublicationResponse.GetProjection(request.UserId))
             .ToListAsync(cancellationToken);
 

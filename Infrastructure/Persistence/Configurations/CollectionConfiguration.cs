@@ -31,20 +31,7 @@ public sealed class CollectionConfiguration : IEntityTypeConfiguration<Collectio
             .HasForeignKey(c => c.UserId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // Many-to-Many с публикациями
-        builder.HasMany(c => c.Publications)
-            .WithMany(p => p.Collections)
-            .UsingEntity<Dictionary<string, object>>(
-                "CollectionPublication",
-                j => j.HasOne<Publication>().WithMany().HasForeignKey("PublicationId").OnDelete(DeleteBehavior.Cascade),
-                j => j.HasOne<Collection>().WithMany().HasForeignKey("CollectionId").OnDelete(DeleteBehavior.Cascade),
-                j =>
-                {
-                    j.ToTable("CollectionPublications");
-                    j.HasIndex("PublicationId");
-                });
-
         builder.Navigation(c => c.User).Metadata.SetField("_user");
-        builder.Navigation(c => c.Publications).Metadata.SetField("_publications");
+        builder.Navigation(c => c.CollectionPublications).Metadata.SetField("_collectionPublications");
     }
 }

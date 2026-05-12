@@ -101,6 +101,6 @@ public sealed class PublicationConfiguration : IEntityTypeConfiguration<Publicat
         builder.Navigation(p => p.Clothes).Metadata.SetField("_clothes");
         builder.Navigation(p => p.Comments).Metadata.SetField("_comments");
         builder.Navigation(p => p.Assessments).Metadata.SetField("_assessments");
-        builder.Navigation(p => p.Collections).Metadata.SetField("_collections");
+        builder.Navigation(p => p.CollectionPublications).Metadata.SetField("_collectionPublications");
     }
 }

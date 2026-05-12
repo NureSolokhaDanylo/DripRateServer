@@ -19,7 +19,7 @@ public sealed class DeleteCollectionCommandHandler : IRequestHandler<DeleteColle
     public async Task<ErrorOr<Deleted>> Handle(DeleteCollectionCommand request, CancellationToken cancellationToken)
     {
         var collection = await _context.Collections
-            .Include(c => c.Publications)
+            .Include(c => c.CollectionPublications)
             .FirstOrDefaultAsync(c => c.Id == request.CollectionId, cancellationToken);
 
         if (collection == null) return CollectionErrors.NotFound;

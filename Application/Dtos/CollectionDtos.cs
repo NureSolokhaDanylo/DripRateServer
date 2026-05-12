@@ -18,7 +18,7 @@ public record CollectionResponse(
         c.Description,
         c.IsPublic,
         c.IsSystem,
-        c.Publications.Count,
+        c.CollectionPublications.Count,
         c.CreatedAt
     );
 }

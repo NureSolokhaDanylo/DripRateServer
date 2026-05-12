@@ -4,6 +4,7 @@ using Application.Interfaces;
 using Domain.Errors;
 using ErrorOr;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Handlers.Commands.Collections;
 
@@ -21,6 +22,11 @@ public sealed class AddToCollectionCommandHandler : IRequestHandler<AddToCollect
         var collectionResult = await _context.Collections
             .GetOwnedOrErrorAsync(request.CollectionId, request.UserId, CollectionErrors.Forbidden, cancellationToken);
         if (collectionResult.IsError) return collectionResult.Errors;
+
+        var alreadyInCollection = await _context.CollectionPublications
+            .AnyAsync(cp => cp.CollectionId == request.CollectionId && cp.PublicationId == request.PublicationId, cancellationToken);
+
+        if (alreadyInCollection) return Result.Success;
 
         var publicationResult = await _context.Publications
             .GetByIdOrErrorAsync(request.PublicationId, PublicationErrors.NotFound, cancellationToken);

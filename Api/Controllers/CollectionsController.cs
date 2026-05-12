@@ -121,6 +121,19 @@ public sealed class CollectionsController : ApiController
             errors => Problem(errors));
     }
 
+    [HttpGet("{id:guid}/v2")]
+    [ProducesResponseType(typeof(List<PublicationResponse>), StatusCodes.Status200OK)]
+    [ApiErrors(CollectionErrors.NotFoundCode, CollectionErrors.ForbiddenCode)]
+    public async Task<IActionResult> GetItemsV2(Guid id, [FromQuery] int skip = 0, [FromQuery] int take = 20)
+    {
+        var query = new GetCollectionItemsV2Query(id, _currentUser.UserId.Value, skip, take);
+        var result = await _mediator.Send(query);
+
+        return result.Match(
+            response => Ok(response),
+            errors => Problem(errors));
+    }
+
     [HttpPost("{id:guid}/items/{pubId:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ApiErrors(CollectionErrors.NotFoundCode, PublicationErrors.NotFoundCode, CollectionErrors.ForbiddenCode)]

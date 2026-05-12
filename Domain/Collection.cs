@@ -19,7 +19,7 @@ public sealed class Collection
     private Guid _userId;
     private User _user = null!;
 
-    private readonly List<Publication> _publications = new();
+    private readonly List<CollectionPublication> _collectionPublications = new();
 
     public Guid Id => _id;
     public string Name => _name;
@@ -32,7 +32,7 @@ public sealed class Collection
     public Guid UserId => _userId;
     public User User => _user;
 
-    public IReadOnlyCollection<Publication> Publications => _publications.AsReadOnly();
+    public IReadOnlyCollection<CollectionPublication> CollectionPublications => _collectionPublications.AsReadOnly();
 
     private Collection() { }
 
@@ -58,20 +58,24 @@ public sealed class Collection
 
     public void AddPublication(Publication publication)
     {
-        if (!_publications.Contains(publication))
+        if (_collectionPublications.All(cp => cp.PublicationId != publication.Id))
         {
-            _publications.Add(publication);
+            _collectionPublications.Add(new CollectionPublication(Id, publication.Id));
         }
     }
 
     public void RemovePublication(Publication publication)
     {
-        _publications.Remove(publication);
+        var cp = _collectionPublications.FirstOrDefault(cp => cp.PublicationId == publication.Id);
+        if (cp != null)
+        {
+            _collectionPublications.Remove(cp);
+        }
     }
 
     public void ClearPublications()
     {
-        _publications.Clear();
+        _collectionPublications.Clear();
     }
 
     public void Update(string name, string? description, bool isPublic)

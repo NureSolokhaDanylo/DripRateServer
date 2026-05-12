@@ -25,7 +25,7 @@ public sealed class GetUserCollectionsQueryHandler : IRequestHandler<GetUserColl
             .ThenBy(c => c.Id)
             .Skip(request.Skip)
             .Take(request.Take)
-            .Select(c => new CollectionResponse(c.Id, c.Name, c.Description, c.IsPublic, c.IsSystem, c.Publications.Count, c.CreatedAt))
+            .Select(c => new CollectionResponse(c.Id, c.Name, c.Description, c.IsPublic, c.IsSystem, c.CollectionPublications.Count, c.CreatedAt))
             .ToListAsync(cancellationToken);
 
         return collections;

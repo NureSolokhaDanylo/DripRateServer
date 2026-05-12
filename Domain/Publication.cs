@@ -13,7 +13,7 @@ public sealed class Publication
     private readonly List<Comment> _comments = new();
     private readonly List<Assessment> _assessments = new();
     private readonly List<string> _images = new();
-    private readonly List<Collection> _collections = new();
+    private readonly List<CollectionPublication> _collectionPublications = new();
 
     private int _likesCount;
     private int _commentsCount;
@@ -37,7 +37,7 @@ public sealed class Publication
     public IReadOnlyCollection<Cloth> Clothes => _clothes.AsReadOnly();
     public IReadOnlyCollection<Comment> Comments => _comments.AsReadOnly();
     public IReadOnlyCollection<Assessment> Assessments => _assessments.AsReadOnly();
-    public IReadOnlyCollection<Collection> Collections => _collections.AsReadOnly();
+    public IReadOnlyCollection<CollectionPublication> CollectionPublications => _collectionPublications.AsReadOnly();
 
     public int LikesCount => _likesCount;
     public int CommentsCount => _commentsCount;

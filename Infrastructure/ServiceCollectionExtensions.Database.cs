@@ -39,6 +39,7 @@ public static partial class ServiceCollectionExtensions
         services.AddScoped<Application.Interfaces.IStartupScript, Infrastructure.Persistence.Scripts.SeedRolesStartupScript>();
         services.AddScoped<Application.Interfaces.IStartupScript, Infrastructure.Persistence.Scripts.SeedTagsStartupScript>();
         services.AddScoped<Application.Interfaces.IStartupScript, Infrastructure.Persistence.Scripts.SyncModeratorsStartupScript>();
+        services.AddScoped<Application.Interfaces.IStartupScript, Infrastructure.Persistence.Scripts.CleanupCollectionsStartupScript>();
 
         var passwordPolicy = SharedConfiguration.GetIOptions2<PasswordPolicyOptions>();
         services.Configure<PasswordPolicyOptions>(_ =>

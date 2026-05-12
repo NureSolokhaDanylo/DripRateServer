@@ -21,7 +21,7 @@ public sealed class ToggleLikeCommandHandler : IRequestHandler<ToggleLikeCommand
     public async Task<ErrorOr<bool>> Handle(ToggleLikeCommand request, CancellationToken cancellationToken)
     {
         var likesCollection = await _context.Collections
-            .Include(c => c.Publications)
+            .Include(c => c.CollectionPublications)
             .FirstOrDefaultAsync(c => c.UserId == request.UserId && c.Type == CollectionType.SystemLikes, cancellationToken);
 
         if (likesCollection == null) return CollectionErrors.LikesNotInitialized;
@@ -33,7 +33,7 @@ public sealed class ToggleLikeCommandHandler : IRequestHandler<ToggleLikeCommand
         var pub = publicationResult.Value;
         bool isLiked;
 
-        if (likesCollection.Publications.Any(p => p.Id == request.PublicationId))
+        if (likesCollection.CollectionPublications.Any(cp => cp.PublicationId == request.PublicationId))
         {
             likesCollection.RemovePublication(pub);
             pub.UpdateLikesCount(-1);

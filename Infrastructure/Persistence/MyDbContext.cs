@@ -21,6 +21,7 @@ public sealed class MyDbContext : IdentityDbContext<User, IdentityRole<Guid>, Gu
     public DbSet<Follow> Follows => Set<Follow>();
     public DbSet<CommentLike> CommentLikes => Set<CommentLike>();
     public DbSet<Collection> Collections => Set<Collection>();
+    public DbSet<CollectionPublication> CollectionPublications => Set<CollectionPublication>();
     public DbSet<Report> Reports => Set<Report>();
     public DbSet<Advertisement> Advertisements => Set<Advertisement>();
     public DbSet<AdvertisementView> AdvertisementViews => Set<AdvertisementView>();

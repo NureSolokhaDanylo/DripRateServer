@@ -21,7 +21,7 @@ public sealed class ToggleSaveCommandHandler : IRequestHandler<ToggleSaveCommand
     public async Task<ErrorOr<bool>> Handle(ToggleSaveCommand request, CancellationToken cancellationToken)
     {
         var savedCollection = await _context.Collections
-            .Include(c => c.Publications)
+            .Include(c => c.CollectionPublications)
             .FirstOrDefaultAsync(c => c.UserId == request.UserId && c.Type == CollectionType.SystemSaved, cancellationToken);
 
         if (savedCollection == null) return CollectionErrors.LikesNotInitialized; // Or create a generic one
@@ -33,7 +33,7 @@ public sealed class ToggleSaveCommandHandler : IRequestHandler<ToggleSaveCommand
         var pub = publicationResult.Value;
         bool isSaved;
 
-        if (savedCollection.Publications.Any(p => p.Id == request.PublicationId))
+        if (savedCollection.CollectionPublications.Any(cp => cp.PublicationId == request.PublicationId))
         {
             savedCollection.RemovePublication(pub);
             isSaved = false;
