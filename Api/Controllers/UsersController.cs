@@ -184,6 +184,23 @@ public sealed class UsersController : ApiController
             errors => Problem(errors));
     }
 
+    [HttpGet("{id:guid}/wardrobe")]
+    [ProducesResponseType(typeof(List<ClothResponseDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetUserWardrobe(
+        Guid id,
+        [FromQuery] string? query, 
+        [FromQuery] string? sortBy = "newest",
+        [FromQuery] int skip = 0, 
+        [FromQuery] int take = 20)
+    {
+        var q = new GetWardrobeQuery(id, query, sortBy, skip, take);
+        var result = await _mediator.Send(q);
+
+        return result.Match(
+            response => Ok(response),
+            errors => Problem(errors));
+    }
+
     [HttpGet("@me/preferences")]
     [ProducesResponseType(typeof(List<TagResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetMyPreferences()

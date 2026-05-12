@@ -111,13 +111,28 @@ public sealed class WardrobeController : ApiController
     [HttpGet]
     [ProducesResponseType(typeof(List<ClothResponseDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetWardrobe(
+        [FromQuery] Guid? userId,
         [FromQuery] string? query, 
         [FromQuery] string? sortBy = "newest",
         [FromQuery] int skip = 0, 
         [FromQuery] int take = 20)
     {
-        var q = new GetWardrobeQuery(_currentUser.UserId.Value, query, sortBy, skip, take);
+        var targetUserId = userId ?? _currentUser.UserId!.Value;
+        var q = new GetWardrobeQuery(targetUserId, query, sortBy, skip, take);
         var result = await _mediator.Send(q);
+
+        return result.Match(
+            response => Ok(response),
+            errors => Problem(errors));
+    }
+
+    [HttpGet("{id:guid}")]
+    [ProducesResponseType(typeof(ClothResponseDto), StatusCodes.Status200OK)]
+    [ApiErrors(ClothErrors.NotFoundCode)]
+    public async Task<IActionResult> Get(Guid id)
+    {
+        var query = new GetClothByIdQuery(id);
+        var result = await _mediator.Send(query);
 
         return result.Match(
             response => Ok(response),

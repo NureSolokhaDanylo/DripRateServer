@@ -9,7 +9,7 @@ public static class ClothErrors
 
     public static Error NotFound => Error.NotFound(
         code: NotFoundCode,
-        description: "The requested clothing item was not found in your wardrobe.");
+        description: "The requested clothing item was not found.");
 
     public static Error Forbidden => Error.Forbidden(
         code: ForbiddenCode,
