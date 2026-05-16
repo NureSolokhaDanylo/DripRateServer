@@ -24,6 +24,7 @@ using Application.Commands.Wardrobe;
 using Application.Queries.Wardrobe;
 using Application.Commands.Comments;
 using Application.Queries.Comments;
+using Application.Dtos;
 using Application.Interfaces;
 using Application.Queries;
 using MediatR;
@@ -88,6 +89,7 @@ public sealed class GamesController : ApiController
     }
 
     [HttpPost("guess-price")]
+    [ProducesResponseType(typeof(List<GuessPriceResultResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> SubmitGuessPriceBatch([FromBody] SubmitGuessPriceBatchCommand command, CancellationToken cancellationToken = default)
     {
         if (!_currentUser.UserId.HasValue) return Unauthorized();
@@ -116,6 +118,7 @@ public sealed class GamesController : ApiController
     }
 
     [HttpPost("tag-match")]
+    [ProducesResponseType(typeof(List<TagMatchResultResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> SubmitTagMatchBatch([FromBody] SubmitTagMatchBatchCommand command, CancellationToken cancellationToken = default)
     {
         if (!_currentUser.UserId.HasValue) return Unauthorized();
