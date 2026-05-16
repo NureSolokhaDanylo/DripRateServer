@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="drawio" version="26.0.0">
+  <diagram name="Use Case Diagram Comprehensive">
+    <mxGraphModel dx="1422" dy="798" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- System Boundary -->
+        <mxCell id="boundary" value="Система DripRate (Серверна частина)" style="swimlane;whiteSpace=wrap;html=1;startSize=30;fillColor=none;strokeColor=#666666;dashed=1;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="200" y="40" width="450" height="980" as="geometry" />
+        </mxCell>
+
+        <!-- Use Cases: Auth & Profile -->
+        <mxCell id="uc_auth" value="Керування обліковим записом&#xa;(Реєстрація, Вхід, Профіль)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="boundary">
+          <mxGeometry x="125" y="40" width="200" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Use Cases: Wardrobe -->
+        <mxCell id="uc_wardrobe" value="Керування цифровим гардеробом&#xa;(Додавання/видалення речей)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="boundary">
+          <mxGeometry x="125" y="130" width="200" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Use Cases: Content Creation -->
+        <mxCell id="uc_create_pub" value="Публікація фешн-контенту&#xa;(Створення постів з речами)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="boundary">
+          <mxGeometry x="125" y="220" width="200" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Use Cases: Collections -->
+        <mxCell id="uc_collections" value="Організація колекцій&#xa;(Збережене, підбірки)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="boundary">
+          <mxGeometry x="125" y="310" width="200" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Use Cases: Social / Interaction -->
+        <mxCell id="uc_social" value="Соціальна взаємодія&#xa;(Підписки, лайки, коментарі)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="boundary">
+          <mxGeometry x="125" y="400" width="200" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Use Cases: Feed & Discovery -->
+        <mxCell id="uc_feed" value="Перегляд персоналізованої&#xa;стрічки та пошук" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="boundary">
+          <mxGeometry x="125" y="490" width="200" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Use Cases: Games -->
+        <mxCell id="uc_games" value="Участь в інтерактивних&#xa;іграх та активностях" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="boundary">
+          <mxGeometry x="125" y="580" width="200" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Use Cases: Ads -->
+        <mxCell id="uc_ads" value="Перегляд та взаємодія&#xa;з рекламним контентом" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="boundary">
+          <mxGeometry x="125" y="670" width="200" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Use Cases: Safety & Reports -->
+        <mxCell id="uc_reports" value="Повідомлення про порушення&#xa;(Скарги на контент/користувачів)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="boundary">
+          <mxGeometry x="125" y="760" width="200" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Use Cases: Moderation (Admin/Mod only) -->
+        <mxCell id="uc_moderate" value="Модерація платформи&#xa;(Перегляд скарг, бан, видалення)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="boundary">
+          <mxGeometry x="125" y="870" width="200" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Actors -->
+        <mxCell id="actor_guest" value="Гість" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="60" y="80" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="actor_user" value="Користувач" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="60" y="400" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="actor_mod" value="Модератор / Адмін" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="720" y="875" width="30" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Associations: Guest -->
+        <mxCell id="e1" style="endArrow=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_guest" target="uc_auth">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Associations: User -->
+        <mxCell id="e2" style="endArrow=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_user" target="uc_wardrobe">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" style="endArrow=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_user" target="uc_create_pub">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" style="endArrow=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_user" target="uc_collections">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" style="endArrow=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_user" target="uc_social">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" style="endArrow=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_user" target="uc_feed">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" style="endArrow=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_user" target="uc_games">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" style="endArrow=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_user" target="uc_ads">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" style="endArrow=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_user" target="uc_reports">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Generalization: User is an Auth-capable entity -->
+        <mxCell id="e10" style="endArrow=none;html=1;entryX=0;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_user" target="uc_auth">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Associations: Moderator -->
+        <mxCell id="e11" style="endArrow=none;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="uc_moderate" target="actor_mod">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

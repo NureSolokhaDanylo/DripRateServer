@@ -1,0 +1,261 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.6.1 Chrome/142.0.7444.265 Electron/39.8.9 Safari/537.36" version="29.6.1">
+  <diagram name="DripRateServer ER Diagram" id="diagram">
+    <mxGraphModel dx="2264" dy="1509" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1000" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="legend" parent="1" style="text;html=1;align=left;verticalAlign=top;fontSize=12;fontStyle=bold;fillColor=#f0f0f0;rounded=1;padding=10;" value="ER Diagram - DripRateServer&#10;Solid arrows = Foreign Key (N:1)&#10;Dashed arrows = Many-to-Many" vertex="1">
+          <mxGeometry height="60" width="300" x="-40" y="-270" as="geometry" />
+        </mxCell>
+        <mxCell id="user" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fontSize=11;strokeWidth=2;strokeColor=#1a1a1a;fillColor=#e1f5ff;align=left;" value="USER&#10;─────&#10;• Id (GUID, PK)&#10;• Email (string)&#10;• UserName (string)&#10;• DisplayName (string)&#10;• AvatarUrl (string)&#10;• Bio (string?)&#10;• CreatedAt (DateTimeOffset)&#10;• IsBanned (bool)" vertex="1">
+          <mxGeometry height="180" width="200" x="660" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="publication" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fontSize=11;strokeWidth=2;strokeColor=#1a1a1a;fillColor=#fff3e0;align=left;" value="PUBLICATION&#10;─────&#10;• Id (GUID, PK)&#10;• UserId (GUID, FK)&#10;• Description (string)&#10;• Images (List&lt;string&gt;)&#10;• CreatedAt (DateTimeOffset)&#10;• LikesCount (int)&#10;• CommentsCount (int)&#10;• AssessmentsCount (int)&#10;• AverageRating (double)&#10;• GameSnapshotPrice (decimal)&#10;• GameSettings (MiniGameSettings)" vertex="1">
+          <mxGeometry height="220" width="220" x="230" y="-90" as="geometry" />
+        </mxCell>
+        <mxCell id="cloth" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fontSize=11;strokeWidth=2;strokeColor=#1a1a1a;fillColor=#f3e5f5;align=left;" value="CLOTH&#10;─────&#10;• Id (GUID, PK)&#10;• UserId (GUID, FK)&#10;• Name (string)&#10;• Brand (string?)&#10;• PhotoUrl (string?)&#10;• StoreLink (string?)&#10;• EstimatedPrice (decimal?)&#10;• CreatedAt (DateTimeOffset)" vertex="1">
+          <mxGeometry height="160" width="200" x="840" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="comment" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fontSize=11;strokeWidth=2;strokeColor=#1a1a1a;fillColor=#e8f5e9;align=left;" value="COMMENT&#10;─────&#10;• Id (GUID, PK)&#10;• UserId (GUID, FK)&#10;• PublicationId (GUID, FK)&#10;• ParentCommentId (GUID?, FK)&#10;• Text (string)&#10;• CreatedAt (DateTimeOffset)&#10;• LikesCount (int)&#10;• RepliesCount (int)" vertex="1">
+          <mxGeometry height="170" width="210" x="990" y="780" as="geometry" />
+        </mxCell>
+        <mxCell id="assessment" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fontSize=11;strokeWidth=2;strokeColor=#1a1a1a;fillColor=#fce4ec;align=left;" value="ASSESSMENT&#10;─────&#10;• Id (GUID, PK)&#10;• UserId (GUID, FK)&#10;• PublicationId (GUID, FK)&#10;• ColorCoordination (int)&#10;• FitAndProportions (int)&#10;• Originality (int)&#10;• OverallStyle (int)&#10;• CreatedAt (DateTimeOffset)" vertex="1">
+          <mxGeometry height="160" width="210" x="520" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="collection" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fontSize=11;strokeWidth=2;strokeColor=#1a1a1a;fillColor=#e0f2f1;align=left;" value="COLLECTION&#10;─────&#10;• Id (GUID, PK)&#10;• UserId (GUID, FK)&#10;• Name (string)&#10;• Description (string?)&#10;• Type (CollectionType)&#10;• IsPublic (bool)&#10;• IsSystem (bool)&#10;• CreatedAt (DateTimeOffset)" vertex="1">
+          <mxGeometry height="160" width="200" x="240" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="tag" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fontSize=11;strokeWidth=2;strokeColor=#1a1a1a;fillColor=#fff9c4;align=left;" value="TAG&#10;─────&#10;• Id (GUID, PK)&#10;• Name (string)&#10;• Category (string)" vertex="1">
+          <mxGeometry height="100" width="180" x="-170" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="follow" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fontSize=11;strokeWidth=2;strokeColor=#1a1a1a;fillColor=#efebe9;align=left;" value="FOLLOW&#10;─────&#10;• FollowerId (GUID, FK)&#10;• FolloweeId (GUID, FK)&#10;• CreatedAt (DateTimeOffset)&#10;&#10;[Composite PK: FollowerId + FolloweeId]" vertex="1">
+          <mxGeometry height="130" width="210" x="630" y="870" as="geometry" />
+        </mxCell>
+        <mxCell id="commentLike" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fontSize=11;strokeWidth=2;strokeColor=#1a1a1a;fillColor=#fbe9e7;align=left;" value="COMMENT_LIKE&#10;─────&#10;• UserId (GUID, FK)&#10;• CommentId (GUID, FK)&#10;• CreatedAt (DateTimeOffset)&#10;&#10;[Composite PK: UserId + CommentId]" vertex="1">
+          <mxGeometry height="130" width="210" x="860" y="1010" as="geometry" />
+        </mxCell>
+        <mxCell id="report" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fontSize=11;strokeWidth=2;strokeColor=#1a1a1a;fillColor=#ffebee;align=left;" value="REPORT&#10;─────&#10;• Id (GUID, PK)&#10;• AuthorId (GUID, FK)&#10;• AssignedToUserId (GUID?, FK)&#10;• Category (ReportCategory)&#10;• TargetType (ReportTargetType)&#10;• TargetId (GUID)&#10;• Status (ReportStatus)&#10;• Text (string?)&#10;• CreatedAt (DateTimeOffset)&#10;• AssignedAt (DateTimeOffset?)&#10;• ResolvedAt (DateTimeOffset?)" vertex="1">
+          <mxGeometry height="230" width="230" x="1430" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="advertisement" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fontSize=11;strokeWidth=2;strokeColor=#1a1a1a;fillColor=#f1f8e9;align=left;" value="ADVERTISEMENT&#10;─────&#10;• Id (GUID, PK)&#10;• Text (string)&#10;• Url (string)&#10;• Images (List&lt;string&gt;)&#10;• MaxImpressions (int)&#10;• ShownCount (int)&#10;• IsActive (bool)&#10;• CreatedAt (DateTimeOffset)" vertex="1">
+          <mxGeometry height="150" width="210" x="90" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="advertisementView" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fontSize=11;strokeWidth=2;strokeColor=#1a1a1a;fillColor=#e0f2f1;align=left;" value="ADVERTISEMENT_VIEW&#10;─────&#10;• AdvertisementId (GUID, FK)&#10;• UserId (GUID, FK)&#10;• ViewedAt (DateTimeOffset)&#10;&#10;[Composite PK: AdvertisementId + UserId]" vertex="1">
+          <mxGeometry height="130" width="220" x="330" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="pubGameStats" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fontSize=11;strokeWidth=2;strokeColor=#1a1a1a;fillColor=#ede7f6;align=left;" value="PUBLICATION_GAME_STATS&#10;─────&#10;• PublicationId (GUID, PK/FK)&#10;• GuessPriceTotalCount (int)&#10;• GuessPriceRealSum (decimal)&#10;• GuessPriceGuessedSum (decimal)&#10;• FirstImpressionTotalCount (int)&#10;• FirstImpressionPositiveCount (int)&#10;• FirstImpressionReactionTimeSum (long)&#10;• TagMatchTotalCount (int)&#10;• TagMatchCorrectCount (int)" vertex="1">
+          <mxGeometry height="190" width="250" x="420" y="-400" as="geometry" />
+        </mxCell>
+        <mxCell id="userGameHistory" parent="1" style="rounded=1;whiteSpace=wrap;html=0;fontSize=11;strokeWidth=2;strokeColor=#1a1a1a;fillColor=#f0f4c3;align=left;" value="USER_GAME_HISTORY&#10;─────&#10;• UserId (GUID, FK)&#10;• PublicationId (GUID, FK)&#10;• GameType (GameType enum)&#10;• CreatedAt (DateTimeOffset)&#10;&#10;[Composite PK: UserId + PublicationId + GameType]" vertex="1">
+          <mxGeometry height="140" width="240" x="-70" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_user_publication" edge="1" parent="1" source="user" style="endArrow=block;html=0;strokeWidth=2;strokeColor=#333;edgeStyle=orthogonalEdgeStyle;align=left;" target="publication">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="490" y="410" />
+              <mxPoint x="490" y="70" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_user_cloth" edge="1" parent="1" source="user" style="endArrow=block;html=0;strokeWidth=2;strokeColor=#333;edgeStyle=orthogonalEdgeStyle;align=left;" target="cloth">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="910" y="410" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_user_comment" edge="1" parent="1" source="user" style="endArrow=block;html=0;strokeWidth=2;strokeColor=#333;edgeStyle=orthogonalEdgeStyle;align=left;" target="comment">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1060" y="520" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_user_assessment" edge="1" parent="1" source="user" style="endArrow=block;html=0;strokeWidth=2;strokeColor:#333;edgeStyle=orthogonalEdgeStyle;align=left;" target="assessment">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="760" y="240" />
+              <mxPoint x="760" y="240" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_user_collection" edge="1" parent="1" source="user" style="endArrow=block;html=0;strokeWidth=2;strokeColor:#333;edgeStyle=orthogonalEdgeStyle;align=left;" target="collection">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="460" y="490" />
+              <mxPoint x="460" y="240" />
+            </Array>
+            <mxPoint x="100" y="350" as="sourcePoint" />
+            <mxPoint x="100" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_publication_comment" edge="1" parent="1" source="publication" style="endArrow=block;html=0;strokeWidth=2;strokeColor:#333;edgeStyle=orthogonalEdgeStyle;align=left;" target="comment">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1730" />
+              <mxPoint x="1730" y="830" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_publication_assessment" edge="1" parent="1" source="publication" style="endArrow=block;html=0;strokeWidth=2;strokeColor:#333;edgeStyle=orthogonalEdgeStyle;align=left;" target="assessment">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="710" y="30" />
+            </Array>
+            <mxPoint x="640" y="120.00030303030323" as="sourcePoint" />
+            <mxPoint x="1220" y="230.00030303030323" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_publication_gamestats" edge="1" parent="1" source="publication" style="endArrow=block;html=0;strokeWidth=2;strokeColor:#666;edgeStyle=orthogonalEdgeStyle;align=left;" target="pubGameStats">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="560" y="-20" />
+            </Array>
+            <mxPoint x="570" y="600" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_publication_tag" edge="1" parent="1" source="publication" style="endArrow=none;startArrow=none;html=0;strokeWidth=2;strokeColor:#666;dashed=1;edgeStyle=orthogonalEdgeStyle;align=left;" target="tag">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-90" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_publication_cloth" edge="1" parent="1" source="publication" style="endArrow=none;startArrow=none;html=0;strokeWidth=2;strokeColor:#666;dashed=1;edgeStyle=orthogonalEdgeStyle;align=left;" target="cloth">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="870" y="10" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_publication_collection" edge="1" parent="1" source="publication" style="endArrow=none;startArrow=none;html=0;strokeWidth=2;strokeColor=#666;dashed=1;edgeStyle=orthogonalEdgeStyle;align=left;" target="collection">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="200" y="30" />
+              <mxPoint x="200" y="230" />
+            </Array>
+            <mxPoint x="370" y="450" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_comment_commentlike" edge="1" parent="1" source="comment" style="endArrow=block;html=0;strokeWidth=2;strokeColor:#333;edgeStyle=orthogonalEdgeStyle;align=left;" target="commentLike">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="965" y="865" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_comment_self" edge="1" parent="1" source="comment" style="endArrow=block;html=0;strokeWidth=2;strokeColor:#333;edgeStyle=orthogonalEdgeStyle;align=left;" target="comment">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1050" y="150" as="sourcePoint" />
+            <mxPoint x="1050" y="250" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_user_commentlike" edge="1" parent="1" source="user" style="endArrow=block;html=0;strokeWidth=2;strokeColor:#333;edgeStyle=orthogonalEdgeStyle;align=left;" target="commentLike">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="820" y="660" />
+              <mxPoint x="920" y="660" />
+            </Array>
+            <mxPoint x="300" y="450" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_user_follow_follower" edge="1" parent="1" source="user" style="endArrow=block;html=0;strokeWidth=2;strokeColor:#333;edgeStyle=orthogonalEdgeStyle;align=left;" target="follow">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="790" y="670" />
+              <mxPoint x="790" y="670" />
+            </Array>
+            <mxPoint x="300" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_user_follow_followee" edge="1" parent="1" source="user" style="endArrow=block;html=0;strokeWidth=2;strokeColor:#333;edgeStyle=orthogonalEdgeStyle;align=left;" target="follow">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="760" y="660" />
+              <mxPoint x="760" y="660" />
+            </Array>
+            <mxPoint x="300" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_user_report_author" edge="1" parent="1" source="user" style="endArrow=block;html=0;strokeWidth=2;strokeColor:#333;edgeStyle=orthogonalEdgeStyle;align=left;" target="report" value=" ">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1310" y="490" />
+              <mxPoint x="1310" y="620" />
+            </Array>
+            <mxPoint x="1200" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_user_report_assignee" edge="1" parent="1" source="user" style="endArrow=block;html=0;strokeWidth=2;strokeColor:#333;edgeStyle=orthogonalEdgeStyle;align=left;" target="report">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1360" y="440" />
+              <mxPoint x="1360" y="570" />
+            </Array>
+            <mxPoint x="1200" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_user_advview" edge="1" parent="1" source="user" style="endArrow=block;html=0;strokeWidth=2;strokeColor:#333;edgeStyle=orthogonalEdgeStyle;align=left;" target="advertisementView">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="460" y="530" />
+            </Array>
+            <mxPoint x="300" y="700" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_user_gamehist" edge="1" parent="1" source="user" style="endArrow=block;html=0;strokeWidth=2;strokeColor:#333;edgeStyle=orthogonalEdgeStyle;align=left;" target="userGameHistory">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="430" y="510" />
+              <mxPoint x="430" y="350" />
+              <mxPoint x="190" y="350" />
+              <mxPoint x="190" y="150" />
+            </Array>
+            <mxPoint x="1100" y="600" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_adv_advview" edge="1" parent="1" source="advertisement" style="endArrow=block;html=0;strokeWidth=2;strokeColor:#333;edgeStyle=orthogonalEdgeStyle;align=left;" target="advertisementView">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="400" y="485" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_adv_tag" edge="1" parent="1" source="advertisement" style="endArrow=none;startArrow=none;html=0;strokeWidth=2;strokeColor:#666;dashed=1;edgeStyle=orthogonalEdgeStyle;align=left;" target="tag">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="155" y="310" />
+            </Array>
+            <mxPoint x="280" y="600" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_pub_gamehist" edge="1" parent="1" source="publication" style="endArrow=block;html=0;strokeWidth=2;strokeColor:#333;edgeStyle=orthogonalEdgeStyle;align=left;" target="userGameHistory">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="110" y="20" />
+            </Array>
+            <mxPoint x="1100" y="600" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge_user_tag" edge="1" parent="1" source="user" style="endArrow=none;startArrow=none;html=0;strokeWidth=2;strokeColor:#666;dashed=1;edgeStyle=orthogonalEdgeStyle;align=left;" target="tag">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="710" y="600" />
+              <mxPoint x="580" y="600" />
+              <mxPoint x="580" y="830" />
+              <mxPoint x="-80" y="830" />
+            </Array>
+            <mxPoint x="330" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="CimkbP8Q3lK0GzDgt1MA-4" parent="1" style="shape=card;whiteSpace=wrap;html=1;size=8;align=left;" value="&lt;span style=&quot;font-size: 11px;&quot;&gt;restrict&lt;/span&gt;" vertex="1">
+          <mxGeometry height="28" width="50" x="1600" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="CimkbP8Q3lK0GzDgt1MA-5" parent="1" style="shape=card;whiteSpace=wrap;html=1;size=8;align=left;" value="&lt;span style=&quot;font-size: 11px;&quot;&gt;restrict&lt;/span&gt;" vertex="1">
+          <mxGeometry height="28" width="50" x="970" y="1040" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
