@@ -1,4 +1,5 @@
 using Application.Commands.Games;
+using Application.Dtos;
 using Application.Interfaces;
 using Domain;
 using ErrorOr;
@@ -7,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Handlers.Commands.Games;
 
-internal sealed class SubmitGuessPriceBatchCommandHandler : IRequestHandler<SubmitGuessPriceBatchCommand, ErrorOr<Success>>
+internal sealed class SubmitGuessPriceBatchCommandHandler : IRequestHandler<SubmitGuessPriceBatchCommand, ErrorOr<List<GuessPriceResultResponse>>>
 {
     private readonly IApplicationDbContext _context;
 
@@ -16,11 +17,11 @@ internal sealed class SubmitGuessPriceBatchCommandHandler : IRequestHandler<Subm
         _context = context;
     }
 
-    public async Task<ErrorOr<Success>> Handle(SubmitGuessPriceBatchCommand request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<List<GuessPriceResultResponse>>> Handle(SubmitGuessPriceBatchCommand request, CancellationToken cancellationToken)
     {
         if (request.Results == null || !request.Results.Any())
         {
-            return Result.Success;
+            return new List<GuessPriceResultResponse>();
         }
 
         var playedPublicationIds = await _context.UserGameHistories
@@ -48,6 +49,8 @@ internal sealed class SubmitGuessPriceBatchCommandHandler : IRequestHandler<Subm
             _context.UserGameHistories.AddRange(newHistories);
         }
 
+        var responseResults = new List<GuessPriceResultResponse>();
+
         if (publicationIdsToUpdate.Any())
         {
             var publicationsWithPrices = await _context.Publications
@@ -65,22 +68,31 @@ internal sealed class SubmitGuessPriceBatchCommandHandler : IRequestHandler<Subm
 
             foreach (var result in request.Results)
             {
-                if (publicationIdsToUpdate.Contains(result.PublicationId) && publicationsWithPrices.TryGetValue(result.PublicationId, out var realPrice) && realPrice > 0)
+                if (publicationIdsToUpdate.Contains(result.PublicationId) && publicationsWithPrices.TryGetValue(result.PublicationId, out var realPrice))
                 {
-                    if (!stats.TryGetValue(result.PublicationId, out var stat))
+                    if (realPrice > 0)
                     {
-                        stat = new PublicationGameStats(result.PublicationId);
-                        _context.GameStats.Add(stat);
-                        stats[result.PublicationId] = stat;
+                        if (!stats.TryGetValue(result.PublicationId, out var stat))
+                        {
+                            stat = new PublicationGameStats(result.PublicationId);
+                            _context.GameStats.Add(stat);
+                            stats[result.PublicationId] = stat;
+                        }
+
+                        stat.AddGuessPriceResult(realPrice, result.GuessedPrice);
                     }
-                    
-                    stat.AddGuessPriceResult(realPrice, result.GuessedPrice);
+
+                    responseResults.Add(new GuessPriceResultResponse(
+                        result.PublicationId,
+                        realPrice,
+                        result.GuessedPrice,
+                        realPrice - result.GuessedPrice));
                 }
             }
         }
 
         await _context.SaveChangesAsync(cancellationToken);
 
-        return Result.Success;
+        return responseResults;
     }
 }

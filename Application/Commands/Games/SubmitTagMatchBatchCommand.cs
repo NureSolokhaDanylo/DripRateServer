@@ -7,4 +7,4 @@ namespace Application.Commands.Games;
 public record SubmitTagMatchBatchCommand(
     Guid UserId,
     List<TagMatchResultDto> Results
-) : IRequest<ErrorOr<Success>>;
+) : IRequest<ErrorOr<List<TagMatchResultResponse>>>;

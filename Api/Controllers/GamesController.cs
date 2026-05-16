@@ -96,7 +96,7 @@ public sealed class GamesController : ApiController
         var result = await _sender.Send(userCommand, cancellationToken);
 
         return result.Match(
-            _ => Ok(),
+            results => Ok(results),
             Problem
         );
     }
@@ -124,7 +124,7 @@ public sealed class GamesController : ApiController
         var result = await _sender.Send(userCommand, cancellationToken);
 
         return result.Match(
-            _ => Ok(),
+            results => Ok(results),
             Problem
         );
     }

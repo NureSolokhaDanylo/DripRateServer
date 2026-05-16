@@ -7,4 +7,4 @@ namespace Application.Commands.Games;
 public record SubmitGuessPriceBatchCommand(
     Guid UserId,
     List<GuessPriceResultDto> Results
-) : IRequest<ErrorOr<Success>>;
+) : IRequest<ErrorOr<List<GuessPriceResultResponse>>>;

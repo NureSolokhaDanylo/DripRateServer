@@ -37,3 +37,17 @@ public record TagMatchResultDto(
     Guid PublicationId,
     IReadOnlyCollection<Guid> TagIds
 );
+
+public record GuessPriceResultResponse(
+    Guid PublicationId,
+    decimal RealPrice,
+    decimal GuessedPrice,
+    decimal Difference
+);
+
+public record TagMatchResultResponse(
+    Guid PublicationId,
+    List<Guid> CorrectTagIds,
+    List<Guid> SelectedTagIds,
+    int Score
+);

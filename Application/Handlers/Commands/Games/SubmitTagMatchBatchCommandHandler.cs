@@ -1,4 +1,5 @@
 using Application.Commands.Games;
+using Application.Dtos;
 using Application.Interfaces;
 using Domain;
 using ErrorOr;
@@ -7,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Handlers.Commands.Games;
 
-internal sealed class SubmitTagMatchBatchCommandHandler : IRequestHandler<SubmitTagMatchBatchCommand, ErrorOr<Success>>
+internal sealed class SubmitTagMatchBatchCommandHandler : IRequestHandler<SubmitTagMatchBatchCommand, ErrorOr<List<TagMatchResultResponse>>>
 {
     private readonly IApplicationDbContext _context;
 
@@ -16,11 +17,11 @@ internal sealed class SubmitTagMatchBatchCommandHandler : IRequestHandler<Submit
         _context = context;
     }
 
-    public async Task<ErrorOr<Success>> Handle(SubmitTagMatchBatchCommand request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<List<TagMatchResultResponse>>> Handle(SubmitTagMatchBatchCommand request, CancellationToken cancellationToken)
     {
         if (request.Results == null || !request.Results.Any())
         {
-            return Result.Success;
+            return new List<TagMatchResultResponse>();
         }
 
         var playedPublicationIds = await _context.UserGameHistories
@@ -48,6 +49,8 @@ internal sealed class SubmitTagMatchBatchCommandHandler : IRequestHandler<Submit
             _context.UserGameHistories.AddRange(newHistories);
         }
 
+        var responseResults = new List<TagMatchResultResponse>();
+
         if (publicationIdsToUpdate.Any())
         {
             var publicationsWithTags = await _context.Publications
@@ -69,15 +72,21 @@ internal sealed class SubmitTagMatchBatchCommandHandler : IRequestHandler<Submit
                         _context.GameStats.Add(stat);
                         stats[result.PublicationId] = stat;
                     }
-                    
+
                     int correctCount = result.TagIds.Count(id => correctTagIds.Contains(id));
                     stat.AddTagMatchResult(correctCount);
+
+                    responseResults.Add(new TagMatchResultResponse(
+                        result.PublicationId,
+                        correctTagIds.ToList(),
+                        result.TagIds.ToList(),
+                        correctCount));
                 }
             }
         }
 
         await _context.SaveChangesAsync(cancellationToken);
 
-        return Result.Success;
+        return responseResults;
     }
 }
