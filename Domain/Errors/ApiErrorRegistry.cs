@@ -51,6 +51,7 @@ public static class ApiErrorRegistry
             [ClothErrors.ForbiddenCode] = Business(ErrorType.Forbidden),
 
             [AssessmentErrors.CannotRateOwnPublicationCode] = Business(ErrorType.Conflict),
+            [AssessmentErrors.NotFoundCode] = Business(ErrorType.NotFound),
             [SocialErrors.CannotFollowSelfCode] = Business(ErrorType.Conflict),
 
             [ReportErrors.NotFoundCode] = Business(ErrorType.NotFound),
@@ -59,6 +60,7 @@ public static class ApiErrorRegistry
             [ReportErrors.SelfReportCode] = Business(ErrorType.Conflict),
             [ReportErrors.DuplicateReportCode] = Business(ErrorType.Conflict),
             [ReportErrors.UnauthorizedCode] = Business(ErrorType.Forbidden),
+            [ReportErrors.CannotDeleteUserCode] = Business(ErrorType.Validation),
 
             [AdvertisementErrors.NotFoundCode] = Business(ErrorType.NotFound),
             [AdvertisementErrors.UnauthorizedCode] = Business(ErrorType.Forbidden),
