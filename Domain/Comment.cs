@@ -53,6 +53,17 @@ public sealed class Comment
         _isDeleted = true;
     }
 
+    public void DisconnectAndMarkAsDeleted()
+    {
+        _publicationId = null;
+        _isDeleted = true;
+    }
+
+    public void DecrementRepliesCount()
+    {
+        _repliesCount = Math.Max(0, _repliesCount - 1);
+    }
+
     internal void AddReply(Comment reply)
     {
         _replies.Add(reply);

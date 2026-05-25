@@ -1,0 +1,115 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.6.1 Chrome/142.0.7444.265 Electron/39.8.9 Safari/537.36" version="29.6.1">
+  <diagram name="Реєстрація користувача (Sequence)" id="0">
+    <mxGraphModel dx="1678" dy="988" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="10" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Користувач" vertex="1">
+          <mxGeometry height="860" width="130" x="80" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="20" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Auth API" vertex="1">
+          <mxGeometry height="860" width="130" x="350" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="30" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#e1d5e7;strokeColor=#9673a6;" value="MediatR +&#xa;валідація" vertex="1">
+          <mxGeometry height="860" width="130" x="620" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="40" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Сервіс&#xa;реєстрації" vertex="1">
+          <mxGeometry height="860" width="130" x="890" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="50" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;fillColor=#d5e8d4;strokeColor=#82b366;" value="Identity / БД&#xa;користувачів" vertex="1">
+          <mxGeometry height="860" width="130" x="1160" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="101" edge="1" parent="1" source="10" style="html=1;verticalAlign=bottom;endArrow=block;rounded=1;exitX=1;exitY=0.1;entryX=0;entryY=0.1;exitDx=0;exitDy=0;entryDx=0;entryDy=0;" target="20" value="POST /api/auth/register&#xa;(email, password, displayName)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="145" y="130" as="sourcePoint" />
+            <mxPoint x="415" y="130" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="102" edge="1" parent="1" source="20" style="html=1;verticalAlign=bottom;endArrow=block;rounded=1;exitX=1;exitY=0.16;entryX=0;entryY=0.16;exitDx=0;exitDy=0;entryDx=0;entryDy=0;" target="30" value="Передати команду&#xa;реєстрації">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="415" y="180" as="sourcePoint" />
+            <mxPoint x="685" y="180" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="103" edge="1" parent="1" source="30" style="html=1;verticalAlign=bottom;endArrow=block;rounded=1;exitX=1;exitY=0.22;entryX=1;entryY=0.25;exitDx=0;exitDy=0;entryDx=0;entryDy=0;" target="30" value="Дані валідні?">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="685" y="230" as="sourcePoint" />
+            <mxPoint x="735" y="230" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="104" edge="1" parent="1" source="30" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;strokeColor=#000000;rounded=1;exitX=0;exitY=0.28;entryX=1;entryY=0.28;exitDx=0;exitDy=0;entryDx=0;entryDy=0;dashPattern=8 8;" target="20" value="Помилка валідації&#xa;(якщо ні)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="685" y="280" as="sourcePoint" />
+            <mxPoint x="415" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="105" edge="1" parent="1" source="20" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;strokeColor=#000000;rounded=1;exitX=0;exitY=0.33;entryX=1;entryY=0.33;exitDx=0;exitDy=0;entryDx=0;entryDy=0;dashPattern=8 8;" target="10" value="400 Bad Request&#xa;(якщо ні)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="415" y="320" as="sourcePoint" />
+            <mxPoint x="145" y="320" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="106" edge="1" parent="1" source="30" style="html=1;verticalAlign=bottom;endArrow=block;rounded=1;exitX=1;exitY=0.4;entryX=0;entryY=0.4;exitDx=0;exitDy=0;entryDx=0;entryDy=0;" target="40" value="Виконати обробник&#xa;реєстрації (якщо так)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="685" y="370" as="sourcePoint" />
+            <mxPoint x="955" y="370" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="107" edge="1" parent="1" source="40" style="html=1;verticalAlign=bottom;endArrow=block;rounded=1;exitX=1;exitY=0.46;entryX=0;entryY=0.46;exitDx=0;exitDy=0;entryDx=0;entryDy=0;" target="50" value="Створити акаунт&#xa;та зберегти аватар за замовчуванням">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="955" y="420" as="sourcePoint" />
+            <mxPoint x="1225" y="420" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="108" edge="1" parent="1" source="50" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;strokeColor=#000000;rounded=1;exitX=0;exitY=0.52;entryX=1;entryY=0.52;exitDx=0;exitDy=0;entryDx=0;entryDy=0;dashPattern=8 8;" target="40" value="Email зайнятий / інша&#xa;бізнес-помилка (якщо помилка)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1225" y="470" as="sourcePoint" />
+            <mxPoint x="955" y="470" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="109" edge="1" parent="1" source="40" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;strokeColor=#000000;rounded=1;exitX=0;exitY=0.58;entryX=1;entryY=0.58;exitDx=0;exitDy=0;entryDx=0;entryDy=0;dashPattern=8 8;" target="30" value="Повернути помилку&#xa;(якщо помилка)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="955" y="510" as="sourcePoint" />
+            <mxPoint x="685" y="510" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="110" edge="1" parent="1" source="20" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;strokeColor=#000000;rounded=1;exitX=0;exitY=0.64;entryX=1;entryY=0.64;exitDx=0;exitDy=0;entryDx=0;entryDy=0;dashPattern=8 8;" target="10" value="ProblemDetails&#xa;(якщо помилка)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="415" y="550" as="sourcePoint" />
+            <mxPoint x="145" y="550" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="111" edge="1" parent="1" source="40" style="html=1;verticalAlign=bottom;endArrow=block;rounded=1;exitX=1;exitY=0.71;entryX=0;entryY=0.71;exitDx=0;exitDy=0;entryDx=0;entryDy=0;" target="50" value="Призначити роль &quot;User&quot;&#xa;(якщо успіх)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="955" y="610" as="sourcePoint" />
+            <mxPoint x="1225" y="610" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="112" edge="1" parent="1" source="40" style="html=1;verticalAlign=bottom;endArrow=block;rounded=1;exitX=1;exitY=0.76;entryX=1;entryY=0.79;exitDx=0;exitDy=0;entryDx=0;entryDy=0;" target="40" value="Ініціалізувати системні&#xa;колекції (Likes, Saved)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="955" y="660" as="sourcePoint" />
+            <mxPoint x="1005" y="660" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="113" edge="1" parent="1" source="40" style="html=1;verticalAlign=bottom;endArrow=block;rounded=1;exitX=1;exitY=0.82;entryX=0;entryY=0.82;exitDx=0;exitDy=0;entryDx=0;entryDy=0;" target="50" value="Оновити профіль&#xa;користувача">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="955" y="710" as="sourcePoint" />
+            <mxPoint x="1225" y="710" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="114" edge="1" parent="1" source="40" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;strokeColor=#000000;rounded=1;exitX=0;exitY=0.88;entryX=1;entryY=0.88;exitDx=0;exitDy=0;entryDx=0;entryDy=0;dashPattern=8 8;" target="30" value="UserId">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="955" y="760" as="sourcePoint" />
+            <mxPoint x="685" y="760" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="115" edge="1" parent="1" source="20" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;strokeColor=#000000;rounded=1;exitX=0;exitY=0.94;entryX=1;entryY=0.94;exitDx=0;exitDy=0;entryDx=0;entryDy=0;dashPattern=8 8;" target="10" value="200 OK + UserId">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="415" y="810" as="sourcePoint" />
+            <mxPoint x="145" y="810" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
