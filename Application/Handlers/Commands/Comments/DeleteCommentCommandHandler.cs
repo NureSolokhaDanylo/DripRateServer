@@ -41,6 +41,7 @@ internal sealed class DeleteCommentCommandHandler : IRequestHandler<DeleteCommen
         }
 
         await _deletionService.DeleteCommentAsync(request.CommentId, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
 
         return Result.Deleted;
     }

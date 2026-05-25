@@ -106,6 +106,11 @@ public sealed class Publication
         }
     }
 
+    public void DecrementCommentsCount(int count)
+    {
+        _commentsCount = Math.Max(0, _commentsCount - count);
+    }
+
     internal void UpdateLikesCount(int delta)
     {
         _likesCount = Math.Max(0, _likesCount + delta);

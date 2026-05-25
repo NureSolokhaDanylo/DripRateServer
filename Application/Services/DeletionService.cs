@@ -21,17 +21,21 @@ internal sealed class DeletionService : IDeletionService
     public async Task DeletePublicationContentAsync(Guid publicationId, CancellationToken cancellationToken)
     {
         var publication = await _context.Publications
-            .AsNoTracking()
+            .IgnoreQueryFilters()
             .Where(p => p.Id == publicationId)
             .Select(p => new { p.Images })
             .FirstOrDefaultAsync(cancellationToken);
 
-        // Soft delete all comments for the publication by disconnecting them
-        await _context.Comments
+        // Load all comments belonging to the publication with tracking
+        var comments = await _context.Comments
+            .IgnoreQueryFilters()
             .Where(c => c.PublicationId == publicationId)
-            .ExecuteUpdateAsync(s => s
-                .SetProperty(c => c.PublicationId, (Guid?)null)
-                .SetProperty(c => c.IsDeleted, true), cancellationToken);
+            .ToListAsync(cancellationToken);
+
+        foreach (var comment in comments)
+        {
+            comment.DisconnectAndMarkAsDeleted();
+        }
 
         // Cleanup files
         if (publication != null)
@@ -46,25 +50,47 @@ internal sealed class DeletionService : IDeletionService
     public async Task DeleteCommentAsync(Guid commentId, CancellationToken cancellationToken)
     {
         var comment = await _context.Comments
-            .AsNoTracking()
+            .IgnoreQueryFilters()
             .Where(c => c.Id == commentId)
-            .Select(c => new { c.Id, c.PublicationId, c.ParentCommentId })
             .FirstOrDefaultAsync(cancellationToken);
 
         if (comment == null) return;
 
-        // Load all comments for the publication to build the tree in memory
-        // Global query filter handles hiding already deleted comments
-        var allCommentsInPublication = await _context.Comments
-            .AsNoTracking()
-            .Where(c => c.PublicationId == comment.PublicationId)
-            .Select(c => new { c.Id, c.ParentCommentId })
-            .ToListAsync(cancellationToken);
+        Publication? publication = null;
+        List<Comment> allCommentsInPublication = new();
+
+        if (comment.PublicationId.HasValue)
+        {
+            // Load the publication with tracking
+            publication = await _context.Publications
+                .IgnoreQueryFilters()
+                .Where(p => p.Id == comment.PublicationId.Value)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            // Load all comments for the publication with tracking to build the tree and mark them
+            allCommentsInPublication = await _context.Comments
+                .IgnoreQueryFilters()
+                .Where(c => c.PublicationId == comment.PublicationId.Value)
+                .ToListAsync(cancellationToken);
+        }
+        else
+        {
+            allCommentsInPublication.Add(comment);
+        }
+
+        // Find the parent comment if it exists in the loaded list
+        Comment? parentComment = null;
+        if (comment.ParentCommentId.HasValue)
+        {
+            parentComment = allCommentsInPublication.FirstOrDefault(c => c.Id == comment.ParentCommentId.Value);
+        }
 
         // Find all descendants of the target comment
-        var descendantIds = new HashSet<Guid>();
+        var descendants = new List<Comment>();
         var queue = new Queue<Guid>();
         queue.Enqueue(commentId);
+
+        var descendantIds = new HashSet<Guid>();
 
         while (queue.Count > 0)
         {
@@ -74,26 +100,33 @@ internal sealed class DeletionService : IDeletionService
             var children = allCommentsInPublication.Where(c => c.ParentCommentId == currentId);
             foreach (var child in children)
             {
-                queue.Enqueue(child.Id);
+                if (!descendantIds.Contains(child.Id))
+                {
+                    queue.Enqueue(child.Id);
+                    descendants.Add(child);
+                }
             }
         }
 
-        var deletedCommentsCount = descendantIds.Count;
-
-        if (comment.ParentCommentId.HasValue)
-        {
-            await _context.Comments
-                .Where(c => c.Id == comment.ParentCommentId.Value)
-                .ExecuteUpdateAsync(s => s.SetProperty(c => c.RepliesCount, c => c.RepliesCount > 0 ? c.RepliesCount - 1 : 0), cancellationToken);
-        }
+        var deletedCommentsCount = descendants.Count + 1; // plus the target comment itself
 
         // Soft delete the comment and all its descendants
-        await _context.Comments
-            .Where(c => descendantIds.Contains(c.Id))
-            .ExecuteUpdateAsync(s => s.SetProperty(c => c.IsDeleted, true), cancellationToken);
+        comment.MarkAsDeleted();
+        foreach (var desc in descendants)
+        {
+            desc.MarkAsDeleted();
+        }
 
-        await _context.Publications
-            .Where(p => p.Id == comment.PublicationId)
-            .ExecuteUpdateAsync(s => s.SetProperty(p => p.CommentsCount, p => p.CommentsCount >= deletedCommentsCount ? p.CommentsCount - deletedCommentsCount : 0), cancellationToken);
+        // Decrement parent replies count
+        if (parentComment != null)
+        {
+            parentComment.DecrementRepliesCount();
+        }
+
+        // Decrement publication comments count
+        if (publication != null)
+        {
+            publication.DecrementCommentsCount(deletedCommentsCount);
+        }
     }
 }
