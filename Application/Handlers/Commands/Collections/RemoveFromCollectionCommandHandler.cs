@@ -4,6 +4,7 @@ using Application.Interfaces;
 using Domain.Errors;
 using ErrorOr;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Handlers.Commands.Collections;
 
@@ -19,6 +20,7 @@ public sealed class RemoveFromCollectionCommandHandler : IRequestHandler<RemoveF
     public async Task<ErrorOr<Success>> Handle(RemoveFromCollectionCommand request, CancellationToken cancellationToken)
     {
         var collectionResult = await _context.Collections
+            .Include(c => c.CollectionPublications)
             .GetOwnedOrErrorAsync(request.CollectionId, request.UserId, CollectionErrors.Forbidden, cancellationToken);
         if (collectionResult.IsError) return collectionResult.Errors;
 
