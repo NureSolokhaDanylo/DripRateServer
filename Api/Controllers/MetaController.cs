@@ -51,4 +51,16 @@ public sealed class MetaController : ApiController
             response => Ok(response),
             errors => Problem(errors));
     }
+
+    [HttpGet("metrics/aarrr")]
+    [ProducesResponseType(typeof(AarrrMetricsResponse), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAarrrMetrics()
+    {
+        var query = new Application.Queries.Metrics.GetAarrrMetricsQuery();
+        var result = await _mediator.Send(query);
+
+        return result.Match(
+            response => Ok(response),
+            errors => Problem(errors));
+    }
 }
