@@ -1,0 +1,1522 @@
+{
+  "/api/Auth/login": {
+    "post": {
+      "tags": [
+        "Auth"
+      ],
+      "operationId": "Auth_Login",
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/LoginRequest"
+            }
+          },
+          "text/json": {
+            "schema": {
+              "$ref": "#/components/schemas/LoginRequest"
+            }
+          },
+          "application/*+json": {
+            "schema": {
+              "$ref": "#/components/schemas/LoginRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "text/plain": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Unauthorized",
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Auth_Login_401ErrorCode"
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Auth_Login_401ErrorCode"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Bad Request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Auth_Login_400ErrorCode"
+                      },
+                      "validationErrors": {
+                        "type": [
+                          "null",
+                          "array"
+                        ],
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string"
+                            },
+                            "message": {
+                              "type": "string"
+                            },
+                            "field": {
+                              "type": [
+                                "null",
+                                "string"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Auth_Login_400ErrorCode"
+                      },
+                      "validationErrors": {
+                        "type": [
+                          "null",
+                          "array"
+                        ],
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string"
+                            },
+                            "message": {
+                              "type": "string"
+                            },
+                            "field": {
+                              "type": [
+                                "null",
+                                "string"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/Collections/@me": {
+    "get": {
+      "tags": [
+        "Collections"
+      ],
+      "operationId": "Collections_GetMyCollections",
+      "parameters": [
+        {
+          "name": "skip",
+          "in": "query",
+          "schema": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": "integer",
+            "format": "int32",
+            "default": 0
+          }
+        },
+        {
+          "name": "take",
+          "in": "query",
+          "schema": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": "integer",
+            "format": "int32",
+            "default": 20
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "text/plain": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CollectionResponse"
+                }
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CollectionResponse"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CollectionResponse"
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Bad Request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Collections_GetMyCollections_400ErrorCode"
+                      },
+                      "validationErrors": {
+                        "type": [
+                          "null",
+                          "array"
+                        ],
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string"
+                            },
+                            "message": {
+                              "type": "string"
+                            },
+                            "field": {
+                              "type": [
+                                "null",
+                                "string"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Collections_GetMyCollections_400ErrorCode"
+                      },
+                      "validationErrors": {
+                        "type": [
+                          "null",
+                          "array"
+                        ],
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string"
+                            },
+                            "message": {
+                              "type": "string"
+                            },
+                            "field": {
+                              "type": [
+                                "null",
+                                "string"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Unauthorized",
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Collections_GetMyCollections_401ErrorCode"
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Collections_GetMyCollections_401ErrorCode"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "security": [
+        {
+          "Bearer": []
+        }
+      ]
+    }
+  },
+  "/api/Collections/{id}/items/{pubId}": {
+    "post": {
+      "tags": [
+        "Collections"
+      ],
+      "operationId": "Collections_AddItem",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        {
+          "name": "pubId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "204": {
+          "description": "No Content"
+        },
+        "404": {
+          "description": "Not Found",
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Collections_AddItem_404ErrorCode"
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Collections_AddItem_404ErrorCode"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Forbidden",
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Collections_AddItem_403ErrorCode"
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Collections_AddItem_403ErrorCode"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Bad Request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Collections_AddItem_400ErrorCode"
+                      },
+                      "validationErrors": {
+                        "type": [
+                          "null",
+                          "array"
+                        ],
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string"
+                            },
+                            "message": {
+                              "type": "string"
+                            },
+                            "field": {
+                              "type": [
+                                "null",
+                                "string"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Collections_AddItem_400ErrorCode"
+                      },
+                      "validationErrors": {
+                        "type": [
+                          "null",
+                          "array"
+                        ],
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string"
+                            },
+                            "message": {
+                              "type": "string"
+                            },
+                            "field": {
+                              "type": [
+                                "null",
+                                "string"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Unauthorized",
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Collections_AddItem_401ErrorCode"
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Collections_AddItem_401ErrorCode"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "security": [
+        {
+          "Bearer": []
+        }
+      ]
+    },
+    "delete": {
+      "tags": [
+        "Collections"
+      ],
+      "operationId": "Collections_RemoveItem",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        {
+          "name": "pubId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "204": {
+          "description": "No Content"
+        },
+        "404": {
+          "description": "Not Found",
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Collections_RemoveItem_404ErrorCode"
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Collections_RemoveItem_404ErrorCode"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Forbidden",
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Collections_RemoveItem_403ErrorCode"
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Collections_RemoveItem_403ErrorCode"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Bad Request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Collections_RemoveItem_400ErrorCode"
+                      },
+                      "validationErrors": {
+                        "type": [
+                          "null",
+                          "array"
+                        ],
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string"
+                            },
+                            "message": {
+                              "type": "string"
+                            },
+                            "field": {
+                              "type": [
+                                "null",
+                                "string"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Collections_RemoveItem_400ErrorCode"
+                      },
+                      "validationErrors": {
+                        "type": [
+                          "null",
+                          "array"
+                        ],
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string"
+                            },
+                            "message": {
+                              "type": "string"
+                            },
+                            "field": {
+                              "type": [
+                                "null",
+                                "string"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Unauthorized",
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Collections_RemoveItem_401ErrorCode"
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Collections_RemoveItem_401ErrorCode"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "security": [
+        {
+          "Bearer": []
+        }
+      ]
+    }
+  },
+  "/api/Publications/{id}/like": {
+    "post": {
+      "tags": [
+        "Publications"
+      ],
+      "operationId": "Publications_ToggleLike",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "text/plain": {
+              "schema": {
+                "type": "boolean"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "boolean"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Not Found",
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Publications_ToggleLike_404ErrorCode"
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Publications_ToggleLike_404ErrorCode"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "Internal Server Error",
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Publications_ToggleLike_500ErrorCode"
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Publications_ToggleLike_500ErrorCode"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Bad Request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Publications_ToggleLike_400ErrorCode"
+                      },
+                      "validationErrors": {
+                        "type": [
+                          "null",
+                          "array"
+                        ],
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string"
+                            },
+                            "message": {
+                              "type": "string"
+                            },
+                            "field": {
+                              "type": [
+                                "null",
+                                "string"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Publications_ToggleLike_400ErrorCode"
+                      },
+                      "validationErrors": {
+                        "type": [
+                          "null",
+                          "array"
+                        ],
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string"
+                            },
+                            "message": {
+                              "type": "string"
+                            },
+                            "field": {
+                              "type": [
+                                "null",
+                                "string"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Unauthorized",
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Publications_ToggleLike_401ErrorCode"
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Publications_ToggleLike_401ErrorCode"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "security": [
+        {
+          "Bearer": []
+        }
+      ]
+    }
+  },
+  "/api/Publications/{id}/save": {
+    "post": {
+      "tags": [
+        "Publications"
+      ],
+      "operationId": "Publications_ToggleSave",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "text/plain": {
+              "schema": {
+                "type": "boolean"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "boolean"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Not Found",
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Publications_ToggleSave_404ErrorCode"
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Publications_ToggleSave_404ErrorCode"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "Internal Server Error",
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Publications_ToggleSave_500ErrorCode"
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Publications_ToggleSave_500ErrorCode"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Bad Request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Publications_ToggleSave_400ErrorCode"
+                      },
+                      "validationErrors": {
+                        "type": [
+                          "null",
+                          "array"
+                        ],
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string"
+                            },
+                            "message": {
+                              "type": "string"
+                            },
+                            "field": {
+                              "type": [
+                                "null",
+                                "string"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Publications_ToggleSave_400ErrorCode"
+                      },
+                      "validationErrors": {
+                        "type": [
+                          "null",
+                          "array"
+                        ],
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string"
+                            },
+                            "message": {
+                              "type": "string"
+                            },
+                            "field": {
+                              "type": [
+                                "null",
+                                "string"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Unauthorized",
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Publications_ToggleSave_401ErrorCode"
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Publications_ToggleSave_401ErrorCode"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "security": [
+        {
+          "Bearer": []
+        }
+      ]
+    }
+  },
+  "/api/Feed/global": {
+    "get": {
+      "tags": [
+        "Feed"
+      ],
+      "operationId": "Feed_GetGlobal",
+      "parameters": [
+        {
+          "name": "cursor",
+          "in": "query",
+          "schema": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          }
+        },
+        {
+          "name": "take",
+          "in": "query",
+          "schema": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "type": "integer",
+            "format": "int32",
+            "default": 20
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "text/plain": {
+              "schema": {
+                "$ref": "#/components/schemas/GlobalFeedResponse"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GlobalFeedResponse"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GlobalFeedResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Bad Request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Feed_GetGlobal_400ErrorCode"
+                      },
+                      "validationErrors": {
+                        "type": [
+                          "null",
+                          "array"
+                        ],
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string"
+                            },
+                            "message": {
+                              "type": "string"
+                            },
+                            "field": {
+                              "type": [
+                                "null",
+                                "string"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Feed_GetGlobal_400ErrorCode"
+                      },
+                      "validationErrors": {
+                        "type": [
+                          "null",
+                          "array"
+                        ],
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string"
+                            },
+                            "message": {
+                              "type": "string"
+                            },
+                            "field": {
+                              "type": [
+                                "null",
+                                "string"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Unauthorized",
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Feed_GetGlobal_401ErrorCode"
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/ProblemDetails"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "#/components/schemas/Feed_GetGlobal_401ErrorCode"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "security": [
+        {
+          "Bearer": []
+        }
+      ]
+    }
+  }
+}

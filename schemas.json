@@ -1,0 +1,69 @@
+{
+  "required": [
+    "email",
+    "password"
+  ],
+  "type": [
+    "null",
+    "object"
+  ],
+  "properties": {
+    "email": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "password": {
+      "type": [
+        "null",
+        "string"
+      ]
+    }
+  }
+}
+{
+  "required": [
+    "id",
+    "name",
+    "description",
+    "isPublic",
+    "isSystem",
+    "itemsCount",
+    "createdAt"
+  ],
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "name": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "description": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "isPublic": {
+      "type": "boolean"
+    },
+    "isSystem": {
+      "type": "boolean"
+    },
+    "itemsCount": {
+      "pattern": "^-?(?:0|[1-9]\\d*)$",
+      "type": "integer",
+      "format": "int32"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}
