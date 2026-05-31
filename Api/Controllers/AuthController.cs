@@ -50,9 +50,11 @@ public class AuthController : ApiController
     [ApiErrors(AuthErrors.EmailAlreadyTakenCode)]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
-        // Use request.DisplayName ?? string.Empty if we want to handle nulls, 
-        // but RegisterCommand expects string.
-        var command = new RegisterCommand(request.DisplayName ?? string.Empty, request.Email, request.Password);
+        string displayName = string.IsNullOrWhiteSpace(request.DisplayName) 
+            ? request.Email.Split('@')[0] 
+            : request.DisplayName;
+
+        var command = new RegisterCommand(displayName, request.Email, request.Password);
 
         var result = await _mediator.Send(command);
 
