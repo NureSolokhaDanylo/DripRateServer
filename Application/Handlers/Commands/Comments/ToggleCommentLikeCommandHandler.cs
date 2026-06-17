@@ -22,7 +22,6 @@ public sealed class ToggleCommentLikeCommandHandler : IRequestHandler<ToggleComm
     public async Task<ErrorOr<bool>> Handle(ToggleCommentLikeCommand request, CancellationToken cancellationToken)
     {
         var comment = await _context.Comments
-            .Include(c => c.Likes)
             .FirstOrDefaultAsync(c => c.Id == request.CommentId, cancellationToken);
 
         if (comment == null)
@@ -30,9 +29,26 @@ public sealed class ToggleCommentLikeCommandHandler : IRequestHandler<ToggleComm
             return CommentErrors.NotFound;
         }
 
-        comment.ToggleLike(request.UserId);
+        var existingLike = await _context.CommentLikes
+            .FirstOrDefaultAsync(l => l.CommentId == request.CommentId && l.UserId == request.UserId, cancellationToken);
+
+        bool isLikedNow;
+
+        if (existingLike != null)
+        {
+            _context.CommentLikes.Remove(existingLike);
+            comment.UpdateLikesCount(-1);
+            isLikedNow = false;
+        }
+        else
+        {
+            _context.CommentLikes.Add(new CommentLike(request.UserId, request.CommentId));
+            comment.UpdateLikesCount(1);
+            isLikedNow = true;
+        }
+
         await _context.SaveChangesAsync(cancellationToken);
 
-        return comment.Likes.Any(l => l.UserId == request.UserId);
+        return isLikedNow;
     }
 }

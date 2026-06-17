@@ -25,11 +25,17 @@ internal sealed class GetTagMatchBatchQueryHandler : IRequestHandler<GetTagMatch
             .ToListAsync(cancellationToken);
 
         var nextPublications = await _context.Publications
-            .Include(p => p.User)
-            .Include(p => p.Tags)
+            .AsNoTracking()
             .Where(p => p.GameSettings.IsTagMatchEnabled && !playedPublicationIds.Contains(p.Id))
             .OrderBy(p => Guid.NewGuid())
             .Take(request.BatchSize)
+            .Select(p => new
+            {
+                p.Id,
+                User = new UserSimpleDto(p.User.Id, p.User.DisplayName, p.User.AvatarUrl),
+                p.Images,
+                Tags = p.Tags.Select(t => new TagResponse(t.Id, t.Name, t.Category)).ToList()
+            })
             .ToListAsync(cancellationToken);
 
         if (!nextPublications.Any())
@@ -38,29 +44,30 @@ internal sealed class GetTagMatchBatchQueryHandler : IRequestHandler<GetTagMatch
         }
 
         var allPossibleDistractors = await _context.Tags
+            .AsNoTracking()
             .OrderBy(t => Guid.NewGuid())
             .Take(100)
+            .Select(t => new TagResponse(t.Id, t.Name, t.Category))
             .ToListAsync(cancellationToken);
 
         var result = new List<TagMatchGameItemDto>();
 
         foreach (var p in nextPublications)
         {
-            var correctTags = p.Tags.Select(t => new TagResponse(t.Id, t.Name, t.Category)).ToList();
+            var correctTags = p.Tags;
             var correctTagIds = p.Tags.Select(t => t.Id).ToHashSet();
             
             var distractors = allPossibleDistractors
                 .Where(t => !correctTagIds.Contains(t.Id))
                 .OrderBy(t => Guid.NewGuid())
                 .Take(3)
-                .Select(t => new TagResponse(t.Id, t.Name, t.Category))
                 .ToList();
 
             var combinedTags = correctTags.Concat(distractors).OrderBy(t => Guid.NewGuid()).ToList();
 
             result.Add(new TagMatchGameItemDto(
                 p.Id,
-                new UserSimpleDto(p.User.Id, p.User.DisplayName, p.User.AvatarUrl),
+                p.User,
                 p.Images,
                 combinedTags
             ));

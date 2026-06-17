@@ -20,6 +20,9 @@ public sealed class AdvertisementView
 
     public AdvertisementView(Guid advertisementId, Guid userId)
     {
+        if (advertisementId == Guid.Empty) throw new ArgumentException("Advertisement ID cannot be empty.", nameof(advertisementId));
+        if (userId == Guid.Empty) throw new ArgumentException("User ID cannot be empty.", nameof(userId));
+
         _advertisementId = advertisementId;
         _userId = userId;
         _viewedAt = DateTimeOffset.UtcNow;

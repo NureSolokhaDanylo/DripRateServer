@@ -24,23 +24,18 @@ internal sealed class GetGuessPriceBatchQueryHandler : IRequestHandler<GetGuessP
             .Select(h => h.PublicationId)
             .ToListAsync(cancellationToken);
 
-        var nextPublicationsQuery = _context.Publications
-            .Include(p => p.User)
-            .Where(p => p.GameSettings.IsGuessPriceEnabled && !playedPublicationIds.Contains(p.Id));
-
-        var nextPublications = await nextPublicationsQuery
+        var result = await _context.Publications
+            .AsNoTracking()
+            .Where(p => p.GameSettings.IsGuessPriceEnabled && !playedPublicationIds.Contains(p.Id))
             .OrderBy(p => Guid.NewGuid())
             .Take(request.BatchSize)
-            .ToListAsync(cancellationToken);
-
-        var result = nextPublications
             .Select(p => new GuessPriceGameItemDto(
                 p.Id,
                 new UserSimpleDto(p.User.Id, p.User.DisplayName, p.User.AvatarUrl),
                 p.Images,
                 p.GameSnapshotPrice
             ))
-            .ToList();
+            .ToListAsync(cancellationToken);
 
         return result;
     }

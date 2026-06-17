@@ -28,6 +28,9 @@ public sealed class Cloth
 
     public Cloth(Guid userId, string name, string? brand = null)
     {
+        if (userId == Guid.Empty) throw new ArgumentException("User ID cannot be empty.", nameof(userId));
+        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Name cannot be empty.", nameof(name));
+
         _userId = userId;
         _name = name;
         _brand = brand;
@@ -36,6 +39,11 @@ public sealed class Cloth
 
     public void UpdateInfo(string name, string? brand, string? photoUrl, string? storeLink, decimal? price)
     {
+        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Name cannot be empty.", nameof(name));
+        if (price.HasValue && price.Value < 0) throw new ArgumentException("Price cannot be negative.", nameof(price));
+        if (photoUrl != null && !Uri.IsWellFormedUriString(photoUrl, UriKind.Absolute)) throw new ArgumentException("Invalid photo URL.", nameof(photoUrl));
+        if (storeLink != null && !Uri.IsWellFormedUriString(storeLink, UriKind.Absolute)) throw new ArgumentException("Invalid store link.", nameof(storeLink));
+
         _name = name;
         _brand = brand;
         _photoUrl = photoUrl;

@@ -30,6 +30,11 @@ public sealed class Advertisement
 
     public Advertisement(string text, string url, int maxImpressions, IEnumerable<string> images)
     {
+        if (string.IsNullOrWhiteSpace(text)) throw new ArgumentException("Text cannot be empty.", nameof(text));
+        if (string.IsNullOrWhiteSpace(url)) throw new ArgumentException("URL cannot be empty.", nameof(url));
+        if (!Uri.IsWellFormedUriString(url, UriKind.Absolute)) throw new ArgumentException("Invalid URL.", nameof(url));
+        if (maxImpressions <= 0) throw new ArgumentException("Max impressions must be positive.", nameof(maxImpressions));
+
         _id = Guid.NewGuid();
         _text = text;
         _url = url;
@@ -42,6 +47,11 @@ public sealed class Advertisement
 
     public void Update(string text, string url, int maxImpressions, IEnumerable<string> finalImages, bool? isActive = null)
     {
+        if (string.IsNullOrWhiteSpace(text)) throw new ArgumentException("Text cannot be empty.", nameof(text));
+        if (string.IsNullOrWhiteSpace(url)) throw new ArgumentException("URL cannot be empty.", nameof(url));
+        if (!Uri.IsWellFormedUriString(url, UriKind.Absolute)) throw new ArgumentException("Invalid URL.", nameof(url));
+        if (maxImpressions <= 0) throw new ArgumentException("Max impressions must be positive.", nameof(maxImpressions));
+
         _text = text;
         _url = url;
         _maxImpressions = maxImpressions;

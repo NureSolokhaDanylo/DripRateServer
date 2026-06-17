@@ -65,6 +65,9 @@ public sealed class Report
 
     public Report(Guid authorId, ReportTargetType targetType, Guid targetId, ReportCategory category, string? text)
     {
+        if (authorId == Guid.Empty) throw new ArgumentException("Author ID cannot be empty.", nameof(authorId));
+        if (targetId == Guid.Empty) throw new ArgumentException("Target ID cannot be empty.", nameof(targetId));
+
         _id = Guid.NewGuid();
         _authorId = authorId;
         _targetType = targetType;
@@ -77,6 +80,8 @@ public sealed class Report
 
     public void AssignTo(Guid moderatorId)
     {
+        if (moderatorId == Guid.Empty) throw new ArgumentException("Moderator ID cannot be empty.", nameof(moderatorId));
+
         _assignedToUserId = moderatorId;
         _assignedAt = DateTimeOffset.UtcNow;
         _status = ReportStatus.InReview;

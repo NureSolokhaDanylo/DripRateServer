@@ -20,6 +20,9 @@ public sealed class CollectionPublication
 
     public CollectionPublication(Guid collectionId, Guid publicationId)
     {
+        if (collectionId == Guid.Empty) throw new ArgumentException("Collection ID cannot be empty.", nameof(collectionId));
+        if (publicationId == Guid.Empty) throw new ArgumentException("Publication ID cannot be empty.", nameof(publicationId));
+
         _collectionId = collectionId;
         _publicationId = publicationId;
         _addedAt = DateTimeOffset.UtcNow;

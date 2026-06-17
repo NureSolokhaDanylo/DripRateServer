@@ -24,18 +24,17 @@ internal sealed class GetFirstImpressionBatchQueryHandler : IRequestHandler<GetF
             .Select(h => h.PublicationId)
             .ToListAsync(cancellationToken);
 
-        var nextPublications = await _context.Publications
-            .Include(p => p.User)
+        var result = await _context.Publications
+            .AsNoTracking()
             .Where(p => p.GameSettings.IsFirstImpressionEnabled && !playedPublicationIds.Contains(p.Id))
             .OrderBy(p => Guid.NewGuid())
             .Take(request.BatchSize)
+            .Select(p => new FirstImpressionGameItemDto(
+                p.Id,
+                new UserSimpleDto(p.User.Id, p.User.DisplayName, p.User.AvatarUrl),
+                p.Images
+            ))
             .ToListAsync(cancellationToken);
-
-        var result = nextPublications.Select(p => new FirstImpressionGameItemDto(
-            p.Id,
-            new UserSimpleDto(p.User.Id, p.User.DisplayName, p.User.AvatarUrl),
-            p.Images
-        )).ToList();
 
         return result;
     }

@@ -19,29 +19,26 @@ public sealed class GetUserProfileQueryHandler : IRequestHandler<GetUserProfileQ
 
     public async Task<ErrorOr<UserProfileResponse>> Handle(GetUserProfileQuery request, CancellationToken cancellationToken)
     {
-        var user = await _context.Users
+        var profile = await _context.Users
             .AsNoTracking()
-            .Include(u => u.Followers)
-            .Include(u => u.Following)
-            .Include(u => u.Publications)
-            .FirstOrDefaultAsync(u => u.Id == request.UserId, cancellationToken);
+            .Where(u => u.Id == request.UserId)
+            .Select(u => new UserProfileResponse(
+                u.Id,
+                u.DisplayName,
+                u.Bio,
+                u.AvatarUrl,
+                u.Followers.Count,
+                u.Following.Count,
+                u.Publications.Count,
+                request.CurrentUserId.HasValue && u.Followers.Any(f => f.FollowerId == request.CurrentUserId.Value)
+            ))
+            .FirstOrDefaultAsync(cancellationToken);
 
-        if (user == null)
+        if (profile == null)
         {
             return UserErrors.NotFound;
         }
 
-        var isFollowing = request.CurrentUserId.HasValue && 
-                          user.Followers.Any(f => f.FollowerId == request.CurrentUserId.Value);
-
-        return new UserProfileResponse(
-            user.Id,
-            user.DisplayName,
-            user.Bio,
-            user.AvatarUrl,
-            user.Followers.Count,
-            user.Following.Count,
-            user.Publications.Count,
-            isFollowing);
+        return profile;
     }
 }

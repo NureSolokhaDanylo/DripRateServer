@@ -33,6 +33,9 @@ public sealed class User : IdentityUser<Guid>
 
     public User(string email, string displayName)
     {
+        if (string.IsNullOrWhiteSpace(email)) throw new ArgumentException("Email cannot be empty.", nameof(email));
+        if (string.IsNullOrWhiteSpace(displayName)) throw new ArgumentException("Display name cannot be empty.", nameof(displayName));
+
         Email = email;
         UserName = email;
         DisplayName = displayName;
@@ -50,6 +53,9 @@ public sealed class User : IdentityUser<Guid>
 
     public void UpdateAvatar(string avatarUrl)
     {
+        if (string.IsNullOrWhiteSpace(avatarUrl)) throw new ArgumentException("Avatar URL cannot be empty.", nameof(avatarUrl));
+        if (!Uri.IsWellFormedUriString(avatarUrl, UriKind.Absolute)) throw new ArgumentException("Invalid avatar URL.", nameof(avatarUrl));
+
         _avatarUrl = avatarUrl;
     }
 

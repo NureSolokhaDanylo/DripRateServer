@@ -38,6 +38,9 @@ public sealed class Collection
 
     private Collection(Guid userId, string name, string? description, bool isPublic, bool isSystem, CollectionType type)
     {
+        if (userId == Guid.Empty) throw new ArgumentException("User ID cannot be empty.", nameof(userId));
+        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Name cannot be empty.", nameof(name));
+
         _userId = userId;
         _name = name;
         _description = description;
@@ -81,6 +84,7 @@ public sealed class Collection
     public void Update(string name, string? description, bool isPublic)
     {
         if (IsSystem) return;
+        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Name cannot be empty.", nameof(name));
 
         _name = name;
         _description = description;

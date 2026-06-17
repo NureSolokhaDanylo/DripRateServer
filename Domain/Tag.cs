@@ -14,6 +14,9 @@ public sealed class Tag
 
     public Tag(string name, string category)
     {
+        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Name cannot be empty.", nameof(name));
+        if (string.IsNullOrWhiteSpace(category)) throw new ArgumentException("Category cannot be empty.", nameof(category));
+
         _name = name;
         _category = category;
     }

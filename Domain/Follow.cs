@@ -22,6 +22,8 @@ public sealed class Follow
 
     public Follow(Guid followerId, Guid followeeId)
     {
+        if (followerId == Guid.Empty) throw new ArgumentException("Follower ID cannot be empty.", nameof(followerId));
+        if (followeeId == Guid.Empty) throw new ArgumentException("Followee ID cannot be empty.", nameof(followeeId));
         if (followerId == followeeId)
         {
             throw new InvalidOperationException(SocialErrors.CannotFollowSelf.Description);

@@ -41,6 +41,10 @@ public sealed class Comment
 
     public Comment(Guid userId, Guid publicationId, string text, Guid? parentCommentId = null)
     {
+        if (userId == Guid.Empty) throw new ArgumentException("User ID cannot be empty.", nameof(userId));
+        if (publicationId == Guid.Empty) throw new ArgumentException("Publication ID cannot be empty.", nameof(publicationId));
+        if (string.IsNullOrWhiteSpace(text)) throw new ArgumentException("Text cannot be empty.", nameof(text));
+
         _userId = userId;
         _publicationId = publicationId;
         _text = text;
@@ -78,18 +82,9 @@ public sealed class Comment
         }
     }
 
-    public void ToggleLike(Guid userId)
+    public void UpdateLikesCount(int change)
     {
-        var existing = _likes.FirstOrDefault(l => l.UserId == userId);
-        if (existing is not null)
-        {
-            _likes.Remove(existing);
-            _likesCount--;
-        }
-        else
-        {
-            _likes.Add(new CommentLike(userId, _id));
-            _likesCount++;
-        }
+        _likesCount += change;
+        if (_likesCount < 0) _likesCount = 0;
     }
 }

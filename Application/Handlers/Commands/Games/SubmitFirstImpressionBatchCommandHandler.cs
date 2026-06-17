@@ -10,9 +10,6 @@ namespace Application.Handlers.Commands.Games;
 internal sealed class SubmitFirstImpressionBatchCommandHandler : IRequestHandler<SubmitFirstImpressionBatchCommand, ErrorOr<Success>>
 {
     private readonly IApplicationDbContext _context;
-    private const int MinValidTimeMs = 150;
-    private const int MaxValidTimeMs = 5000;
-
     public SubmitFirstImpressionBatchCommandHandler(IApplicationDbContext context)
     {
         _context = context;
@@ -46,7 +43,7 @@ internal sealed class SubmitFirstImpressionBatchCommandHandler : IRequestHandler
             var history = new UserGameHistory(request.UserId, result.PublicationId, GameType.FirstImpression);
             newHistories.Add(history);
             
-            if (result.ReactionTimeMs >= MinValidTimeMs && result.ReactionTimeMs <= MaxValidTimeMs)
+            if (PublicationGameStats.IsValidReactionTime(result.ReactionTimeMs))
             {
                 publicationIdsToUpdate.Add(result.PublicationId);
             }

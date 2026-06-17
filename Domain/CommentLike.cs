@@ -20,6 +20,9 @@ public sealed class CommentLike
 
     public CommentLike(Guid userId, Guid commentId)
     {
+        if (userId == Guid.Empty) throw new ArgumentException("User ID cannot be empty.", nameof(userId));
+        if (commentId == Guid.Empty) throw new ArgumentException("Comment ID cannot be empty.", nameof(commentId));
+
         _userId = userId;
         _commentId = commentId;
         _createdAt = DateTimeOffset.UtcNow;

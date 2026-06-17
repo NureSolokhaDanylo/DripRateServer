@@ -32,6 +32,9 @@ public sealed class Assessment
 
     public Assessment(Guid userId, Guid publicationId, int color, int fit, int originality, int style)
     {
+        if (userId == Guid.Empty) throw new ArgumentException("User ID cannot be empty.", nameof(userId));
+        if (publicationId == Guid.Empty) throw new ArgumentException("Publication ID cannot be empty.", nameof(publicationId));
+
         _userId = userId;
         _publicationId = publicationId;
         _createdAt = DateTimeOffset.UtcNow;

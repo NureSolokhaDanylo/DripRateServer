@@ -16,6 +16,9 @@ public sealed class UserGameHistory
 
     public UserGameHistory(Guid userId, Guid publicationId, GameType gameType)
     {
+        if (userId == Guid.Empty) throw new ArgumentException("User ID cannot be empty.", nameof(userId));
+        if (publicationId == Guid.Empty) throw new ArgumentException("Publication ID cannot be empty.", nameof(publicationId));
+
         UserId = userId;
         PublicationId = publicationId;
         GameType = gameType;

@@ -58,8 +58,11 @@ public sealed class Publication
 
     public Publication(Guid userId, string description, IEnumerable<string> images, bool isUrgentRatingRequested = false)
     {
+        if (userId == Guid.Empty) throw new ArgumentException("User ID cannot be empty.", nameof(userId));
+        if (images == null) throw new ArgumentNullException(nameof(images));
+
         _userId = userId;
-        _description = description;
+        _description = description ?? string.Empty;
         _createdAt = DateTimeOffset.UtcNow;
         _images.AddRange(images);
         _isUrgentRatingRequested = isUrgentRatingRequested;
@@ -74,6 +77,9 @@ public sealed class Publication
 
     public void ConfigureMiniGames(decimal snapshotPrice, int tagsCount)
     {
+        if (snapshotPrice < 0) throw new ArgumentException("Price cannot be negative.", nameof(snapshotPrice));
+        if (tagsCount < 0) throw new ArgumentException("Tags count cannot be negative.", nameof(tagsCount));
+
         GameSnapshotPrice = snapshotPrice;
         
         bool guessPriceEnabled = snapshotPrice > 0;
