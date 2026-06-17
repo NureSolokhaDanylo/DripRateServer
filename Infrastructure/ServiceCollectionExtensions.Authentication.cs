@@ -23,7 +23,6 @@ public static partial class ServiceCollectionExtensions
             _.Issuer = jwtOptions.Issuer;
             _.Audience = jwtOptions.Audience;
             _.ExpirationMinutes = jwtOptions.ExpirationMinutes;
-            _.RefreshTokenExpirationDays = jwtOptions.RefreshTokenExpirationDays;
         });
 
         var key = Encoding.ASCII.GetBytes(jwtOptions.Key 

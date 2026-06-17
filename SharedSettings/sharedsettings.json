@@ -11,8 +11,7 @@
   "Jwt": {
     "Issuer": "DripRateServer",
     "Audience": "DripRateServerApi",
-    "ExpirationMinutes": 43200,
-    "RefreshTokenExpirationDays": 7
+    "ExpirationMinutes": 43200
   },
   "Feed": {
     "AdFrequency": 5,
