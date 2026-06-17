@@ -19,6 +19,7 @@ public sealed class AdvertisementConfiguration : IEntityTypeConfiguration<Advert
         builder.Property(a => a.CreatedAt).HasField("_createdAt");
 
         builder.HasIndex(a => a.IsActive);
+        builder.HasIndex(a => a.CreatedAt);
 
         builder.Property<List<string>>("_images")
             .HasColumnName("Images");

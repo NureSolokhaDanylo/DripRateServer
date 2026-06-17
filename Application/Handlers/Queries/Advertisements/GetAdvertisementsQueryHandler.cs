@@ -31,13 +31,16 @@ public sealed class GetAdvertisementsQueryHandler : IRequestHandler<GetAdvertise
         if (!string.IsNullOrWhiteSpace(request.Search))
         {
             var search = request.Search.ToLower();
-            query = query.Where(a => a.Text.ToLower().Contains(search) || a.Url.ToLower().Contains(search));
+            query = query.Where(a => a.Text.Contains(search) || a.Url.Contains(search));
         }
 
-        var ads = await query
+        var adsEntities = await query
             .OrderByDescending(a => a.CreatedAt)
             .Skip(request.Skip)
             .Take(request.Take)
+            .ToListAsync(cancellationToken);
+
+        var ads = adsEntities
             .Select(a => new AdvertisementResponse(
                 a.Id,
                 a.Images.ToList(),
@@ -48,7 +51,7 @@ public sealed class GetAdvertisementsQueryHandler : IRequestHandler<GetAdvertise
                 a.IsActive,
                 a.Tags.Select(t => new TagResponse(t.Id, t.Name, t.Category)).ToList(),
                 a.CreatedAt))
-            .ToListAsync(cancellationToken);
+            .ToList();
 
         return ads;
     }
