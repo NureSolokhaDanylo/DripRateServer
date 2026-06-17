@@ -1,5 +1,6 @@
 using ErrorOr;
 using MediatR;
+using Application.Dtos;
 
 namespace Application.Commands.Advertisements;
 
