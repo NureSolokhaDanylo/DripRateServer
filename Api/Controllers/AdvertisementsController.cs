@@ -96,7 +96,7 @@ public sealed class AdvertisementsController : ApiController
 
     [HttpPatch("{id:guid}/active")]
     [AuthorizeWithError(Roles = "Moderator")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(AdvertisementResponse), StatusCodes.Status200OK)]
     [ApiErrors(AdvertisementErrors.NotFoundCode, AdvertisementErrors.LimitReachedCode)]
     public async Task<IActionResult> ToggleActive(Guid id, [FromBody] bool isActive)
     {
@@ -104,7 +104,7 @@ public sealed class AdvertisementsController : ApiController
         var result = await _mediator.Send(command);
 
         return result.Match(
-            _ => NoContent(),
+            response => Ok(response),
             errors => Problem(errors));
     }
 

@@ -1,4 +1,5 @@
 using Application.Commands.Advertisements;
+using Application.Dtos;
 using Domain.Errors;
 using ErrorOr;
 using MediatR;
@@ -7,7 +8,7 @@ using Application.Interfaces;
 
 namespace Application.Handlers.Commands.Advertisements;
 
-internal sealed class ToggleAdvertisementActiveCommandHandler : IRequestHandler<ToggleAdvertisementActiveCommand, ErrorOr<Success>>
+internal sealed class ToggleAdvertisementActiveCommandHandler : IRequestHandler<ToggleAdvertisementActiveCommand, ErrorOr<AdvertisementResponse>>
 {
     private readonly IApplicationDbContext _context;
 
@@ -16,9 +17,10 @@ internal sealed class ToggleAdvertisementActiveCommandHandler : IRequestHandler<
         _context = context;
     }
 
-    public async Task<ErrorOr<Success>> Handle(ToggleAdvertisementActiveCommand request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<AdvertisementResponse>> Handle(ToggleAdvertisementActiveCommand request, CancellationToken cancellationToken)
     {
         var ad = await _context.Advertisements
+            .Include(a => a.Tags)
             .FirstOrDefaultAsync(a => a.Id == request.Id, cancellationToken);
 
         if (ad is null) return AdvertisementErrors.NotFound;
@@ -29,6 +31,16 @@ internal sealed class ToggleAdvertisementActiveCommandHandler : IRequestHandler<
         }
 
         await _context.SaveChangesAsync(cancellationToken);
-        return Result.Success;
+        
+        return new AdvertisementResponse(
+            ad.Id,
+            ad.Images.ToList(),
+            ad.Text,
+            ad.Url,
+            ad.MaxImpressions,
+            ad.ShownCount,
+            ad.IsActive,
+            ad.Tags.Select(t => new TagResponse(t.Id, t.Name, t.Category)).ToList(),
+            ad.CreatedAt);
     }
 }
