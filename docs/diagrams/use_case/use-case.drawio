@@ -1,194 +1,644 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<mxfile host="drawio" version="26.0.0">
-  <diagram name="Use Case Diagram">
-    <mxGraphModel dx="1422" dy="798" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
+<mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.6.1 Chrome/142.0.7444.265 Electron/39.8.9 Safari/537.36" version="29.6.1">
+  <diagram name="API Use Cases - Landscape" id="0">
+    <mxGraphModel dx="2377" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2200" pageHeight="1700" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        
-        <!-- System Boundary -->
-        <mxCell id="2" value="DripRate Social Network" style="swimlane;startSize=30;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;align=center;verticalAlign=top;" vertex="1" parent="1">
-          <mxGeometry x="240" y="40" width="800" height="1500" as="geometry" />
+        <mxCell id="user" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="Користувач" vertex="1">
+          <mxGeometry height="160" width="80" x="1000" y="50" as="geometry" />
         </mxCell>
-
-        <!-- Actors -->
-        <mxCell id="actor_guest" value="Guest" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
-          <mxGeometry x="60" y="100" width="30" height="60" as="geometry" />
+        <mxCell id="guest" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Гість" vertex="1">
+          <mxGeometry height="80" width="40" x="50" y="350" as="geometry" />
         </mxCell>
-        <mxCell id="actor_user" value="Authorized User" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
-          <mxGeometry x="60" y="400" width="30" height="60" as="geometry" />
+        <mxCell id="moderator" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="Модератор" vertex="1">
+          <mxGeometry height="120" width="60" x="2020" y="1000" as="geometry" />
         </mxCell>
-        <mxCell id="actor_moderator" value="Moderator" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
-          <mxGeometry x="60" y="1200" width="30" height="60" as="geometry" />
+        <mxCell id="sl_auth" parent="1" style="swimlane;startSize=30;fillColor=#f5f5f5;fontStyle=1;" value="Авторизація (Auth)" vertex="1">
+          <mxGeometry height="220" width="300" x="150" y="300" as="geometry" />
         </mxCell>
-
-        <!-- Inheritance -->
-        <mxCell id="edge_user_guest" value="" style="endArrow=block;endSize=16;endFill=0;html=1;" edge="1" parent="1" source="actor_user" target="actor_guest">
-          <mxGeometry width="160" relative="1" as="geometry" />
+        <mxCell id="uc_register" parent="sl_auth" style="ellipse;whiteSpace=wrap;html=1;" value="Реєстрація" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="40" as="geometry" />
         </mxCell>
-        <mxCell id="edge_mod_user" value="" style="endArrow=block;endSize=16;endFill=0;html=1;" edge="1" parent="1" source="actor_moderator" target="actor_user">
-          <mxGeometry width="160" relative="1" as="geometry" />
+        <mxCell id="uc_login" parent="sl_auth" style="ellipse;whiteSpace=wrap;html=1;" value="Вхід (Login)" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="100" as="geometry" />
         </mxCell>
-
-        <!-- Auth & Profile -->
-        <mxCell id="uc_register" value="Register" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="2">
-          <mxGeometry x="50" y="50" width="140" height="60" as="geometry" />
+        <mxCell id="uc_pass" parent="sl_auth" style="ellipse;whiteSpace=wrap;html=1;" value="Зміна пароля" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="160" as="geometry" />
         </mxCell>
-        <mxCell id="uc_login" value="Login" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="2">
-          <mxGeometry x="50" y="130" width="140" height="60" as="geometry" />
+        <mxCell id="sl_users" parent="1" style="swimlane;startSize=30;fillColor=#f5f5f5;fontStyle=1;" value="Користувачі (Users)" vertex="1">
+          <mxGeometry height="700" width="300" x="150" y="570" as="geometry" />
         </mxCell>
-        <mxCell id="uc_view_profile" value="View User Profile" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="2">
-          <mxGeometry x="50" y="210" width="140" height="60" as="geometry" />
+        <mxCell id="uc_u_me" parent="sl_users" style="ellipse;whiteSpace=wrap;html=1;" value="Перегляд власного профілю" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="40" as="geometry" />
         </mxCell>
-        <mxCell id="uc_update_profile" value="Update Profile Info" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="2">
-          <mxGeometry x="50" y="300" width="140" height="60" as="geometry" />
+        <mxCell id="uc_u_upd" parent="sl_users" style="ellipse;whiteSpace=wrap;html=1;" value="Оновлення профілю" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="100" as="geometry" />
         </mxCell>
-        <mxCell id="uc_manage_avatar" value="Manage Avatar&#xa;(Upload/Reset)" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="2">
-          <mxGeometry x="50" y="380" width="140" height="60" as="geometry" />
+        <mxCell id="uc_u_ava" parent="sl_users" style="ellipse;whiteSpace=wrap;html=1;" value="Оновлення/видалення аватара" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="160" as="geometry" />
         </mxCell>
-        <mxCell id="uc_change_password" value="Change Password" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="2">
-          <mxGeometry x="50" y="460" width="140" height="60" as="geometry" />
+        <mxCell id="uc_u_get" parent="sl_users" style="ellipse;whiteSpace=wrap;html=1;" value="Перегляд чужого профілю" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="220" as="geometry" />
         </mxCell>
-
-        <!-- Publications & Social -->
-        <mxCell id="uc_view_feed" value="View Feed&#xa;(Global/Top/Urgent)" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="2">
-          <mxGeometry x="250" y="50" width="160" height="70" as="geometry" />
+        <mxCell id="uc_u_ward" parent="sl_users" style="ellipse;whiteSpace=wrap;html=1;" value="Перегляд чужого гардеробу" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="280" as="geometry" />
         </mxCell>
-        <mxCell id="uc_view_pub" value="View Publication" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="2">
-          <mxGeometry x="250" y="140" width="140" height="60" as="geometry" />
+        <mxCell id="uc_u_fol" parent="sl_users" style="ellipse;whiteSpace=wrap;html=1;" value="Підписка на користувача" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="340" as="geometry" />
         </mxCell>
-        <mxCell id="uc_create_pub" value="Create Publication" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="2">
-          <mxGeometry x="250" y="230" width="140" height="60" as="geometry" />
+        <mxCell id="uc_u_unfol" parent="sl_users" style="ellipse;whiteSpace=wrap;html=1;" value="Відписка від користувача" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="400" as="geometry" />
         </mxCell>
-        <mxCell id="uc_delete_pub" value="Delete Publication" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="2">
-          <mxGeometry x="250" y="310" width="140" height="60" as="geometry" />
+        <mxCell id="uc_u_getfol" parent="sl_users" style="ellipse;whiteSpace=wrap;html=1;" value="Перегляд підписників" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="460" as="geometry" />
         </mxCell>
-        <mxCell id="uc_follow" value="Follow/Unfollow User" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="2">
-          <mxGeometry x="250" y="390" width="140" height="60" as="geometry" />
+        <mxCell id="uc_u_getfng" parent="sl_users" style="ellipse;whiteSpace=wrap;html=1;" value="Перегляд підписок" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="520" as="geometry" />
         </mxCell>
-
-        <!-- Comments -->
-        <mxCell id="uc_create_comment" value="Create Comment" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="2">
-          <mxGeometry x="480" y="140" width="140" height="60" as="geometry" />
+        <mxCell id="uc_u_pref_g" parent="sl_users" style="ellipse;whiteSpace=wrap;html=1;" value="Отримання вподобань" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="580" as="geometry" />
         </mxCell>
-        <mxCell id="uc_manage_comment" value="Manage Comment&#xa;(Delete/Like)" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="2">
-          <mxGeometry x="480" y="220" width="140" height="70" as="geometry" />
+        <mxCell id="uc_u_pref_s" parent="sl_users" style="ellipse;whiteSpace=wrap;html=1;" value="Збереження вподобань" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="640" as="geometry" />
         </mxCell>
-
-        <!-- Collections & Wardrobe -->
-        <mxCell id="uc_manage_wardrobe" value="Manage Wardrobe&#xa;(Add/Update/Delete Cloth)" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="2">
-          <mxGeometry x="50" y="580" width="180" height="80" as="geometry" />
+        <mxCell id="sl_meta" parent="1" style="swimlane;startSize=30;fillColor=#f5f5f5;fontStyle=1;" value="Метадані (Meta)" vertex="1">
+          <mxGeometry height="160" width="300" x="650" y="300" as="geometry" />
         </mxCell>
-        <mxCell id="uc_create_col" value="Create Collection" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="2">
-          <mxGeometry x="250" y="580" width="140" height="60" as="geometry" />
+        <mxCell id="uc_tags" parent="sl_meta" style="ellipse;whiteSpace=wrap;html=1;" value="Отримання списку тегів" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="40" as="geometry" />
         </mxCell>
-        <mxCell id="uc_manage_col" value="Manage Collection&#xa;(Update/Items/Save/Like)" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="2">
-          <mxGeometry x="250" y="660" width="180" height="80" as="geometry" />
+        <mxCell id="uc_aarrr" parent="sl_meta" style="ellipse;whiteSpace=wrap;html=1;" value="Отримання AARRR метрик" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="100" as="geometry" />
         </mxCell>
-
-        <!-- Games & Assessments -->
-        <mxCell id="uc_play_games" value="Play Games&#xa;(Impression/Price/Tags)" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="2">
-          <mxGeometry x="480" y="350" width="160" height="80" as="geometry" />
+        <mxCell id="sl_feed" parent="1" style="swimlane;startSize=30;fillColor=#f5f5f5;fontStyle=1;" value="Стрічка та Пошук (Feed &amp; Search)" vertex="1">
+          <mxGeometry height="520" width="300" x="650" y="510" as="geometry" />
         </mxCell>
-        <mxCell id="uc_create_assess" value="Create Assessment" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="2">
-          <mxGeometry x="480" y="450" width="140" height="60" as="geometry" />
+        <mxCell id="uc_feed_global" parent="sl_feed" style="ellipse;whiteSpace=wrap;html=1;" value="Отримання глобальної стрічки" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="40" as="geometry" />
         </mxCell>
-
-        <!-- Moderation -->
-        <mxCell id="uc_report" value="Report Content" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="2">
-          <mxGeometry x="50" y="1100" width="140" height="60" as="geometry" />
+        <mxCell id="uc_feed_subs" parent="sl_feed" style="ellipse;whiteSpace=wrap;html=1;" value="Отримання стрічки підписок" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="100" as="geometry" />
         </mxCell>
-        <mxCell id="uc_resolve_report" value="Resolve Reports" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="2">
-          <mxGeometry x="50" y="1200" width="140" height="60" as="geometry" />
+        <mxCell id="uc_feed_urgent" parent="sl_feed" style="ellipse;whiteSpace=wrap;html=1;" value="Отримання термінової стрічки" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="160" as="geometry" />
         </mxCell>
-        <mxCell id="uc_manage_ads" value="Manage Advertisements&#xa;(Create/Update/Toggle)" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="2">
-          <mxGeometry x="50" y="1300" width="180" height="80" as="geometry" />
+        <mxCell id="uc_feed_user" parent="sl_feed" style="ellipse;whiteSpace=wrap;html=1;" value="Отримання стрічки користувача" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="220" as="geometry" />
         </mxCell>
-
-        <!-- Relationships - Guest -->
-        <mxCell id="rel_g1" value="" style="endArrow=none;html=1;exitX=1;exitY=0.3333333333333333;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_guest" target="uc_register">
-          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        <mxCell id="uc_feed_top" parent="sl_feed" style="ellipse;whiteSpace=wrap;html=1;" value="Отримання топ стрічки" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="280" as="geometry" />
         </mxCell>
-        <mxCell id="rel_g2" value="" style="endArrow=none;html=1;exitX=1;exitY=0.3333333333333333;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_guest" target="uc_login">
-          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        <mxCell id="uc_search_pub" parent="sl_feed" style="ellipse;whiteSpace=wrap;html=1;" value="Пошук публікацій" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="340" as="geometry" />
         </mxCell>
-        <mxCell id="rel_g3" value="" style="endArrow=none;html=1;exitX=1;exitY=0.3333333333333333;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_guest" target="uc_view_feed">
-          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        <mxCell id="uc_search_usr" parent="sl_feed" style="ellipse;whiteSpace=wrap;html=1;" value="Пошук користувачів" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="400" as="geometry" />
         </mxCell>
-        <mxCell id="rel_g4" value="" style="endArrow=none;html=1;exitX=1;exitY=0.3333333333333333;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_guest" target="uc_view_pub">
-          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        <mxCell id="uc_search_col" parent="sl_feed" style="ellipse;whiteSpace=wrap;html=1;" value="Пошук колекцій" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="460" as="geometry" />
         </mxCell>
-        <mxCell id="rel_g5" value="" style="endArrow=none;html=1;exitX=1;exitY=0.3333333333333333;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_guest" target="uc_view_profile">
-          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        <mxCell id="sl_games" parent="1" style="swimlane;startSize=30;fillColor=#f5f5f5;fontStyle=1;" value="Ігри (Games)" vertex="1">
+          <mxGeometry height="160" width="300" x="650" y="1080" as="geometry" />
         </mxCell>
-
-        <!-- Relationships - User -->
-        <mxCell id="rel_u1" value="" style="endArrow=none;html=1;exitX=1;exitY=0.3333333333333333;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_user" target="uc_update_profile">
-          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        <mxCell id="uc_game_get" parent="sl_games" style="ellipse;whiteSpace=wrap;html=1;" value="Отримання ігрових завдань" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="40" as="geometry" />
         </mxCell>
-        <mxCell id="rel_u2" value="" style="endArrow=none;html=1;exitX=1;exitY=0.3333333333333333;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_user" target="uc_manage_avatar">
-          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        <mxCell id="uc_game_send" parent="sl_games" style="ellipse;whiteSpace=wrap;html=1;" value="Відправлення результатів ігор" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="100" as="geometry" />
         </mxCell>
-        <mxCell id="rel_u3" value="" style="endArrow=none;html=1;exitX=1;exitY=0.3333333333333333;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_user" target="uc_change_password">
-          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        <mxCell id="sl_pubs" parent="1" style="swimlane;startSize=30;fillColor=#f5f5f5;fontStyle=1;" value="Публікації (Publications)" vertex="1">
+          <mxGeometry height="460" width="300" x="1150" y="300" as="geometry" />
         </mxCell>
-        <mxCell id="rel_u4" value="" style="endArrow=none;html=1;exitX=1;exitY=0.3333333333333333;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_user" target="uc_create_pub">
-          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        <mxCell id="uc_p_crt" parent="sl_pubs" style="ellipse;whiteSpace=wrap;html=1;" value="Створення публікації" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="40" as="geometry" />
         </mxCell>
-        <mxCell id="rel_u5" value="" style="endArrow=none;html=1;exitX=1;exitY=0.3333333333333333;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_user" target="uc_delete_pub">
-          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        <mxCell id="uc_p_get" parent="sl_pubs" style="ellipse;whiteSpace=wrap;html=1;" value="Отримання публікації" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="100" as="geometry" />
         </mxCell>
-        <mxCell id="rel_u6" value="" style="endArrow=none;html=1;exitX=1;exitY=0.3333333333333333;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_user" target="uc_follow">
-          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        <mxCell id="uc_p_del" parent="sl_pubs" style="ellipse;whiteSpace=wrap;html=1;" value="Видалення публікації" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="160" as="geometry" />
         </mxCell>
-        <mxCell id="rel_u7" value="" style="endArrow=none;html=1;exitX=1;exitY=0.3333333333333333;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_user" target="uc_manage_wardrobe">
-          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        <mxCell id="uc_p_like" parent="sl_pubs" style="ellipse;whiteSpace=wrap;html=1;" value="Лайк публікації" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="220" as="geometry" />
         </mxCell>
-        <mxCell id="rel_u8" value="" style="endArrow=none;html=1;exitX=1;exitY=0.3333333333333333;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_user" target="uc_create_col">
-          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        <mxCell id="uc_p_save" parent="sl_pubs" style="ellipse;whiteSpace=wrap;html=1;" value="Збереження публікації" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="280" as="geometry" />
         </mxCell>
-        <mxCell id="rel_u9" value="" style="endArrow=none;html=1;exitX=1;exitY=0.3333333333333333;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_user" target="uc_manage_col">
-          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        <mxCell id="uc_p_acrt" parent="sl_pubs" style="ellipse;whiteSpace=wrap;html=1;" value="Створення оцінки" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="340" as="geometry" />
         </mxCell>
-        <mxCell id="rel_u10" value="" style="endArrow=none;html=1;exitX=1;exitY=0.3333333333333333;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_user" target="uc_play_games">
-          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        <mxCell id="uc_p_aget" parent="sl_pubs" style="ellipse;whiteSpace=wrap;html=1;" value="Отримання оцінок публікації" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="400" as="geometry" />
         </mxCell>
-        <mxCell id="rel_u11" value="" style="endArrow=none;html=1;exitX=1;exitY=0.3333333333333333;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_user" target="uc_create_assess">
-          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        <mxCell id="sl_comms" parent="1" style="swimlane;startSize=30;fillColor=#f5f5f5;fontStyle=1;" value="Коментарі (Comments)" vertex="1">
+          <mxGeometry height="280" width="300" x="1150" y="810" as="geometry" />
         </mxCell>
-        <mxCell id="rel_u12" value="" style="endArrow=none;html=1;exitX=1;exitY=0.3333333333333333;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_user" target="uc_report">
-          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        <mxCell id="uc_c_add" parent="sl_comms" style="ellipse;whiteSpace=wrap;html=1;" value="Додавання коментаря" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="40" as="geometry" />
         </mxCell>
-        <mxCell id="rel_u13" value="" style="endArrow=none;html=1;exitX=1;exitY=0.3333333333333333;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_user" target="uc_create_comment">
-          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        <mxCell id="uc_c_get" parent="sl_comms" style="ellipse;whiteSpace=wrap;html=1;" value="Отримання коментарів" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="100" as="geometry" />
         </mxCell>
-        <mxCell id="rel_u14" value="" style="endArrow=none;html=1;exitX=1;exitY=0.3333333333333333;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_user" target="uc_manage_comment">
-          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        <mxCell id="uc_c_del" parent="sl_comms" style="ellipse;whiteSpace=wrap;html=1;" value="Видалення коментаря" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="160" as="geometry" />
         </mxCell>
-
-        <!-- Relationships - Moderator -->
-        <mxCell id="rel_m1" value="" style="endArrow=none;html=1;exitX=1;exitY=0.3333333333333333;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_moderator" target="uc_resolve_report">
-          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        <mxCell id="uc_c_like" parent="sl_comms" style="ellipse;whiteSpace=wrap;html=1;" value="Лайк коментаря" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="220" as="geometry" />
         </mxCell>
-        <mxCell id="rel_m2" value="" style="endArrow=none;html=1;exitX=1;exitY=0.3333333333333333;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_moderator" target="uc_manage_ads">
-          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        <mxCell id="sl_ward" parent="1" style="swimlane;startSize=30;fillColor=#f5f5f5;fontStyle=1;" value="Гардероб (Wardrobe)" vertex="1">
+          <mxGeometry height="280" width="300" x="1150" y="1140" as="geometry" />
         </mxCell>
-
-        <!-- Includes -->
-        <mxCell id="inc_c1" value="&lt;&lt;include&gt;&gt;" style="endArrow=open;dashed=1;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="2" source="uc_create_comment" target="uc_view_pub">
-          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        <mxCell id="uc_w_get" parent="sl_ward" style="ellipse;whiteSpace=wrap;html=1;" value="Перегляд власного гардеробу" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="40" as="geometry" />
         </mxCell>
-        <mxCell id="inc_c2" value="&lt;&lt;include&gt;&gt;" style="endArrow=open;dashed=1;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="2" source="uc_create_assess" target="uc_view_pub">
-          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        <mxCell id="uc_w_add" parent="sl_ward" style="ellipse;whiteSpace=wrap;html=1;" value="Додавання одягу" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="100" as="geometry" />
         </mxCell>
-        <mxCell id="inc_c3" value="&lt;&lt;include&gt;&gt;" style="endArrow=open;dashed=1;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="2" source="uc_create_pub" target="uc_manage_avatar">
-           <mxGeometry width="50" height="50" relative="1" as="geometry" />
-           <mxPoint as="offset" x="-10" y="0" />
+        <mxCell id="uc_w_upd" parent="sl_ward" style="ellipse;whiteSpace=wrap;html=1;" value="Редагування одягу" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="160" as="geometry" />
         </mxCell>
-        <mxCell id="inc_c4" value="&lt;&lt;include&gt;&gt;" style="endArrow=open;dashed=1;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="2" source="uc_view_pub" target="uc_view_feed">
-          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        <mxCell id="uc_w_del" parent="sl_ward" style="ellipse;whiteSpace=wrap;html=1;" value="Видалення одягу" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="220" as="geometry" />
         </mxCell>
-
+        <mxCell id="sl_colls" parent="1" style="swimlane;startSize=30;fillColor=#f5f5f5;fontStyle=1;" value="Колекції (Collections)" vertex="1">
+          <mxGeometry height="460" width="300" x="1650" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_co_getm" parent="sl_colls" style="ellipse;whiteSpace=wrap;html=1;" value="Отримання своїх колекцій" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_co_getu" parent="sl_colls" style="ellipse;whiteSpace=wrap;html=1;" value="Отримання чужих колекцій" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_co_crt" parent="sl_colls" style="ellipse;whiteSpace=wrap;html=1;" value="Створення колекції" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_co_upd" parent="sl_colls" style="ellipse;whiteSpace=wrap;html=1;" value="Оновлення колекції" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_co_del" parent="sl_colls" style="ellipse;whiteSpace=wrap;html=1;" value="Видалення колекції" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_co_add" parent="sl_colls" style="ellipse;whiteSpace=wrap;html=1;" value="Додавання елемента" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_co_rem" parent="sl_colls" style="ellipse;whiteSpace=wrap;html=1;" value="Видалення елемента" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="sl_mod" parent="1" style="swimlane;startSize=30;fillColor=#f5f5f5;fontStyle=1;" value="Модерація (Moderation)" vertex="1">
+          <mxGeometry height="280" width="300" x="1650" y="810" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_r_crt" parent="sl_mod" style="ellipse;whiteSpace=wrap;html=1;" value="Створення скарги" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_m_list" parent="sl_mod" style="ellipse;whiteSpace=wrap;html=1;" value="Отримання списку скарг" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_m_ent" parent="sl_mod" style="ellipse;whiteSpace=wrap;html=1;" value="Отримання скарг сутності" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_m_res" parent="sl_mod" style="ellipse;whiteSpace=wrap;html=1;" value="Вирішення скарги" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="sl_ads" parent="1" style="swimlane;startSize=30;fillColor=#f5f5f5;fontStyle=1;" value="Реклама (Advertisements)" vertex="1">
+          <mxGeometry height="400" width="300" x="1650" y="1140" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_a_get" parent="sl_ads" style="ellipse;whiteSpace=wrap;html=1;" value="Перегляд реклами" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_a_view" parent="sl_ads" style="ellipse;whiteSpace=wrap;html=1;" value="Фіксація перегляду" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_a_crt" parent="sl_ads" style="ellipse;whiteSpace=wrap;html=1;" value="Створення реклами" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_a_upd" parent="sl_ads" style="ellipse;whiteSpace=wrap;html=1;" value="Редагування реклами" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_a_tog" parent="sl_ads" style="ellipse;whiteSpace=wrap;html=1;" value="Зміна статусу реклами" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_a_list" parent="sl_ads" style="ellipse;whiteSpace=wrap;html=1;" value="Отримання списку реклами" vertex="1">
+          <mxGeometry height="40" width="200" x="50" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="e_g1" edge="1" parent="1" source="guest" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#6c8ebf;" target="uc_register" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_g2" edge="1" parent="1" source="guest" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#6c8ebf;" target="uc_login" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_u_auth" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_pass" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="130" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_u1" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_u_me" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="130" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_u2" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_u_upd" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="130" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_u3" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_u_ava" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="130" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_u4" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_u_get" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="130" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_u5" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_u_ward" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="130" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_u6" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_u_fol" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="130" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_u7" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_u_unfol" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="130" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_u8" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_u_getfol" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="130" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_u9" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_u_getfng" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="130" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_u10" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_u_pref_g" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="130" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_u11" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_u_pref_s" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="130" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_m1" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_tags" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="630" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_m2" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_aarrr" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="630" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_f1" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_feed_global" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="630" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_f2" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_feed_subs" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="630" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_f3" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_feed_urgent" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="630" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_f4" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_feed_user" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="630" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_f5" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_feed_top" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="630" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_f6" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_search_pub" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="630" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_f7" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_search_usr" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="630" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_f8" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_search_col" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="630" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_ga1" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_game_get" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="630" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_ga2" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_game_send" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="630" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_p1" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_p_crt" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="1130" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_p2" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_p_get" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="1130" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_p3" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_p_del" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="1130" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_p4" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_p_like" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="1130" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_p5" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_p_save" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="1130" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_p6" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_p_acrt" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="1130" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_p7" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_p_aget" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="1130" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_c1" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_c_add" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="1130" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_c2" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_c_get" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="1130" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_c3" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_c_del" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="1130" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_c4" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_c_like" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="1130" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_w1" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_w_get" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="1130" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_w2" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_w_add" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="1130" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_w3" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_w_upd" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="1130" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_w4" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_w_del" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="1130" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_co1" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_co_getm" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="1630" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_co2" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_co_getu" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="1630" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_co3" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_co_crt" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="1630" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_co4" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_co_upd" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="1630" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_co5" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_co_del" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="1630" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_co6" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_co_add" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="1630" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_co7" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_co_rem" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="1630" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_r1" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_r_crt" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="1630" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_ad1" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_a_get" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="1630" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_u_ad2" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;strokeColor=#82b366;" target="uc_a_view" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1040" y="250" />
+              <mxPoint x="1630" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_m_m1" edge="1" parent="1" source="moderator" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;strokeColor=#d6b656;" target="uc_m_list" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_m_m2" edge="1" parent="1" source="moderator" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;strokeColor=#d6b656;" target="uc_m_ent" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_m_m3" edge="1" parent="1" source="moderator" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;strokeColor=#d6b656;" target="uc_m_res" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_m_a3" edge="1" parent="1" source="moderator" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;strokeColor=#d6b656;" target="uc_a_crt" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_m_a4" edge="1" parent="1" source="moderator" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;strokeColor=#d6b656;" target="uc_a_upd" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_m_a5" edge="1" parent="1" source="moderator" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;strokeColor=#d6b656;" target="uc_a_tog" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_m_a6" edge="1" parent="1" source="moderator" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;strokeColor=#d6b656;" target="uc_a_list" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>

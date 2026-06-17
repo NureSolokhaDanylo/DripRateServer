@@ -4,26 +4,32 @@
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="user" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;strokeColor=#666666;fillColor=#e1d5e7;align=left;fontSize=12;horizontal=1;fontColor=#000000;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;" value="КОРИСТУВАЧ" vertex="1">
-          <mxGeometry height="150" width="219" x="660" y="380" as="geometry" />
+        <mxCell id="user" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;strokeColor=#d79b00;fillColor=#ffe6cc;align=left;fontSize=12;horizontal=1;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;" value="КОРИСТУВАЧ" vertex="1">
+          <mxGeometry height="190" width="219" x="660" y="380" as="geometry" />
         </mxCell>
-        <mxCell id="user_email" parent="user" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="електронна_пошта" vertex="1">
+        <mxCell id="user_email" parent="user" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Електронна_пошта" vertex="1">
           <mxGeometry height="20" width="219" y="30" as="geometry" />
         </mxCell>
-        <mxCell id="user_uname" parent="user" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="ім&#39;я_користувача" vertex="1">
+        <mxCell id="p7QWMQ9ssHn5Y0iu4Nc7-10" parent="user" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Пароль" vertex="1">
           <mxGeometry height="20" width="219" y="50" as="geometry" />
         </mxCell>
-        <mxCell id="user_dname" parent="user" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="відображуване_ім&#39;я" vertex="1">
+        <mxCell id="user_uname" parent="user" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Ім&#39;я_користувача" vertex="1">
           <mxGeometry height="20" width="219" y="70" as="geometry" />
         </mxCell>
-        <mxCell id="user_avatar" parent="user" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="url_аватара" vertex="1">
+        <mxCell id="user_dname" parent="user" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Відображуване_ім&#39;я" vertex="1">
           <mxGeometry height="20" width="219" y="90" as="geometry" />
         </mxCell>
-        <mxCell id="user_bio" parent="user" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Біо" vertex="1">
+        <mxCell id="user_avatar" parent="user" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Url_аватара" vertex="1">
           <mxGeometry height="20" width="219" y="110" as="geometry" />
         </mxCell>
-        <mxCell id="user_banned" parent="user" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Заблоковано" vertex="1">
+        <mxCell id="user_bio" parent="user" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Біо" vertex="1">
           <mxGeometry height="20" width="219" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="user_banned" parent="user" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Заблоковано" vertex="1">
+          <mxGeometry height="20" width="219" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="user_created" parent="user" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Дата_створення" vertex="1">
+          <mxGeometry height="20" width="219" y="170" as="geometry" />
         </mxCell>
         <mxCell id="ZsMdb-xjLDYXcSS-4M5R-1" edge="1" parent="1" source="publication" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=ERmany;endFill=0;startArrow=ERmany;startFill=0;" target="cloth">
           <mxGeometry relative="1" as="geometry">
@@ -32,7 +38,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="publication" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;strokeColor=#666666;fillColor=#dae8fc;align=left;fontSize=12;horizontal=1;fontColor=#000000;spacingLeft=8;perimeterSpacing=1;swimlaneFillColor=none;labelBorderColor=none;" value="ПУБЛІКАЦІЯ" vertex="1">
+        <mxCell id="publication" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;strokeColor=#d79b00;fillColor=#ffe6cc;align=left;fontSize=12;horizontal=1;spacingLeft=8;perimeterSpacing=1;swimlaneFillColor=none;labelBorderColor=none;" value="ПУБЛІКАЦІЯ" vertex="1">
           <mxGeometry height="130" width="246" x="230" y="-90" as="geometry" />
         </mxCell>
         <mxCell id="pub_desc" parent="publication" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Опис" vertex="1">
@@ -41,16 +47,16 @@
         <mxCell id="pub_imgs" parent="publication" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Зображення" vertex="1">
           <mxGeometry height="20" width="246" y="50" as="geometry" />
         </mxCell>
-        <mxCell id="pub_gsp" parent="publication" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="ціна_гри" vertex="1">
+        <mxCell id="pub_gsp" parent="publication" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Ціна_гри" vertex="1">
           <mxGeometry height="20" width="246" y="70" as="geometry" />
         </mxCell>
-        <mxCell id="pub_gs" parent="publication" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="налаштування_гри" vertex="1">
+        <mxCell id="pub_gs" parent="publication" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Налаштування_гри" vertex="1">
           <mxGeometry height="20" width="246" y="90" as="geometry" />
         </mxCell>
-        <mxCell id="pub_urg" parent="publication" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="терміновий_запит_оцінки" vertex="1">
+        <mxCell id="pub_urg" parent="publication" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Терміновий_запит_оцінки" vertex="1">
           <mxGeometry height="20" width="246" y="110" as="geometry" />
         </mxCell>
-        <mxCell id="cloth" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;strokeColor=#666666;fillColor=#dae8fc;align=left;fontSize=12;horizontal=1;fontColor=#000000;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;" value="ОДЯГ" vertex="1">
+        <mxCell id="cloth" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;strokeColor=#d79b00;fillColor=#ffe6cc;align=left;fontSize=12;horizontal=1;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;" value="ОДЯГ" vertex="1">
           <mxGeometry height="130" width="213" x="844" y="112" as="geometry" />
         </mxCell>
         <mxCell id="cloth_name" parent="cloth" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Назва" vertex="1">
@@ -59,34 +65,34 @@
         <mxCell id="cloth_brand" parent="cloth" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Бренд" vertex="1">
           <mxGeometry height="20" width="213" y="50" as="geometry" />
         </mxCell>
-        <mxCell id="cloth_photo" parent="cloth" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="url_фото" vertex="1">
+        <mxCell id="cloth_photo" parent="cloth" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Url_фото" vertex="1">
           <mxGeometry height="20" width="213" y="70" as="geometry" />
         </mxCell>
-        <mxCell id="cloth_store" parent="cloth" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="посилання_на_магазин" vertex="1">
+        <mxCell id="cloth_store" parent="cloth" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Посилання_на_магазин" vertex="1">
           <mxGeometry height="20" width="213" y="90" as="geometry" />
         </mxCell>
-        <mxCell id="cloth_price" parent="cloth" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="орієнтовна_ціна" vertex="1">
+        <mxCell id="cloth_price" parent="cloth" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Орієнтовна_ціна" vertex="1">
           <mxGeometry height="20" width="213" y="110" as="geometry" />
         </mxCell>
-        <mxCell id="comment" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;strokeColor=#666666;fillColor=#dae8fc;align=left;fontSize=12;horizontal=1;fontColor=#000000;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;" value="КОМЕНТАР" vertex="1">
+        <mxCell id="comment" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;strokeColor=#d79b00;fillColor=#ffe6cc;align=left;fontSize=12;horizontal=1;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;" value="КОМЕНТАР" vertex="1">
           <mxGeometry height="50" width="210" x="916" y="-70" as="geometry" />
         </mxCell>
         <mxCell id="cmt_text" parent="comment" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Текст" vertex="1">
           <mxGeometry height="20" width="210" y="30" as="geometry" />
         </mxCell>
-        <mxCell id="assessment" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;strokeColor=#666666;fillColor=#dae8fc;align=left;fontSize=12;horizontal=1;fontColor=#000000;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;" value="ОЦІНКА" vertex="1">
+        <mxCell id="assessment" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;strokeColor=#d79b00;fillColor=#ffe6cc;align=left;fontSize=12;horizontal=1;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;" value="ОЦІНКА" vertex="1">
           <mxGeometry height="110" width="210" x="568" y="112" as="geometry" />
         </mxCell>
-        <mxCell id="asmt_cc" parent="assessment" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="поєднання_кольорів" vertex="1">
+        <mxCell id="asmt_cc" parent="assessment" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Поєднання_кольорів" vertex="1">
           <mxGeometry height="20" width="210" y="30" as="geometry" />
         </mxCell>
-        <mxCell id="asmt_fp" parent="assessment" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="посадка_та_пропорції" vertex="1">
+        <mxCell id="asmt_fp" parent="assessment" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Посадка_та_пропорції" vertex="1">
           <mxGeometry height="20" width="210" y="50" as="geometry" />
         </mxCell>
         <mxCell id="asmt_or" parent="assessment" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Оригінальність" vertex="1">
           <mxGeometry height="20" width="210" y="70" as="geometry" />
         </mxCell>
-        <mxCell id="asmt_os" parent="assessment" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="загальний_стиль" vertex="1">
+        <mxCell id="asmt_os" parent="assessment" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Загальний_стиль" vertex="1">
           <mxGeometry height="20" width="210" y="90" as="geometry" />
         </mxCell>
         <mxCell id="pPiP5M_2UqExviaLzWKt-1" edge="1" parent="1" source="collection" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#e1d5e7;strokeColor=#000000;startArrow=ERmany;startFill=0;endArrow=ERmany;endFill=0;" target="publication">
@@ -97,7 +103,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="collection" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;strokeColor=#666666;fillColor=#dae8fc;align=left;fontSize=12;horizontal=1;fontColor=#000000;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;" value="КОЛЕКЦІЯ" vertex="1">
+        <mxCell id="collection" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;strokeColor=#d79b00;fillColor=#ffe6cc;align=left;fontSize=12;horizontal=1;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;" value="КОЛЕКЦІЯ" vertex="1">
           <mxGeometry height="130" width="208" x="230" y="221" as="geometry" />
         </mxCell>
         <mxCell id="col_name" parent="collection" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Назва" vertex="1">
@@ -134,11 +140,11 @@
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="16" y="638" />
-              <mxPoint x="770" y="638" />
+              <mxPoint x="683" y="638" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="tag" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;strokeColor=#666666;fillColor=#e1d5e7;align=left;fontSize=12;horizontal=1;fontColor=#000000;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;" value="ТЕГ" vertex="1">
+        <mxCell id="tag" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;strokeColor=#d79b00;fillColor=#ffe6cc;align=left;fontSize=12;horizontal=1;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;" value="ТЕГ" vertex="1">
           <mxGeometry height="70" width="180" x="-26" y="251" as="geometry" />
         </mxCell>
         <mxCell id="tag_name" parent="tag" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Назва" vertex="1">
@@ -147,13 +153,13 @@
         <mxCell id="tag_cat" parent="tag" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Категорія" vertex="1">
           <mxGeometry height="20" width="180" y="50" as="geometry" />
         </mxCell>
-        <mxCell id="report" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;strokeColor=#666666;fillColor=#e1d5e7;align=left;fontSize=12;horizontal=1;fontColor=#000000;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;" value="СКАРГА" vertex="1">
+        <mxCell id="report" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;strokeColor=#d79b00;fillColor=#ffe6cc;align=left;fontSize=12;horizontal=1;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;" value="СКАРГА" vertex="1">
           <mxGeometry height="110" width="230" x="957" y="511" as="geometry" />
         </mxCell>
         <mxCell id="rpt_cat" parent="report" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Категорія" vertex="1">
           <mxGeometry height="20" width="230" y="30" as="geometry" />
         </mxCell>
-        <mxCell id="rpt_ttype" parent="report" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="тип_цілі" vertex="1">
+        <mxCell id="rpt_ttype" parent="report" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Тип_цілі" vertex="1">
           <mxGeometry height="20" width="230" y="50" as="geometry" />
         </mxCell>
         <mxCell id="rpt_status" parent="report" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Статус" vertex="1">
@@ -162,7 +168,7 @@
         <mxCell id="rpt_text" parent="report" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Текст" vertex="1">
           <mxGeometry height="20" width="230" y="90" as="geometry" />
         </mxCell>
-        <mxCell id="advertisement" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;strokeColor=#666666;fillColor=#e1d5e7;align=left;fontSize=12;horizontal=1;fontColor=#000000;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;" value="РЕКЛАМА" vertex="1">
+        <mxCell id="advertisement" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;strokeColor=#d79b00;fillColor=#ffe6cc;align=left;fontSize=12;horizontal=1;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;" value="РЕКЛАМА" vertex="1">
           <mxGeometry height="130" width="210" x="55" y="458" as="geometry" />
         </mxCell>
         <mxCell id="adv_text" parent="advertisement" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Текст" vertex="1">
@@ -174,11 +180,41 @@
         <mxCell id="adv_imgs" parent="advertisement" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Зображення" vertex="1">
           <mxGeometry height="20" width="210" y="70" as="geometry" />
         </mxCell>
-        <mxCell id="adv_mi" parent="advertisement" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="макс_показів" vertex="1">
+        <mxCell id="adv_mi" parent="advertisement" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Макс_показів" vertex="1">
           <mxGeometry height="20" width="210" y="90" as="geometry" />
         </mxCell>
         <mxCell id="adv_active" parent="advertisement" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Активна" vertex="1">
           <mxGeometry height="20" width="210" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="pubGameStats" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;strokeColor=#d79b00;fillColor=#ffe6cc;align=left;fontSize=12;horizontal=1;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;" value="СТАТИСТИКА ГРИ" vertex="1">
+          <mxGeometry height="190" width="263" x="221.5" y="-329" as="geometry" />
+        </mxCell>
+        <mxCell id="pgs_gptc" parent="pubGameStats" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Загальна_кількість_вгадувань_ціни" vertex="1">
+          <mxGeometry height="20" width="263" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="pgs_gprs" parent="pubGameStats" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Сума_реальних_цін" vertex="1">
+          <mxGeometry height="20" width="263" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="pgs_gpgs" parent="pubGameStats" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Сума_вгаданих_цін" vertex="1">
+          <mxGeometry height="20" width="263" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="pgs_fitc" parent="pubGameStats" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Загальна_кількість_перших_вражень" vertex="1">
+          <mxGeometry height="20" width="263" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="pgs_fipc" parent="pubGameStats" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Кількість_позитивних_перших_вражень" vertex="1">
+          <mxGeometry height="20" width="263" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="pgs_firts" parent="pubGameStats" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Сума_часу_реакції_перших_вражень" vertex="1">
+          <mxGeometry height="20" width="263" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="pgs_tmtc" parent="pubGameStats" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Загальна_кількість_збігів_тегів" vertex="1">
+          <mxGeometry height="20" width="263" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="pgs_tmcc" parent="pubGameStats" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Кількість_правильних_збігів_тегів" vertex="1">
+          <mxGeometry height="20" width="263" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="l708juo8TgHIodRHmX08-15" edge="1" parent="1" source="publication" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=ERone;endFill=0;startArrow=ERone;startFill=0;" target="pubGameStats" value=" ">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="l708juo8TgHIodRHmX08-16" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=ERmany;endFill=0;startArrow=ERone;startFill=0;" target="comment" value=" ">
           <mxGeometry relative="1" as="geometry">
@@ -192,14 +228,6 @@
             <Array as="points">
               <mxPoint x="1000" y="476" />
               <mxPoint x="1000" y="476" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="l708juo8TgHIodRHmX08-19" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=ERmany;endFill=0;startArrow=ERone;startFill=0;" target="report" value=" ">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="1005" y="476" />
-              <mxPoint x="1005" y="476" />
             </Array>
           </mxGeometry>
         </mxCell>
@@ -245,6 +273,20 @@
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="334" y="502" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="role" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;strokeColor=#d79b00;fillColor=#ffe6cc;align=left;fontSize=12;horizontal=1;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;" value="РОЛЬ" vertex="1">
+          <mxGeometry height="50" width="180" x="723" y="623" as="geometry" />
+        </mxCell>
+        <mxCell id="role_name" parent="role" style="shape=tableRow;horizontal=1;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;fontColor=#000000;align=left;spacingLeft=8;swimlaneFillColor=none;labelBorderColor=none;strokeColor=#666666;" value="Назва" vertex="1">
+          <mxGeometry height="20" width="180" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_user_role" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;startArrow=ERmany;startFill=0;endArrow=ERmany;endFill=0;" target="role" value=" ">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="813" y="636" />
+              <mxPoint x="813" y="636" />
             </Array>
           </mxGeometry>
         </mxCell>

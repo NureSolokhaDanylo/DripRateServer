@@ -20,9 +20,9 @@ services:
       - BlobStorage__ConnectionString=${BlobStorage__ConnectionString}
       - BlobStorage__ContainerName=${BlobStorage__ContainerName}
       - BlobStorage__DefaultAvatarUrl=${BlobStorage__DefaultAvatarUrl}
-      - FEED__ADFREQUENCY=${FEED_ADFREQUENCY}
-      - FEED__VIEWCOOLDOWNHOURS=${FEED_VIEWCOOLDOWNHOURS}
-      - MODERATOR_EMAILS=${MODERATOR_EMAILS}
+      - FEED__ADFREQUENCY=${FEED_ADFREQUENCY:-5}
+      - FEED__VIEWCOOLDOWNHOURS=${FEED_VIEWCOOLDOWNHOURS:-24}
+      - MODERATOR_EMAILS=${MODERATOR_EMAILS:-}
 
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2025-latest
