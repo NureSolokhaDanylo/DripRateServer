@@ -28,7 +28,7 @@ public static partial class ServiceCollectionExtensions
                     .MigrationsAssembly(typeof(MyDbContext).Assembly.FullName)
                     .ExecutionStrategy(dependencies => new LoggingSqlServerRetryingExecutionStrategy(
                         dependencies,
-                        maxRetryCount: int.MaxValue, // Бесконечно (как ты и просил)
+                        maxRetryCount: int.MaxValue, // Infinite
                         maxRetryDelay: TimeSpan.FromSeconds(30),
                         errorNumbersToAdd: null,
                         logger: logger)));

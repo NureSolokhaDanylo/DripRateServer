@@ -25,7 +25,7 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.HasQueryFilter(u => !u.IsBanned);
 
-        // Навигация через приватные поля
+        // Navigation through private fields
         builder.Navigation(u => u.Publications).Metadata.SetField("_publications");
         builder.Navigation(u => u.Wardrobe).Metadata.SetField("_wardrobe");
         builder.Navigation(u => u.Followers).Metadata.SetField("_followers");

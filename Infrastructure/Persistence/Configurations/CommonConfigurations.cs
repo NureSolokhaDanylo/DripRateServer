@@ -65,7 +65,7 @@ public sealed class CommentConfiguration : IEntityTypeConfiguration<Comment>
 
         builder.HasQueryFilter(c => !c.IsDeleted && !c.User.IsBanned);
 
-        // Убираем каскад от пользователя, оставляем только от публикации
+        // Remove cascade from user, keep only from publication
         builder.HasOne(c => c.User)
             .WithMany()
             .HasForeignKey(c => c.UserId)
@@ -113,7 +113,7 @@ public sealed class AssessmentConfiguration : IEntityTypeConfiguration<Assessmen
 
         builder.HasQueryFilter(a => !a.User.IsBanned);
 
-        // Убираем каскад от пользователя, оставляем только от публикации
+        // Remove cascade from user, keep only from publication
         builder.HasOne(a => a.User)
             .WithMany()
             .HasForeignKey(a => a.UserId)

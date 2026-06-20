@@ -11,6 +11,7 @@ public static class ReportErrors
     public const string DuplicateReportCode = "Report.DuplicateReport";
     public const string UnauthorizedCode = "Report.Unauthorized";
     public const string CannotDeleteUserCode = "Report.CannotDeleteUser";
+    public const string CannotBanEntityCode = "Report.CannotBanEntity";
 
     public static Error NotFound => Error.NotFound(
         code: NotFoundCode,
@@ -39,4 +40,8 @@ public static class ReportErrors
     public static Error CannotDeleteUser => Error.Validation(
         code: CannotDeleteUserCode,
         description: "You cannot delete a user via moderation action. Use ban instead.");
+
+    public static Error CannotBanEntity => Error.Validation(
+        code: CannotBanEntityCode,
+        description: "You cannot apply a ban action directly to a publication or comment.");
 }

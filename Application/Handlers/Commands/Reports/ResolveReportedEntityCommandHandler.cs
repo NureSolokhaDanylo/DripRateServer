@@ -68,13 +68,12 @@ internal sealed class ResolveReportedEntityCommandHandler : IRequestHandler<Reso
         }
         else if (request.Action == ModerationAction.BanUser)
         {
-            var userId = request.TargetType switch
+            if (request.TargetType != ReportTargetType.User)
             {
-                ReportTargetType.User => request.TargetId,
-                ReportTargetType.Publication => (await _context.Publications.IgnoreQueryFilters().Where(p => p.Id == request.TargetId).Select(p => p.UserId).FirstOrDefaultAsync(cancellationToken)),
-                ReportTargetType.Comment => (await _context.Comments.IgnoreQueryFilters().Where(c => c.Id == request.TargetId).Select(c => c.UserId).FirstOrDefaultAsync(cancellationToken)),
-                _ => Guid.Empty
-            };
+                return ReportErrors.CannotBanEntity;
+            }
+
+            var userId = request.TargetId;
 
             if (userId != Guid.Empty)
             {

@@ -28,8 +28,8 @@ public sealed class MyDbContext : IdentityDbContext<User, IdentityRole<Guid>, Gu
     public DbSet<PublicationGameStats> GameStats => Set<PublicationGameStats>();
     public DbSet<UserGameHistory> UserGameHistories => Set<UserGameHistory>();
 
-    // Регистрация IApplicationDbContext.Users для соответствия интерфейсу, 
-    // хотя он уже есть в базовом IdentityDbContext.
+    // Register IApplicationDbContext.Users to match the interface, 
+    // even though it already exists in the base IdentityDbContext.
     public override DbSet<User> Users => Set<User>();
 
     protected override void OnModelCreating(ModelBuilder builder)

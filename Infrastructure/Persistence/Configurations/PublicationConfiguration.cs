@@ -43,11 +43,11 @@ public sealed class PublicationConfiguration : IEntityTypeConfiguration<Publicat
             .HasForeignKey(p => p.UserId)
             .OnDelete(DeleteBehavior.Restrict);
         
-        // Мапим поле напрямую для коллекции строк
+        // Map the field directly for a string collection
         builder.Property<List<string>>("_images")
             .HasColumnName("Images");
 
-        // Many-to-Many с тегами
+        // Many-to-Many with tags
         builder.HasMany(p => p.Tags)
             .WithMany()
             .UsingEntity<Dictionary<string, object>>(
@@ -60,7 +60,7 @@ public sealed class PublicationConfiguration : IEntityTypeConfiguration<Publicat
                     j.HasIndex("TagId");
                 });
 
-        // Many-to-Many с одеждой
+        // Many-to-Many with clothes
         builder.HasMany(p => p.Clothes)
             .WithMany()
             .UsingEntity<Dictionary<string, object>>(

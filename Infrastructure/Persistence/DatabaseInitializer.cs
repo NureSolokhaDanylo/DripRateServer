@@ -56,7 +56,7 @@ public sealed class DatabaseInitializer
         var csb = new SqlConnectionStringBuilder(connectionString);
         var databaseName = csb.InitialCatalog;
         
-        // Проверяем через master, что сервер вообще живой
+        // Check through master if the server is alive
         csb.InitialCatalog = "master";
         var masterConnectionString = csb.ConnectionString;
         var delay = TimeSpan.FromSeconds(5);
@@ -71,7 +71,7 @@ public sealed class DatabaseInitializer
                 await using var connection = new SqlConnection(masterConnectionString);
                 await connection.OpenAsync(cancellationToken);
 
-                // Если смогли подключиться к master — сервер готов
+                // If connected to master — the server is ready
                 _logger.LogInformation("SQL Server is responsive after {Attempt} attempts.", attempt);
                 return;
             }
