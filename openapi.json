@@ -6883,28 +6883,18 @@
                     }
                   },
                   "TagIds": {
-                    "type": [
-                      "null",
-                      "array"
-                    ],
+                    "type": "array",
+                    "nullable": true,
                     "items": {
-                      "type": [
-                        "null",
-                        "string"
-                      ],
+                      "type": "string",
                       "format": "uuid"
                     }
                   },
                   "ClothIds": {
-                    "type": [
-                      "null",
-                      "array"
-                    ],
+                    "type": "array",
+                    "nullable": true,
                     "items": {
-                      "type": [
-                        "null",
-                        "string"
-                      ],
+                      "type": "string",
                       "format": "uuid"
                     }
                   },
